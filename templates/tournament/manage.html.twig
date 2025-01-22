@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Tournament{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center">Turnier verwalten: {{ tournament.ident }}</h1>
+
+        <!-- Display Flash Messages -->
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        {{ form_row(form.level, { 'attr': { 'class': 'form-select' } }) }}
+                        <hr>
+                        <h5>Add/Remove Participants</h5>
+                        {{ form_row(form.participants, { 'attr': { 'class': 'form-check' } }) }}
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Speichern</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <!-- Team Selection Links -->
+                <h5>Team Selection for Participants</h5>
+                <ul class="list-group">
+                    {% for participant in tournament.participants %}
+                        {% set isValid = '' %}
+                        {% if tournament_participant_is_valid(tournament, participant) %}
+                            {% set isValid = 'bg-success' %}
+                        {% else %}
+                            {% set isValid = 'bg-danger' %}
+                        {% endif %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center {{ isValid }}">
+                            {{ participant.ident }}
+                            {{ component('ButtonComponent', {
+                                text: 'Teams wählen', classes: 'btn btn-sm btn-primary', route: path('tournament_team_selection', { tournamentId: tournament.id, participantId: participant.id })
+                            }) }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+            {% set isValid = '' %}
+            {% set disabled = '' %}
+            {% if tournament_is_valid(tournament) %}
+                {% set isValid = 'bg-success' %}
+            {% else %}
+                {% set isValid = 'bg-danger' %}
+                {% set disabled = 'disabled' %}
+            {% endif %}
+            <div class="col-md-8">
+                <form method="post" action="{{ path('tournament_calculate', {
+                    'id': tournament.id
+                }) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-success w-100 {{ isValid }}">
+                        Turnier starten
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

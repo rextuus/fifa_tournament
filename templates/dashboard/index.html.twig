@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <!-- Page Header -->
+        <div class="text-center mb-5">
+            <h1 class="display-4">Tournament Management Dashboard</h1>
+            <p class="lead">Create and manage tournaments and participants easily.</p>
+        </div>
+
+        <!-- Action Cards -->
+        <div class="row justify-content-center">
+            <!-- Card: Create New Tournament -->
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5>Turniere verwalten</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Lege neue Turniere an oder verwalte existierende</p>
+                        {{ component('ButtonComponent', {
+                            text: 'Zu den Turnieren', classes: 'btn btn-primary', route: path('tournament_list')
+                        }) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Manage Participants -->
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5>Truppen verwalten</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Lege neue Truppen oder Mitspieler an</p>
+                        {{ component('ButtonComponent', {
+                            text: 'Zu den Truppen', classes: 'btn btn-success', route: path('participant_manage')
+                        }) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Placeholder for Future Features -->
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <h5>Spotify Verwalten</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Verbinde die App mit deinem Spotify Account</p>
+                        {{ component('ButtonComponent', {
+                            text: 'Spotify Verwaltung', classes: 'btn btn-success', route: path('spotify_info')
+                        }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

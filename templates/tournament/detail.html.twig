@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tournament Details{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center mb-4">{{ tournament.ident }} - Tournament Bracket</h1>
+
+        <div class="table-responsive">
+            <table class="table text-center align-middle">
+                <thead class="table-dark">
+                <tr>
+                    {% for round in tournament.rounds %}
+                        <th>{{ round.roundType.getRoundDescription }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for row in matrix %}
+                    <tr>
+                        {% for column in row %}
+                            <td class="test">
+                                <span class="fixture">
+                                    {% if column != 'X' %}
+                                        {{ component('FixtureComponent', {fixture: column}) }}
+                                    {% else %}
+
+                                    {% endif %}
+                                </span>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

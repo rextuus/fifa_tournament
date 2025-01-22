@@ -1,0 +1,9 @@
+<div class="d-inline" {{ stimulus_controller('modal-form', {formUrl: this.formUrl, title: this.modalTitle, submitText: this.submitText, declineText: this.declineText }, {}, {'modal-common': '.dcCommonModal'}) }}>
+    <a href="#" title="{{ this.modalTitle }}"
+        {% if this.linkId %}id="{{ this.linkId }}" {% endif %}
+        {% if this.classes %}class="{{ this.classes }}" {% endif %}
+        {% if this.attributes %}{{ this.attributes|raw }} {% endif %}
+        {{ stimulus_action('modal-form', 'openModal') }}>
+        {% block content %}{% endblock %}
+    </a>
+</div>

@@ -1,0 +1,60 @@
+<div{{ attributes }} class="card mb-3 hover-container bg-dark text-white">
+    <div class="card-body">
+        <h5 class="card-title">{{ fixture.ident }}</h5>
+        <div class="teams-content d-flex justify-content-between align-items-center">
+            <!-- Home Team -->
+            <div class="team-container d-flex flex-column align-items-center">
+                <!-- Team Image (Visible by Default) -->
+                <img src="{{ fixture.homeTeam is not null and fixture.homeTeam.imageFile
+                ? image_url(fixture.homeTeam.imageFile, 'medium')
+                : asset('build/images/thumbnails/team_default.png') }}"
+                     alt="Home Team Logo"
+                     class="img-fluid team-image"
+                     style="width: 80px; height: 80px; object-fit: cover;" />
+
+                <!-- Participant Image (Hidden by Default) -->
+                <img src="{{ fixture.homeParticipant is not null and fixture.homeParticipant.imageFile
+                ? image_url(fixture.homeParticipant.imageFile, 'large')
+                : asset('build/images/thumbnails/client_default.png') }}"
+                     alt="Home Participant Image"
+                     class="img-fluid participant-image rounded-circle border"
+                     style="width: 80px; height: 80px; object-fit: cover;" />
+
+                <!-- Team Name (Visible by Default) -->
+                <div class="team-name">{{ fixture.homeTeam.name ?? 'TBA' }}</div>
+
+                <!-- Participant Name (Hidden by Default) -->
+                <div class="participant-ident">{{ fixture.homeParticipant.ident ?? 'Unknown' }}</div>
+            </div>
+
+            <!-- VS Divider -->
+            <div class="vs-divider text-center font-weight-bold mx-3">VS</div>
+
+            <!-- Away Team -->
+            <div class="team-container d-flex flex-column align-items-center">
+                <!-- Team Image (Visible by Default) -->
+                <img src="{{ fixture.awayTeam is not null and fixture.awayTeam.imageFile
+                ? image_url(fixture.awayTeam.imageFile, 'medium')
+                : asset('build/images/thumbnails/team_default.png') }}"
+                     alt="Away Team Logo"
+                     class="img-fluid team-image"
+                     style="width: 80px; height: 80px; object-fit: cover;" />
+
+                <!-- Participant Image (Hidden by Default) -->
+                <img src="{{ fixture.awayParticipant is not null and fixture.awayParticipant.imageFile
+                ? image_url(fixture.awayParticipant.imageFile, 'large')
+                : asset('build/images/thumbnails/client_default.png') }}"
+                     alt="Away Participant Image"
+                     class="img-fluid participant-image rounded-circle border"
+                     style="width: 80px; height: 80px; object-fit: cover;" />
+
+                <!-- Team Name (Visible by Default) -->
+                <div class="team-name">{{ fixture.awayTeam.name ?? 'TBA' }}</div>
+
+                <!-- Participant Name (Hidden by Default) -->
+                <div class="participant-ident">{{ fixture.awayParticipant.ident ?? 'Unknown' }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-white">0 - 0</div>
+</div>

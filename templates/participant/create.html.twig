@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Participant{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="text-center mb-4">
+            <h1 class="display-5">Create New Participant</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        {{ form_row(form.ident, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_row(form.players, { 'attr': {'class': 'form-control'} }) }}
+
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Create Participant</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

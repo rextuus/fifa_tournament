@@ -1,0 +1,51 @@
+<div{{ attributes }} class="card col-md-8 mb-3 p-3 shadow-sm border-0 rounded-3">
+    <!-- Participant Identifier -->
+    <div class="h3 text-primary text-center mb-4 fw-bold">
+        {{ this.participant.ident }}
+    </div>
+
+    <!-- Image Section -->
+    <div class="text-center mb-5">
+        {% if this.participant.imageFile %}
+            {% set imageMarkup %}
+                <img src="{{ image_url(this.participant.imageFile, 'large') }}"
+                     alt="Participant Image"
+                     class="img-fluid rounded shadow-sm"
+                     style="max-width: 300px;">
+            {% endset %}
+        {% else %}
+            {% set imageMarkup %}
+                <img src="{{ asset('build/images/thumbnails/client_default.png') }}"
+                     alt="Default Participant Image"
+                     class="img-fluid rounded shadow-sm"
+                     style="max-width: {{ this.size }}px;">
+            {% endset %}
+        {% endif %}
+        {{ imageMarkup }}
+    </div>
+
+    <!-- Track Information Section -->
+    {{ component('TrackComponent', {participant: participant, track: this.track}) }}
+
+    <!-- Action Button -->
+    <div class="text-center mb-4">
+        <button type="button"
+                class="btn btn-outline-primary px-4"
+                data-action="live#action"
+                data-live-action-param="debounce(500)|createQrCode">
+            {{ showQrCode ? 'QR Code' : 'QR Code' }}
+        </button>
+    </div>
+
+    <!-- QR Code Display -->
+    {% set qrCode = this.qrCode %}
+    {% if qrCode is not null %}
+        <div class="text-center mt-4">
+            <h5 class="text-muted mb-3">QR-Code zu dieser Seite</h5>
+            <img src="{{ qrCode }}"
+                 alt="QR Code"
+                 class="img-fluid shadow-sm rounded"
+                 style="max-width: {{ size }}px;">
+        </div>
+    {% endif %}
+</div>

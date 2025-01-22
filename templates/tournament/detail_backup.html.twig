@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tournament Details{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center mb-4">{{ tournament.ident }} - Tournament Bracket</h1>
+
+        <div class="table-responsive">
+            <table class="table text-center align-middle">
+                <thead class="table-dark">
+                <tr>
+                    {% for round in tournament.rounds %}
+                        <th>Round {{ round.nr }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% set total_rounds = tournament.rounds|length %}
+
+                {# Calculate the total number of rows (matches start halved in each round) #}
+                {% set total_rows = 2 ** (total_rounds - 1) %}
+
+                {# Loop through each row dynamically #}
+                {% for row in 0..total_rows - 1 %}
+                    <tr>
+                        {% for round_index in 0..total_rounds - 1 %}
+                            {# Determine whether this row contains a match in this round #}
+                            {% set match_spacing = 2 ** round_index %}
+                            {% if row % match_spacing == 0 %}
+                                {% set round = tournament.rounds[round_index] %}
+                                {% set match_index = (row / match_spacing)|round(0, 'floor') %}
+
+                                {% if round.fixtures[match_index] is defined %}
+                                    {% set fixture = round.fixtures[match_index] %}
+                                    <td class="test"><span class="fixture">
+                                            {{ component('FixtureComponent', {fixture: fixture}) }}
+                                    </span></td>
+                                {% else %}
+                                    <td class=""></td>
+                                {% endif %}
+                            {% else %}
+{#                                <td class="placeholder"></td> #}{# Empty cell for non-applicable rows in this round #}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

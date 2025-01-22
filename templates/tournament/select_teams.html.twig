@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Select Teams for Tournament{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="mb-4">Teamauswahl für {{ participant.ident }} und das Turnier {{ tournament.ident }}</h1>
+
+        <p class="mb-4">Anzahl benötigter Teams: <strong>{{ listCount }}/{{ tournament.numberOfChoices }}</strong></p>
+
+        <!-- Include the team listing component -->
+        <div class="mb-5">
+            {{ component('TeamListing', {
+                participant: participant,
+                tournament: tournament
+            }) }}
+        </div>
+
+        <!-- Form for team selection -->
+        <div class="card">
+            <div class="card-body">
+                {% if listCount >= tournament.numberOfChoices %}
+                    <h5 class="card-title">Du hast das Limit an Teams für dieses Turnier bereits erreicht</h5>
+                {% else %}
+                    <h5 class="card-title">Wähle ein Teams aus</h5>
+                    <hr>
+                    {{ form_start(form, { 'attr': {'class': 'needs-validation'} }) }}
+                    {{ form_widget(form) }}
+                    <button type="submit" class="btn btn-primary mt-3">Hinzufügen</button>
+                    {{ form_end(form) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

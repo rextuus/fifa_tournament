@@ -1,0 +1,30 @@
+{% block cropped_image_upload_widget %}
+    {% set imageUrl = asset(default_image_path) %}
+    {% if current_image_url %}
+        {% set imageUrl = image_url(current_image_url, 'large') %}
+    {% endif %}
+    <div class="cropped-image-upload" data-controller="cropped-image-upload"
+         data-cropped-image-upload-width-value="{{ width }}"
+         data-cropped-image-upload-height-value="{{ height }}">
+
+        <div class="cropper-wrapper hidden" style="width: {{ width }}px; min-height: {{ height }}px" data-cropped-image-upload-target="cropperWrapper">
+            <div class="cropper" style="width: {{ width }}px;" data-cropped-image-upload-target="cropper"></div>
+        </div>
+        <div style="width: {{ width }}px; min-height: {{ height }}px" data-cropped-image-upload-target="imageWrapper">
+            <img src="{{ imageUrl }}" style="width: 100%; height: 100%; object-fit: cover;" alt="Uploaded Image">
+        </div>
+
+        <a href="#" class="btn btn-primary position-relative mt-3" data-turbo="false">
+            <div class="d-flex align-items-center" data-cropped-image-upload-target="label">
+                <span class="spinner-border spinner-border-sm has-mr-2 hidden" role="status" id="spinner" aria-hidden="true"></span>
+                <span>Bild auswählen</span>
+            </div>
+            <input type="file"
+                   id="{{ id }}"
+                   name="{{ full_name }}"
+                   data-cropped-image-upload-target="fileInput"
+                   data-action="change->cropped-image-upload#readFile"
+                   accept=".jpg, .jpeg, .png">
+        </a>
+    </div>
+{% endblock %}

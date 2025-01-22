@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Participants{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <!-- Page Header -->
+        <div class="text-center mb-4">
+            <h1 class="display-5">Truppen verwalten</h1>
+            <p class="lead">Neue Truppen anlegen und verwalten</p>
+        </div>
+
+        <!-- Buttons for Actions -->
+        <div class="row mb-4">
+            <div class="col-md-6 text-center">
+                <a href="{{ path('participant_create') }}" class="btn btn-primary btn-lg w-75">Neue Truppe erstellen</a>
+            </div>
+            <div class="col-md-6 text-center">
+                <a href="{{ path('player_create') }}" class="btn btn-success btn-lg w-75">Neuen Spieler erstellen</a>
+            </div>
+        </div>
+
+        <!-- Participants List -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Truppen</h5>
+            </div>
+            <div class="card-body">
+                {% if participants|length > 0 %}
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Truppe</th>
+                            <th scope="col">Spieler</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for participant in participants %}
+                            <tr>
+                                <th scope="row">{{ participant.id }}</th>
+                                <td>
+                                    {{ component('ProfileImageComponent', {profile: participant, width: 90}) }}
+                                    {{ participant.ident }}
+                                </td>
+                                <td>
+                                    {% if participant.players|length > 0 %}
+                                        <ul class="list-unstyled mb-0">
+                                            {% for player in participant.players %}
+                                                <li>
+                                                    {{ component('ProfileImageComponent', {profile: player}) }}
+                                                    {{ player.ident }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <em>No players assigned</em>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ component('ButtonComponent', {
+                                        text: 'Mitglieder', classes: 'btn btn-sm btn-warning', route: path('participant_edit', { id: participant.id })
+                                    }) }}
+                                    {{ component('ButtonComponent', {
+                                        text: 'Torhymne', classes: 'btn btn-sm btn-warning', route: path('spotify_search', { id: participant.id })
+                                    }) }}
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted">No participants found. Create one to get started.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

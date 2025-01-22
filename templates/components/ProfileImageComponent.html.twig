@@ -1,0 +1,14 @@
+<div{{ attributes }}>
+    {% if this.profile.imageFile %}
+        {% set imageMarkup %}
+            <img src="{{ image_url(this.profile.imageFile, 'large') }}"
+                 class="img-fluid" style="max-width: {{ this.width }}px;"/>
+        {% endset %}
+    {% else %}
+        {% set imageMarkup %}
+            <img src="{{ asset(this.getDefaultImage()) }}"
+                 class="img-fluid" style="max-width: {{ this.width }}px;"/>
+        {% endset %}
+    {% endif %}
+    {{ imageMarkup }}
+</div>

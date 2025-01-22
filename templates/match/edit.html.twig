@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Match Details{% endblock %}
+
+{% block body %}
+
+    <div class="col my-auto mx-auto" style="max-width: 100px;">
+        {% if team.imageFile %}
+            {% set imageMarkup %}
+                <img src="{{ image_url(team.imageFile, 'medium') }}"
+                     class="img-fluid rounded-circle"/>
+            {% endset %}
+        {% else %}
+            {% set imageMarkup %}
+                <img src="{{ asset('build/images/thumbnails/client_default.png') }}"
+                     class="img-fluid rounded-circle"/>
+            {% endset %}
+        {% endif %}
+
+            <twig:AjaxFormModalLink
+                    modalTitle="{{ 'form.profile_image.headline'|trans() }}"
+                    classes="btn btn-outline-secondary"
+                    submitText="{{ 'label.save'|trans() }}"
+                    formUrl="{{ url('team_edit_profile_image',  {'id' : team.id}) }}">
+                {{ imageMarkup }}
+            </twig:AjaxFormModalLink>
+
+    </div>
+{#    {{ form(form) }}#}
+{% endblock %}

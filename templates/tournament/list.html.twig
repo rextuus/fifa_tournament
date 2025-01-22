@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Tournaments{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <!-- Page Header -->
+        <div class="text-center mb-4">
+            <h1 class="display-5">Manage Tournaments</h1>
+            <p class="lead">View, create, and manage tournaments.</p>
+        </div>
+
+        <!-- Buttons for Actions -->
+        <div class="row mb-4">
+            <div class="col-md-6 text-center">
+                {{ component('ButtonComponent', {
+                    text: 'Neues Turnier', classes: 'btn btn-primary btn-lg w-75', route: path('tournament_create')
+                }) }}
+            </div>
+            <div class="col-md-6 text-center">
+                {{ component('ButtonComponent', {
+                    text: 'Neuer Teilnehmer', classes: 'btn btn-success btn-lg w-75', route: path('participant_create')
+                }) }}
+            </div>
+        </div>
+
+        <!-- Tournament List -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Tournaments</h5>
+            </div>
+            <div class="card-body">
+                {% if tournaments|length > 0 %}
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Ident</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Teilnehmer</th>
+                            <th scope="col">Optionen</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for tournament in tournaments %}
+                            {% set isValid = '' %}
+                            {% if tournament_is_valid(tournament) %}
+                                {% set isValid = 'bg-success' %}
+                            {% else %}
+                                {% set isValid = 'bg-danger' %}
+                            {% endif %}
+                            <tr>
+                                <th scope="row" class="{{ isValid }}">{{ tournament.id }}</th>
+                                <td class="{{ isValid }}">{{ tournament.ident }}</td>
+                                <td class="{{ isValid }}">{{ tournament.state.value }}</td>
+                                <td class="{{ isValid }}">
+                                    {% if tournament.participants|length > 0 %}
+                                        <ul class="list-unstyled mb-0">
+                                            {% for participant in tournament.participants %}
+                                                <li>{{ participant.ident }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <em>No participants</em>
+                                    {% endif %}
+                                </td>
+                                <td class="{{ isValid }}">
+                                    {{ component('ButtonComponent', {
+                                        text: 'Edit', classes: 'btn btn-sm btn-warning', route: path('tournament_manage', { id: tournament.id })
+                                    }) }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted">No tournaments found. Create one to get started.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Participant{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="text-center mb-4">
+            <h1 class="display-5">Team bearbeiten</h1>
+            <p class="lead">QR-Code nutzen um Bilder per Smartphone hochzuladen</p>
+        </div>
+
+        <div class="col my-auto mx-auto mb-3" style="max-width: 200px;">
+            {% if participant.imageFile %}
+                {% set imageMarkup %}
+                    <img src="{{ image_url(participant.imageFile, 'medium') }}"
+                         class="img-fluid rounded-circle"/>
+                {% endset %}
+            {% else %}
+                {% set imageMarkup %}
+                    <img src="{{ asset('build/images/thumbnails/client_default.png') }}"
+                         class="img-fluid rounded-circle"/>
+                {% endset %}
+            {% endif %}
+
+            <twig:AjaxFormModalLink
+                    modalTitle="{{ 'form.profile_image.headline'|trans() }}"
+                    classes="btn btn-outline-secondary"
+                    submitText="Speichern"
+                    formUrl="{{ url('participant_edit_profile_image',  {'id' : participant.id}) }}">
+                {{ imageMarkup }}
+            </twig:AjaxFormModalLink>
+
+            <div class="row my-4 text-center">
+                <!-- QR code container -->
+                <div class="col-auto">
+                    <img src="{{ qrCodeDataUri }}" alt="QR Code" class="img-fluid" style="max-width: 200px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {{ form_start(form) }}
+
+                        <!-- Participant Identifier -->
+                        <div class="mb-3">
+                            {{ form_row(form.ident, { 'attr': { 'class': 'form-control' } }) }}
+                        </div>
+
+                        <!-- Players Multi-select -->
+                        <div class="mb-3">
+                            {{ form_row(form.players, { 'attr': { 'class': 'form-control' } }) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

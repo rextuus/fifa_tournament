@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Player{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center">Edit Player</h1>
+
+        <div class="col my-auto mx-auto mb-3" style="max-width: 100px;">
+            {% if player.imageFile %}
+                {% set imageMarkup %}
+                    <img src="{{ image_url(player.imageFile, 'medium') }}"
+                         class="img-fluid rounded-circle"/>
+                {% endset %}
+            {% else %}
+                {% set imageMarkup %}
+                    <img src="{{ asset('build/images/thumbnails/client_default.png') }}"
+                         class="img-fluid rounded-circle"/>
+                {% endset %}
+            {% endif %}
+
+            <twig:AjaxFormModalLink
+                    modalTitle="{{ 'form.profile_image.headline'|trans() }}"
+                    classes="btn btn-outline-secondary"
+                    submitText="Speichern"
+                    formUrl="{{ url('player_edit_profile_image',  {'id' : player.id}) }}">
+                {{ imageMarkup }}
+            </twig:AjaxFormModalLink>
+
+            <div class="row my-4 text-center">
+                <!-- QR code container -->
+                <div class="col-auto">
+                    <img src="{{ qrCodeDataUri }}" alt="QR Code" class="img-fluid" style="max-width: 200px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        {{ form_row(form.ident, { 'attr': { 'class': 'form-control' } }) }}
+                        <button type="submit" class="btn btn-primary mt-3 w-100">Save Changes</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

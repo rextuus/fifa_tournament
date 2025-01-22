@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="row g-3">
+        {% for team in this.teams %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {% if team.imageFile %}
+                                <img src="{{ image_url(team.imageFile, 'medium') }}"
+                                     alt="Team Image"
+                                     class="img-fluid"
+                                     style="width: 80px; height: 80px; object-fit: cover;" />
+                            {% else %}
+                                <img src="{{ asset('build/images/thumbnails/client_default.png') }}"
+                                     alt="Default Team Image"
+                                     class="img-fluid"
+                                     style="width: 80px; height: 80px; object-fit: cover;" />
+                            {% endif %}
+                        </div>
+                        <h6 class="card-title">{{ team }}</h6>
+                        <!-- Change to Button -->
+                        <div>
+                            <form method="post" action="{{ path('tournament_team_remove', {
+                                'teamListId': this.getTeamListId,
+                                'teamId': team.id
+                            }) }}" style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm mt-2">
+                                    X
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

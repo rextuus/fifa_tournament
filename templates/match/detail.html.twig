@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Match Details{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <!-- Match Header -->
+        <div class="text-center mb-5">
+            <h1>{{ match.title }}</h1>
+            <p class="text-muted">Date: {{ match.date }}</p>
+        </div>
+
+        <div class="row justify-content-center">
+            {% for participant in match.participants %}
+                <div class="col-md-5 mb-4">
+                    <div class="card text-center shadow-sm">
+                        <!-- Styled participant ident -->
+                        <div class="participant-ident py-2 mb-3 text-uppercase font-weight-bold text-bg-secondary">
+                            {{ participant.ident }}
+                        </div>
+
+                        <!-- Carousel for Participant Image and Team Logo -->
+                        {% if participant.participantImage or (participant.team and participant.team.logo) %}
+                            <div id="carousel-participant-{{ loop.index }}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                                <div class="carousel-inner">
+                                    {% set isActiveSet = false %}
+
+                                    {% if participant.participantImage %}
+                                        <!-- Participant Image -->
+                                        <div class="carousel-item {% if not isActiveSet %}active{% set isActiveSet = true %}{% endif %}">
+                                            <img src="{{ participant.participantImage }}" alt="Participant Image" class="d-block w-100" style="height: 300px; object-fit: cover;">
+                                        </div>
+                                    {% endif %}
+
+                                    {% if participant.team and participant.team.logo %}
+                                        <!-- Team Logo -->
+                                        <div class="carousel-item {% if not isActiveSet %}active{% set isActiveSet = true %}{% endif %}">
+                                            <img src="{{ participant.team.logo }}" alt="{{ participant.team.name }} Logo" class="d-block w-100" style="height: 300px; object-fit: contain;">
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <!-- Removed the navigation buttons -->
+                            </div>
+                        {% endif %}
+
+                        <div class="card-body">
+                            <!-- Team Data -->
+                            {% if participant.team %}
+                                <h5 class="card-title mb-3">{{ participant.team.name }}</h5>
+                            {% endif %}
+                            <!-- User Information -->
+
+                            <!-- User Information -->
+                            <h6 class="border-top">Players:</h6>
+
+                            <!-- Check if there are more than 2 players -->
+                            {% if participant.players|length > 2 %}
+                                <div id="carousel-players-{{ loop.index }}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                                    <div class="carousel-inner">
+                                        {% for playerChunk in participant.players|batch(2) %}
+                                            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                                <div class="row">
+                                                    {% for player in playerChunk %}
+                                                        <div class="col-6 text-center">
+                                                            <img src="{{ player.image }}" alt="{{ player.name }}" class="rounded-circle mb-2" style="width: 60px; height: 60px; object-fit: cover;">
+                                                            <p class="small">{{ player.name }}</p>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <!-- If 2 or fewer players, display them statically -->
+                                <div class="row mt-2">
+                                    {% for player in participant.players %}
+                                        <div class="col-6 text-center">
+                                            <img src="{{ player.image }}" alt="{{ player.name }}" class="rounded-circle mb-2" style="width: 60px; height: 60px; object-fit: cover;">
+                                            <p class="small">{{ player.name }}</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

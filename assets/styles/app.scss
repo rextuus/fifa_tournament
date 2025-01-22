@@ -1,0 +1,137 @@
+// Import Bootstrap & Fontawesome
+@import '~bootstrap/scss/bootstrap';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import 'croppie/croppie.css';
+
+// Custom Colors
+$primary-bg: linear-gradient(135deg, #24292f, #1a1f24); // Dark gray blend
+$secondary-bg: linear-gradient(135deg, #0056b3, #0069d9); // Electric blue
+$accent-color: #e63946;
+
+// Typography
+$font-family-game: 'Lato', sans-serif;
+
+body {
+    font-family: $font-family-game;
+    background: $primary-bg;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: $secondary-bg;
+    padding: 1.5rem;
+    text-align: center;
+
+    h1 {
+        color: $accent-color;
+        font-size: 2.5rem;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+
+        &:hover {
+            color: $accent-color;
+        }
+    }
+}
+
+footer {
+    background: $primary-bg;
+    text-align: center;
+    padding: 1rem;
+    position: relative;
+
+    span {
+        color: $accent-color;
+    }
+}
+
+
+// form
+.hidden {
+    display: none;
+}
+
+.cropped-image-upload .cropper-wrapper {
+    background-color: grey;
+    overflow: hidden;
+}
+
+.cropped-image-upload .cropper-wrapper .cropper {
+    background-color: grey;
+    display: none;
+}
+
+.cropped-image-upload .cropper-wrapper.ready .cropper {
+    display: block;
+}
+
+.cropped-image-upload input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+td.test {
+    background: $primary-bg; /* Light grey (Bootstrap usually uses this) */
+    color: #212529; /* Dark text to ensure readability */
+    border: none;
+
+    .fixture{
+        padding: 0.5rem;
+        //background: $accent-color;
+        //color: white;
+    }
+}
+
+
+// hovering for the tournament tree
+.hover-container {
+    position: relative;
+}
+
+/* Team container with default styles */
+.team-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* Keep content aligned inside container */
+    text-align: center;
+}
+
+/* Default State: Team images and names visible, participant content hidden */
+.team-image,
+.team-name {
+    display: block;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.participant-image,
+.participant-ident {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Hover: Trigger hover from the parent to apply changes to both teams */
+.hover-container:hover .team-image,
+.hover-container:hover .team-name {
+    display: none;
+    opacity: 0; /* Fade out team content */
+}
+
+.hover-container:hover .participant-image,
+.hover-container:hover .participant-ident {
+    display: block;
+    opacity: 1; /* Fade in participant content */
+}

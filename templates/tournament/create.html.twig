@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Tournament{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center">Create a New Tournament</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_row(form.ident, { 'attr': { 'class': 'form-control' } }) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_row(form.level, { 'attr': { 'class': 'form-select' } }) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Create Tournament</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
