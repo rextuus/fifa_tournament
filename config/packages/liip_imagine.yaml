@@ -30,3 +30,9 @@ liip_imagine:
             quality: 80
             filters:
                 fixed: { width: 250, height: 250}
+        image_square_x_large:
+            data_loader: image
+            cache: public_image
+            quality: 80
+            filters:
+                fixed: { width: 500, height: 500 }

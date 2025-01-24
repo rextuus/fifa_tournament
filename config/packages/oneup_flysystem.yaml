@@ -1,11 +1,5 @@
 oneup_flysystem:
     adapters:
-        order:
-            local:
-                location: '%kernel.project_dir%/%env(resolve:ORDER_PDF_DIR)%'
-        invoice:
-            local:
-                location: '%kernel.project_dir%/%env(resolve:INVOICE_PDF_DIR)%'
         image:
             local:
                 location: '%kernel.project_dir%/%env(resolve:IMAGE_DIR)%'
@@ -13,19 +7,7 @@ oneup_flysystem:
             local:
                 location: '%kernel.project_dir%/%env(resolve:PUBLIC_IMAGE_DIR)%'
     filesystems:
-        order:
-            adapter: order
-            visibility: private
-            alias: flysystem_order
-        invoice:
-            adapter: invoice
-            visibility: private
-            alias: flysystem_invoice
         image:
             adapter: image
             visibility: private
             alias: flysystem_image
-        public_image:
-            adapter: public_image
-            visibility: private
-            alias: flysystem_public_image

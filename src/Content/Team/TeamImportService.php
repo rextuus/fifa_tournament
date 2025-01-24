@@ -9,6 +9,8 @@ use App\Content\File\Flysystem\FilesystemProvider;
 use App\Content\File\Form\Data\FileData;
 use App\Entity\Team;
 use Doctrine\ORM\EntityManagerInterface;
+use Liip\ImagineBundle\Message\WarmupCache;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class TeamImportService
 {
@@ -17,6 +19,7 @@ class TeamImportService
         private readonly EntityManagerInterface $entityManager,
         private readonly FileService $fileService,
         private readonly ImageStorageService $imageStorageService,
+        private readonly MessageBusInterface $messageBus,
     ) {
     }
 
@@ -65,6 +68,7 @@ class TeamImportService
                 $data->setFilesystemIdent(FilesystemProvider::IDENT_IMAGE);
 
                 $file = $this->fileService->createByData($data);
+                $this->messageBus->dispatch(new WarmupCache($file->getRelativePath(), null, true));
 
                 $team->setImageFile($file);
             }
