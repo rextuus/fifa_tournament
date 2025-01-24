@@ -24,19 +24,27 @@ class CreateDefaultUserCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Creates a default user with a specified password.')
+            ->setDescription('Creates a default user with a specified email and password.')
+            ->addArgument('email', InputArgument::REQUIRED, 'The email for the default user.')
             ->addArgument('password', InputArgument::REQUIRED, 'The password for the default user.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $email = $input->getArgument('email');
         $password = $input->getArgument('password');
+
+        // Validate email format
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $output->writeln('<error>Invalid email format.</error>');
+            return Command::FAILURE;
+        }
 
         // Check if a user with the email already exists
         $existingUser = $this->entityManager->getRepository(User::class)
-            ->findOneBy(['email' => 'master@wh-company.de']);
+            ->findOneBy(['email' => $email]);
         if ($existingUser) {
-            $output->writeln('<error>A user with the email "master@wh-company.de" already exists.</error>');
+            $output->writeln('<error>A user with the email "' . $email . '" already exists.</error>');
             return Command::FAILURE;
         }
 
@@ -48,7 +56,7 @@ class CreateDefaultUserCommand extends Command
 
         // Create and set up the new user
         $user = new User();
-        $user->setEmail('master@wh-company.de');
+        $user->setEmail($email);
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashedPassword);
 
@@ -57,7 +65,7 @@ class CreateDefaultUserCommand extends Command
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            $output->writeln('<info>Default user with email "master@wh-company.de" created successfully!</info>');
+            $output->writeln('<info>Default user with email "' . $email . '" created successfully!</info>');
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $output->writeln('<error>An error occurred while creating the default user: ' . $e->getMessage() . '</error>');
