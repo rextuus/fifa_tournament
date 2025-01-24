@@ -48,7 +48,7 @@ final class ParticipantComponent
     public function getTrack(): SpotifyTrack
     {
         if ($this->participant->getGoalHymnSpotifyId() === null){
-            return new SpotifyTrack('','', '', '', '', 0);
+            return new SpotifyTrack('-','', '', '', '', 0);
         }
 
         return $this->spotifyService->getGoalHymnForParticipant($this->participant);

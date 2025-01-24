@@ -2,24 +2,37 @@
 
 namespace App\Controller;
 
+use App\Content\SettingService;
 use App\Content\Spotify\NoAccessTokenFoundException;
 use App\Content\Spotify\SpotifyService;
+use App\Entity\Fixture;
 use App\Entity\Participant;
+use App\Entity\Tournament;
+use App\Entity\User;
 use App\Form\SelectSongPeriodType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/spotify')]
-final class SpotifyController extends AbstractController{
-    public function __construct(private SpotifyService $spotifyService, private EntityManagerInterface $entityManager)
-    {
+final class SpotifyController extends AbstractController
+{
+    public function __construct(
+        private readonly SpotifyService $spotifyService,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly SettingService $settingService,
+        #[Autowire('%env(FORCED_RUNNING_TIME)%')]
+        private readonly int $forcedRuntime,
+    ) {
     }
 
     #[Route('/login', name: 'spotify_login')]
@@ -43,9 +56,10 @@ final class SpotifyController extends AbstractController{
         $authorizationCode = $request->query->get('code');
         $state = $request->query->get('state');
 
-        if ($authorizationCode && $state) {
+        $user = $this->getUser();
+        if ($authorizationCode && $state && $user && $user instanceof User) {
             // Exchange the authorization code for an access token
-            $this->spotifyService->createAccessToken($authorizationCode);
+            $this->spotifyService->createAccessToken($authorizationCode, $user);
 
             return $this->redirectToRoute('dashboard');
         }
@@ -88,6 +102,7 @@ final class SpotifyController extends AbstractController{
             'form' => $form->createView(),
             'participant' => $participant,
             'tracks' => $tracks,
+            'spotifyIsAvailable' => $this->spotifyService->checkSpotifyIsLoggedIn(),
         ]);
     }
 
@@ -97,7 +112,27 @@ final class SpotifyController extends AbstractController{
         $track = $this->spotifyService->getTrackById($spotifyTrack); // Duration in milliseconds
         $durationInSeconds = intval($track->getDuration() / 1000);
 
-        $form = $this->createForm(SelectSongPeriodType::class, ['trackDuration' => $durationInSeconds]);
+        $settings = $this->settingService->getSettingForUser($this->getUser());
+        $playTimeLimit = $settings->getSongPlayTimeLimit();
+
+        $currentTrack = $participant->getGoalHymnSpotifyId();
+        $start = 0;
+        $end = 0;
+        if ($currentTrack === $spotifyTrack) {
+            $start = $participant->getGoalHymnStartTime();
+            $end = $participant->getGoalHymnEndTime();
+        }
+
+        $form = $this->createForm(
+            SelectSongPeriodType::class,
+            null,
+            [
+                'trackDuration' => $durationInSeconds,
+                'playTimeLimit' => $playTimeLimit,
+                'start' => $start,
+                'end' => $end,
+            ]
+        );
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -118,6 +153,7 @@ final class SpotifyController extends AbstractController{
             'trackDuration' => $durationInSeconds,
             'track' => $track,
             'participant' => $participant,
+            'playTimeLimit' => $playTimeLimit,
         ]);
     }
 
@@ -127,12 +163,62 @@ final class SpotifyController extends AbstractController{
         try {
             $displayName = $this->spotifyService->getLoginInformation();
         } catch (NoAccessTokenFoundException  $e) {
-            return $this->redirectToRoute('spotify_login', []);
+            $displayName = 'not_logged_in';
         }
 
         return $this->render('spotify/info.html.twig', [
             'displayName' => $displayName,
         ]);
+    }
+
+    #[Route('/run/{fixtureId}/{participantId}', name: 'spotify_run', methods: ['GET', 'POST'])]
+    public function run(
+        Request $request,
+        #[MapEntity(id: 'fixtureId')] Fixture $fixture,
+        #[MapEntity(id: 'participantId')] Participant $participant,
+    ): JsonResponse {
+        $isHome = $request->query->get('isHome');
+
+        if ($fixture->isGoalMusicRunning()) {
+            return new JsonResponse(['error' => 'Goal music is already running'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($participant->getGoalHymnSpotifyId() !== null) {
+            $settings = $this->settingService->getSettingForUser($this->getUser());
+
+            $calculatedRuntime = $participant->getGoalHymnEndTime() - $participant->getGoalHymnStartTime();
+
+            if ($calculatedRuntime > $settings->getMaximumSongDuration()) {
+                $calculatedRuntime = $settings->getMaximumSongDuration();
+            }
+
+            if ($calculatedRuntime > $this->forcedRuntime) {
+                $calculatedRuntime = $this->forcedRuntime;
+            }
+
+            $this->spotifyService->breakQueueWithGoalHymn(
+                $fixture->getId(),
+                $participant->getGoalHymnSpotifyId(),
+                $participant->getGoalHymnStartTime(),
+                $calculatedRuntime,
+            );
+
+            $fixture->setIsGoalMusicRunning(true);
+        }
+
+        if ($isHome) {
+            $fixture->setHomeGoals($fixture->getHomeGoals() + 1);
+        } else {
+            $fixture->setAwayGoals($fixture->getAwayGoals() + 1);
+        }
+
+        $this->entityManager->persist($fixture);
+        $this->entityManager->flush();
+
+        return new JsonResponse([
+            'homeGoals' => $fixture->getHomeGoals(),
+            'awayGoals' => $fixture->getAwayGoals(),
+        ], Response::HTTP_OK);
     }
 
     #[Route('/test/{id}', name: 'test')]
@@ -142,6 +228,7 @@ final class SpotifyController extends AbstractController{
         // https://www.spotify.com/uk/account/apps/
 
         $this->spotifyService->breakQueueWithGoalHymn(
+            1,
             $participant->getGoalHymnSpotifyId(),
             $participant->getGoalHymnStartTime(),
             $participant->getGoalHymnEndTime() - $participant->getGoalHymnStartTime(),

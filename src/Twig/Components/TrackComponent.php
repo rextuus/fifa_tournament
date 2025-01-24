@@ -21,4 +21,9 @@ final class TrackComponent
 
     #[LiveProp(writable: true)]
     public Participant $participant;
+
+    public function isTrackFilled(): bool
+    {
+        return $this->track->getTrackName() !== '-';
+    }
 }

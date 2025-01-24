@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Settings{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2>Edit Settings</h2>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="form-wrapper mt-4">
+            <!-- Render the entire form -->
+            {{ form_start(form, { 'attr': { 'class': 'needs-validation', 'novalidate': 'novalidate' } }) }}
+            {{ form_widget(form, {
+                'attr': { 'class': 'form-group' },
+            }) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

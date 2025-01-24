@@ -11,6 +11,7 @@
     <div class="row justify-content-center mt-4">
         {{ component('ParticipantComponent', {participant: participant, size: 300}) }}
 
+        {% if spotifyIsAvailable %}
         <div class="col-md-8">
             {{ form_start(form) }}
             <div class="input-group mb-3">
@@ -21,6 +22,12 @@
             </div>
             {{ form_end(form) }}
         </div>
+        {% else %}
+        <div class="col-md-8">
+            <h1 class="text-danger">Bitte zuerst bei Spotify anmelden.</h1>
+            <a href="{{ path('spotify_login') }}" class="text-info">Zum Login</a>
+        </div>
+        {% endif %}
     </div>
 
     <!-- Display Tracks -->

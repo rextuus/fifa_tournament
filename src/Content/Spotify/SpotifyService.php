@@ -5,38 +5,39 @@ namespace App\Content\Spotify;
 use App\Content\Spotify\Representation\SpotifyTrack;
 use App\Entity\Participant;
 use App\Entity\SpotifyAccessToken;
+use App\Entity\User;
 use App\Message\RestoreSpotifyQueue;
 use App\Repository\SpotifyAccessTokenRepository;
 use DateTime;
 use SpotifyWebAPI\Session;
 use SpotifyWebAPI\SpotifyWebAPI;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SpotifyService
 {
-    const STORE_TOKEN_URL = 'https://www.wh-company.de/spotify/callback.php';
-    const FETCH_TOKEN_URL = 'https://www.wh-company.de/spotify/fetch.php';
-
-    const CLIENT_ID = '674bca2e71284896ae7fd7e60ca8dfff';
-    const CLIENT_SECRET = 'd23dfc9982974916a40f1f6cdec947fc';
-//    const REDIRECT_URI = 'https://wh-company.de/spotify/callback.php';
-    const REDIRECT_URI = 'http://localhost:8000/spotify/callback';
-
     private ?SpotifyWebAPI $api = null;
 
     public function __construct(
         private readonly SpotifyAccessTokenRepository $spotifyAccessTokenRepository,
-        private readonly MessageBusInterface $messageBus
+        private readonly MessageBusInterface $messageBus,
+        private readonly Security $security,
+        #[Autowire('%env(SPOTIFY_CLIENT_ID)%')]
+        private readonly string $clientId,
+        #[Autowire('%env(SPOTIFY_CLIENT_SECRET)%')]
+        private readonly string $clientSecret,
+        #[Autowire('%env(SPOTIFY_REDIRECT_URI)%')]
+        private readonly string $redirectUri
     ) {
     }
 
-    private function getApi(): SpotifyWebAPI
+    private function getApi(?User $user = null): SpotifyWebAPI
     {
         if ($this->api === null) {
             $api = new SpotifyWebAPI();
-            $api->setAccessToken($this->getValidAccessToken()->getAccessToken());
+            $api->setAccessToken($this->getValidAccessToken($user)->getAccessToken());
 
             $this->api = $api;
         }
@@ -44,12 +45,12 @@ class SpotifyService
         return $this->api;
     }
 
-    public function createAccessToken(string $authorizationCode): void
+    public function createAccessToken(string $authorizationCode, User $user): void
     {
         $session = new Session(
-            self::CLIENT_ID,
-            self::CLIENT_SECRET,
-            self::REDIRECT_URI
+            $this->clientId,
+            $this->clientSecret,
+            $this->redirectUri
         );
 
         $session->requestAccessToken($authorizationCode);
@@ -57,16 +58,16 @@ class SpotifyService
         $accessToken = $session->getAccessToken();
         $refreshToken = $session->getRefreshToken();
 
-        $spotifyAccessToken = $this->storeTokensToDb($accessToken, $refreshToken, $session->getTokenExpiration());
+        $this->storeTokensToDb($accessToken, $refreshToken, $session->getTokenExpiration(), $user);
     }
 
 
     public function getOauthToken(): string
     {
         $session = new Session(
-            self::CLIENT_ID,
-            self::CLIENT_SECRET,
-            self::REDIRECT_URI
+            $this->clientId,
+            $this->clientSecret,
+            $this->redirectUri
         );
 
         $state = $session->generateState();
@@ -87,25 +88,49 @@ class SpotifyService
         return $session->getAuthorizeUrl($options);
     }
 
-    public function storeTokensToDb(string $accessToken, string $refreshToken, int $expiration): SpotifyAccessToken
-    {
+    public function storeTokensToDb(
+        string $accessToken,
+        string $refreshToken,
+        int $expiration,
+        User $user
+    ): SpotifyAccessToken {
         $spotifyAccessToken = new SpotifyAccessToken();
         $spotifyAccessToken->setAccessToken($accessToken);
         $spotifyAccessToken->setRefreshToken($refreshToken);
         $spotifyAccessToken->setExpirationDate($expiration);
+        $spotifyAccessToken->setUser($user);
 
         $this->spotifyAccessTokenRepository->save($spotifyAccessToken);
 
         return $spotifyAccessToken;
     }
 
+    public function checkSpotifyIsLoggedIn(): bool
+    {
+        try {
+            $spotifyAccessToken = $this->spotifyAccessTokenRepository->getNewestToken(
+                $this->security->getUser()
+            );
+        } catch (NoAccessTokenFoundException $e) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * @throws NoAccessTokenFoundException
      */
-    public function getValidAccessToken(): SpotifyAccessToken
+    public function getValidAccessToken(?User $user = null): SpotifyAccessToken
     {
         // get current tokens
-        $spotifyAccessToken = $this->spotifyAccessTokenRepository->getNewestToken();
+        if ($user === null) {
+            $user = $this->security->getUser();
+        }
+
+        $spotifyAccessToken = $this->spotifyAccessTokenRepository->getNewestToken(
+            $user
+        );
 
         // check if current token is valid
         $currentTime = (new DateTime())->getTimestamp();
@@ -115,9 +140,9 @@ class SpotifyService
         }
 
         $session = new Session(
-            self::CLIENT_ID,
-            self::CLIENT_SECRET,
-            self::REDIRECT_URI
+            $this->clientId,
+            $this->clientSecret,
+            $this->redirectUri
         );
 
         $session->setAccessToken($spotifyAccessToken->getAccessToken());
@@ -126,10 +151,12 @@ class SpotifyService
         // refresh access token and store it in db
         $session->refreshAccessToken();
 
+        // save the new accessToken with same as in the expired one
         return $this->storeTokensToDb(
             $session->getAccessToken(),
             $session->getRefreshToken(),
-            $session->getTokenExpiration()
+            $session->getTokenExpiration(),
+            $spotifyAccessToken->getUser()
         );
     }
 
@@ -163,14 +190,17 @@ class SpotifyService
         return $api->seek(['position_ms' => 10000]);
     }
 
-    public function breakQueueWithGoalHymn(string $trackId, int $startTime, int $playTimeInSeconds = 10): bool
-    {
-//        dd($playTimeInSeconds * 1000);
+    public function breakQueueWithGoalHymn(
+        int $fixtureId,
+        string $trackId,
+        int $startTime,
+        int $playTimeInSeconds = 10
+    ): bool {
         $api = $this->getApi();
 
         // save current song info
         $currentSongInfo = $api->getMyCurrentPlaybackInfo();
-//dd($api->getMyDevices());
+
         $currentSongId = $currentSongInfo->item->id;
         $currentSongProgress = $currentSongInfo->progress_ms;
 
@@ -181,21 +211,19 @@ class SpotifyService
 
         $api->queue($currentSongId);
 
-        $message = new RestoreSpotifyQueue($currentSongId, $currentSongProgress);
+        $user = $this->security->getUser();
 
+        $message = new RestoreSpotifyQueue($fixtureId, $user->getId(), $currentSongId, $currentSongProgress);
 
         $this->messageBus->dispatch($message, [new DelayStamp($playTimeInSeconds * 1000)]);
 
-//        $api->next(['position_ms' => 10000]);
-
-
-        dd($api->getMyQueue());
+        return true;
     }
 
-    public function restoreSpotifyQueueAsBeforeGoalHymnBreak(int $progress): void
+    public function restoreSpotifyQueueAsBeforeGoalHymnBreak(int $progress, User $user): void
     {
         $this->api = null;
-        $api = $this->getApi();
+        $api = $this->getApi($user);
 
         // Move to the requeued current song and set playback position
         $api->next();

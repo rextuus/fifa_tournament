@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Content\Spotify\NoAccessTokenFoundException;
 use App\Entity\SpotifyAccessToken;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -50,9 +51,13 @@ class SpotifyAccessTokenRepository extends ServiceEntityRepository
     /**
      * @throws NoAccessTokenFoundException
      */
-    public function getNewestToken(): SpotifyAccessToken
+    public function getNewestToken(User $user): SpotifyAccessToken
     {
-        $newestToken = $this->findOneBy([], ['id' => 'DESC']);
+        $newestToken = $this->findOneBy(
+            ['user' => $user],
+            ['id' => 'DESC']
+        );
+
 
         if ($newestToken === null) {
             throw new NoAccessTokenFoundException('No tokens found');

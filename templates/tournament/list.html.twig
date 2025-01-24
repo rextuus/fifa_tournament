@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Manage Tournaments{% endblock %}
-
 {% block body %}
     <div class="container my-5">
         <!-- Page Header -->
@@ -9,7 +7,6 @@
             <h1 class="display-5">Manage Tournaments</h1>
             <p class="lead">View, create, and manage tournaments.</p>
         </div>
-
         <!-- Buttons for Actions -->
         <div class="row mb-4">
             <div class="col-md-6 text-center">
@@ -23,7 +20,6 @@
                 }) }}
             </div>
         </div>
-
         <!-- Tournament List -->
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
@@ -51,15 +47,22 @@
                             {% endif %}
                             <tr>
                                 <th scope="row" class="{{ isValid }}">{{ tournament.id }}</th>
-                                <td class="{{ isValid }}">{{ tournament.ident }}</td>
+                                <td class="{{ isValid }}">
+                                    {{ tournament.ident }}
+                                    {{ component('ButtonComponent', {
+                                        text: 'Zum Turnier', classes: 'btn btn-sm btn-primary mt-3', route: path('tournament_detail', { id: tournament.id })
+                                    }) }}
+                                </td>
                                 <td class="{{ isValid }}">{{ tournament.state.value }}</td>
                                 <td class="{{ isValid }}">
                                     {% if tournament.participants|length > 0 %}
-                                        <ul class="list-unstyled mb-0">
-                                            {% for participant in tournament.participants %}
-                                                <li>{{ participant.ident }}</li>
-                                            {% endfor %}
-                                        </ul>
+                                        <div class="participants-list" style="max-height: 150px; overflow-y: auto;">
+                                            <ul class="list-unstyled mb-0">
+                                                {% for participant in tournament.participants %}
+                                                    <li>{{ participant.ident }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
                                     {% else %}
                                         <em>No participants</em>
                                     {% endif %}

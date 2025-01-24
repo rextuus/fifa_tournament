@@ -4,9 +4,22 @@ namespace App\Message;
 
 final class RestoreSpotifyQueue
 {
+    public function __construct(
+        private readonly int $fixtureId,
+        private readonly int $userId,
+        private readonly string $trackId,
+        private readonly int $progressTime
+    ) {
+    }
 
-    public function __construct(private string $trackId, private int $progressTime)
+    public function getFixtureId(): int
     {
+        return $this->fixtureId;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->userId;
     }
 
     public function getTrackId(): string

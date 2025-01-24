@@ -4,10 +4,16 @@
 @import '~@fortawesome/fontawesome-free/scss/solid';
 @import 'croppie/croppie.css';
 
-// Custom Colors
-$primary-bg: linear-gradient(135deg, #24292f, #1a1f24); // Dark gray blend
-$secondary-bg: linear-gradient(135deg, #0056b3, #0069d9); // Electric blue
-$accent-color: #e63946;
+// Color Variables
+$primary-bg: linear-gradient(135deg, #2c2c2c, #1a1a1a); // Dark gray blend
+$secondary-bg: linear-gradient(135deg, #3b3b3b, #555555); // Muted gray
+$accent-color: #c89c0a; // Warm orange
+$light-gray: #f1f1f1; // Light gray for text and borders
+$dark-gray: #333333; // Neutral dark gray
+$white: #ffffff; // Pure white
+$black: #000000; // Pure black
+$shadow-color: rgba(0, 0, 0, 0.2); // Box shadow color
+$button-hover-color: lighten($accent-color, 10%); // Lighter accent for hover
 
 // Typography
 $font-family-game: 'Lato', sans-serif;
@@ -15,7 +21,7 @@ $font-family-game: 'Lato', sans-serif;
 body {
     font-family: $font-family-game;
     background: $primary-bg;
-    color: #fff;
+    color: $light-gray;
     margin: 0;
     padding: 0;
 }
@@ -31,7 +37,7 @@ header {
     }
 
     nav a {
-        color: white;
+        color: $light-gray;
         text-decoration: none;
         margin: 0 15px;
 
@@ -52,47 +58,147 @@ footer {
     }
 }
 
+// General Container Styling
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
 
-// form
-.hidden {
-    display: none;
-}
-
-.cropped-image-upload .cropper-wrapper {
-    background-color: grey;
-    overflow: hidden;
-}
-
-.cropped-image-upload .cropper-wrapper .cropper {
-    background-color: grey;
-    display: none;
-}
-
-.cropped-image-upload .cropper-wrapper.ready .cropper {
-    display: block;
-}
-
-.cropped-image-upload input[type="file"] {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-}
-
-td.test {
-    background: $primary-bg; /* Light grey (Bootstrap usually uses this) */
-    color: #212529; /* Dark text to ensure readability */
-    border: none;
-
-    .fixture{
-        padding: 0.5rem;
-        //background: $accent-color;
-        //color: white;
+    .row {
+        margin: 0 -15px; // Gutter fix for row spacing
     }
 }
 
+// Carousel Styling
+#participantCarousel {
+    .carousel-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $secondary-bg;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 8px 15px $shadow-color;
+
+        .carousel-item {
+            display: flex;
+            flex-wrap: wrap; // Ensure responsiveness
+            justify-content: space-around;
+            align-items: center;
+
+            .col-md-6 {
+                text-align: center;
+                padding: 15px;
+
+                img {
+                    width: 150px; // Image size for participant profiles
+                    height: 150px;
+                    border-radius: 50%; // Circular images
+                    object-fit: cover;
+                    margin-bottom: 10px;
+                    box-shadow: 0 4px 8px $shadow-color;
+                }
+
+                h5 {
+                    margin-top: 10px;
+                    font-size: 1.2rem;
+                    color: $white;
+                }
+            }
+        }
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        display: inline-block !important; // Make navigation visible again
+        width: 5%;
+        height: auto;
+        background-color: rgba($black, 0.5); // Semi-transparent black
+        border-radius: 50%;
+
+        span {
+            font-size: 1.5rem;
+            color: $white;
+        }
+    }
+}
+
+// Goal Button Controls
+.goal-controls-home,
+.goal-controls-away {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    margin: 1rem;
+
+    button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        background-color: $accent-color;
+        color: $white;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 3px 6px $shadow-color;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: $button-hover-color;
+            transform: translateY(-2px);
+        }
+    }
+}
+
+// Card Styling for Layout
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 8px 15px $shadow-color;
+    background: $dark-gray;
+    padding: 1.5rem;
+
+    .card-header {
+        background-color: $accent-color;
+        color: $white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-radius: 8px 8px 0 0;
+        padding: 1rem;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 1rem;
+    }
+}
+
+// Typography Adjustments
+h1 {
+    font-size: 2.5rem;
+    color: $accent-color;
+    text-shadow: 0px 4px 6px $shadow-color;
+}
+
+h5 {
+    font-size: 1.25rem;
+    color: $white;
+}
+
+// Responsive Adjustments
+@media (max-width: 768px) {
+    .carousel-inner .carousel-item {
+        flex-direction: column;
+
+        .col-md-6 {
+            margin-bottom: 15px;
+        }
+    }
+
+    button {
+        font-size: 0.9rem;
+    }
+}
 
 // hovering for the tournament tree
 .hover-container {
@@ -134,4 +240,44 @@ td.test {
 .hover-container:hover .participant-ident {
     display: block;
     opacity: 1; /* Fade in participant content */
+}
+
+// form
+.hidden {
+    display: none;
+}
+
+.cropped-image-upload .cropper-wrapper {
+    background-color: grey;
+    overflow: hidden;
+}
+
+.cropped-image-upload .cropper-wrapper .cropper {
+    background-color: grey;
+    display: none;
+}
+
+.cropped-image-upload .cropper-wrapper.ready .cropper {
+    display: block;
+}
+
+.cropped-image-upload input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+td.test {
+    background: $primary-bg; /* Light grey (Bootstrap usually uses this) */
+    color: #212529; /* Dark text to ensure readability */
+    border: none;
+
+    .fixture{
+        padding: 0.5rem;
+        //background: $accent-color;
+        //color: white;
+    }
 }

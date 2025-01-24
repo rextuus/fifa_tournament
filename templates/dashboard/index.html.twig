@@ -30,7 +30,7 @@
             <!-- Card: Manage Participants -->
             <div class="col-md-4 mb-4">
                 <div class="card text-center shadow-sm">
-                    <div class="card-header bg-success text-white">
+                    <div class="card-header bg-secondary text-white">
                         <h5>Truppen verwalten</h5>
                     </div>
                     <div class="card-body">
@@ -45,13 +45,27 @@
             <!-- Card: Placeholder for Future Features -->
             <div class="col-md-4 mb-4">
                 <div class="card text-center shadow-sm">
-                    <div class="card-header bg-secondary text-white">
+                    <div class="card-header bg-success text-white">
                         <h5>Spotify Verwalten</h5>
                     </div>
                     <div class="card-body">
                         <p class="card-text">Verbinde die App mit deinem Spotify Account</p>
                         {{ component('ButtonComponent', {
                             text: 'Spotify Verwaltung', classes: 'btn btn-success', route: path('spotify_info')
+                        }) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h5>Einstellungen</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Allgemeine Einstellungen</p>
+                        {{ component('ButtonComponent', {
+                            text: 'Einstellungen', classes: 'btn btn-success', route: path('setting_edit')
                         }) }}
                     </div>
                 </div>

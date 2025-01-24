@@ -23,6 +23,10 @@ class SpotifyAccessToken
     #[ORM\Column(type: 'integer', nullable: false)]
     private int $expirationDate;
 
+    #[ORM\ManyToOne(inversedBy: 'spotifyAccessTokens')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,18 @@ class SpotifyAccessToken
     public function setExpirationDate(int $expirationDate): static
     {
         $this->expirationDate = $expirationDate;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

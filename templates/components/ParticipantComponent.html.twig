@@ -29,6 +29,14 @@
 
     <!-- Action Button -->
     <div class="text-center mb-4">
+        <span>
+                    <a href="#"
+                       onclick="location.href='{{ path('app_select_song', { id: participant.id, spotifyTrack: this.track.spotifyId }) }}'"
+                       class="btn btn-outline-primary px-4">Edit</a>
+        </span>
+    </div>
+
+    <div class="text-center mb-4">
         <button type="button"
                 class="btn btn-outline-primary px-4"
                 data-action="live#action"

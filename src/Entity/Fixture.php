@@ -46,6 +46,15 @@ class Fixture
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
     private bool $isTwoLeg = false;
 
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
+    private bool $isGoalMusicRunning = false;
+
+    #[ORM\Column(type: 'integer', nullable: false, options: ['default' => 0])]
+    private int $homeGoals = 0;
+
+    #[ORM\Column(type: 'integer', nullable: false, options: ['default' => 0])]
+    private int $awayGoals = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -173,6 +182,39 @@ class Fixture
     {
         $this->isTwoLeg = $isTwoLeg;
 
+        return $this;
+    }
+
+    public function isGoalMusicRunning(): bool
+    {
+        return $this->isGoalMusicRunning;
+    }
+
+    public function setIsGoalMusicRunning(bool $isGoalMusicRunning): Fixture
+    {
+        $this->isGoalMusicRunning = $isGoalMusicRunning;
+        return $this;
+    }
+
+    public function getHomeGoals(): int
+    {
+        return $this->homeGoals;
+    }
+
+    public function setHomeGoals(int $homeGoals): Fixture
+    {
+        $this->homeGoals = $homeGoals;
+        return $this;
+    }
+
+    public function getAwayGoals(): int
+    {
+        return $this->awayGoals;
+    }
+
+    public function setAwayGoals(int $awayGoals): Fixture
+    {
+        $this->awayGoals = $awayGoals;
         return $this;
     }
 }

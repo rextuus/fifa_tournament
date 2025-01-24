@@ -3,12 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -30,6 +34,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
+
+    /**
+     * @var Collection<int, SpotifyAccessToken>
+     */
+    #[ORM\OneToMany(targetEntity: SpotifyAccessToken::class, mappedBy: 'user')]
+    private Collection $spotifyAccessTokens;
+
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Setting $setting = null;
+
+    public function __construct()
+    {
+        $this->spotifyAccessTokens = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -103,5 +124,64 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SpotifyAccessToken>
+     */
+    public function getSpotifyAccessTokens(): Collection
+    {
+        return $this->spotifyAccessTokens;
+    }
+
+    public function addSpotifyAccessToken(SpotifyAccessToken $spotifyAccessToken): static
+    {
+        if (!$this->spotifyAccessTokens->contains($spotifyAccessToken)) {
+            $this->spotifyAccessTokens->add($spotifyAccessToken);
+            $spotifyAccessToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSpotifyAccessToken(SpotifyAccessToken $spotifyAccessToken): static
+    {
+        if ($this->spotifyAccessTokens->removeElement($spotifyAccessToken)) {
+            // set the owning side to null (unless already changed)
+            if ($spotifyAccessToken->getUser() === $this) {
+                $spotifyAccessToken->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSetting(): ?Setting
+    {
+        return $this->setting;
+    }
+
+    public function setSetting(Setting $setting): static
+    {
+        // set the owning side of the relation if necessary
+        if ($setting->getUser() !== $this) {
+            $setting->setUser($this);
+        }
+
+        $this->setting = $setting;
+
+        return $this;
     }
 }

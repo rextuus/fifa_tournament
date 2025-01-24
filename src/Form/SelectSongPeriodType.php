@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Content\SettingService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
@@ -21,7 +22,7 @@ class SelectSongPeriodType extends AbstractType
                     'class' => 'form-range',
                     'min' => 0,
                     'max' => $options['trackDuration'], // Dynamically set the track duration
-                    'value' => 0, // Default initial value
+                    'value' => $options['start'], // Default initial value
                     'step' => 1,
                     'id' => 'startSlider', // Ensure this matches your JS selector
                 ],
@@ -34,7 +35,7 @@ class SelectSongPeriodType extends AbstractType
                     'class' => 'form-range',
                     'min' => 1,
                     'max' => $options['trackDuration'],
-                    'value' => 60,
+                    'value' => $options['end'],
                     'step' => 1,
                     'id' => 'endSlider',
                 ],
@@ -45,10 +46,13 @@ class SelectSongPeriodType extends AbstractType
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'trackDuration' => 300, // Default duration of track
+            'playTimeLimit' => 30, // Default duration of track
+            'start' => 30, // Default duration of track
+            'end' => 30, // Default duration of track
         ]);
     }
 }

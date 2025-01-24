@@ -1,6 +1,10 @@
 <div{{ attributes }} class="card mb-3 hover-container bg-dark text-white">
     <div class="card-body">
-        <h5 class="card-title">{{ fixture.ident }}</h5>
+        <h5 class="card-title">
+            {{ component('ButtonComponent', {
+                text: fixture.ident, classes: 'btn btn-info mb-3', route: path('match_detail', { id: fixture.id })
+            }) }}
+        </h5>
         <div class="teams-content d-flex justify-content-between align-items-center">
             <!-- Home Team -->
             <div class="team-container d-flex flex-column align-items-center">

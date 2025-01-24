@@ -12,10 +12,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ImageStorageService
 {
+    private const TEAM_IMAGE_FOLDER_NAME = 'team';
+
     public function __construct(
-        private FilesystemProvider $filesystemProvider,
-        private HttpClientInterface $httpClient,
-        private FilePathGenerator $filePathGenerator,
+        private readonly FilesystemProvider $filesystemProvider,
+        private readonly HttpClientInterface $httpClient,
+        private readonly FilePathGenerator $filePathGenerator,
     ) {
     }
 
@@ -31,10 +33,7 @@ class ImageStorageService
 
             $imageContent = $response->getContent();
 
-            // Generate a unique file path
-
-            // Save the image to Flysystem
-            $hashedFolderName = $this->filePathGenerator->generateRandomFilePath($depth = 2);
+            $hashedFolderName = self::TEAM_IMAGE_FOLDER_NAME;
 
             $filePath = $this->filePathGenerator->getFullFilePath(
                 $hashedFolderName,

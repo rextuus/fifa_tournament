@@ -1,92 +1,76 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Match Details{% endblock %}
+{% block title %}Fixture Details{% endblock %}
 
 {% block body %}
     <div class="container my-5">
-        <!-- Match Header -->
+        <!-- Fixture Header -->
         <div class="text-center mb-5">
-            <h1>{{ match.title }}</h1>
-            <p class="text-muted">Date: {{ match.date }}</p>
+            <h1>{{ fixture.ident }}</h1>
         </div>
 
         <div class="row justify-content-center">
-            {% for participant in match.participants %}
+            <!-- Home Participant -->
+            {% if fixture.homeParticipant %}
                 <div class="col-md-5 mb-4">
-                    <div class="card text-center shadow-sm">
-                        <!-- Styled participant ident -->
-                        <div class="participant-ident py-2 mb-3 text-uppercase font-weight-bold text-bg-secondary">
-                            {{ participant.ident }}
-                        </div>
-
-                        <!-- Carousel for Participant Image and Team Logo -->
-                        {% if participant.participantImage or (participant.team and participant.team.logo) %}
-                            <div id="carousel-participant-{{ loop.index }}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-                                <div class="carousel-inner">
-                                    {% set isActiveSet = false %}
-
-                                    {% if participant.participantImage %}
-                                        <!-- Participant Image -->
-                                        <div class="carousel-item {% if not isActiveSet %}active{% set isActiveSet = true %}{% endif %}">
-                                            <img src="{{ participant.participantImage }}" alt="Participant Image" class="d-block w-100" style="height: 300px; object-fit: cover;">
+                    <div class="card text-center shadow-sm position-relative">
+                        <!-- Participant Image Carousel -->
+                        <div id="homeParticipantCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        {{ component('ProfileImageComponent', {profile: fixture.homeTeam, width: 150}) }}
+                                        <div class="card-body team-name">
+                                            <h5 class="card-title">{{ fixture.homeTeam.name }}</h5>
                                         </div>
-                                    {% endif %}
-
-                                    {% if participant.team and participant.team.logo %}
-                                        <!-- Team Logo -->
-                                        <div class="carousel-item {% if not isActiveSet %}active{% set isActiveSet = true %}{% endif %}">
-                                            <img src="{{ participant.team.logo }}" alt="{{ participant.team.name }} Logo" class="d-block w-100" style="height: 300px; object-fit: contain;">
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                <!-- Removed the navigation buttons -->
-                            </div>
-                        {% endif %}
-
-                        <div class="card-body">
-                            <!-- Team Data -->
-                            {% if participant.team %}
-                                <h5 class="card-title mb-3">{{ participant.team.name }}</h5>
-                            {% endif %}
-                            <!-- User Information -->
-
-                            <!-- User Information -->
-                            <h6 class="border-top">Players:</h6>
-
-                            <!-- Check if there are more than 2 players -->
-                            {% if participant.players|length > 2 %}
-                                <div id="carousel-players-{{ loop.index }}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-                                    <div class="carousel-inner">
-                                        {% for playerChunk in participant.players|batch(2) %}
-                                            <div class="carousel-item {% if loop.first %}active{% endif %}">
-                                                <div class="row">
-                                                    {% for player in playerChunk %}
-                                                        <div class="col-6 text-center">
-                                                            <img src="{{ player.image }}" alt="{{ player.name }}" class="rounded-circle mb-2" style="width: 60px; height: 60px; object-fit: cover;">
-                                                            <p class="small">{{ player.name }}</p>
-                                                        </div>
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
-                                        {% endfor %}
+                                    </div>
+                                <div class="carousel-item
+                                    {% if not (fixture.homeTeam and fixture.homeTeam.imageFile) %}active{% endif %}">
+                                    {{ component('ProfileImageComponent', {profile: fixture.homeParticipant, width: 150}) }}
+                                    <div class="card-body team-name">
+                                        <h5 class="card-title">{{ fixture.homeParticipant.ident }}</h5>
                                     </div>
                                 </div>
-                            {% else %}
-                                <!-- If 2 or fewer players, display them statically -->
-                                <div class="row mt-2">
-                                    {% for player in participant.players %}
-                                        <div class="col-6 text-center">
-                                            <img src="{{ player.image }}" alt="{{ player.name }}" class="rounded-circle mb-2" style="width: 60px; height: 60px; object-fit: cover;">
-                                            <p class="small">{{ player.name }}</p>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
+                            </div>
+                        </div>
 
+                        <!-- Goal Buttons (Correctly Positioned) -->
+                        <div class="goal-controls-home position-absolute top-50 translate-middle-y" style="right: 0;">
+                            {{ component('GoalComponent', {participant: fixture.homeParticipant, fixture: fixture, isHome: true}) }}
                         </div>
                     </div>
                 </div>
-            {% endfor %}
+            {% endif %}
+
+            <!-- Away Participant -->
+            {% if fixture.awayParticipant %}
+                <div class="col-md-5 mb-4">
+                    <div class="card text-center shadow-sm position-relative">
+                        <!-- Participant Image Carousel -->
+                        <div id="awayParticipantCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    {{ component('ProfileImageComponent', {profile: fixture.awayTeam, width: 150}) }}
+                                    <div class="card-body team-name">
+                                        <h5 class="card-title">{{ fixture.awayTeam.name }}</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item
+                                    {% if not (fixture.awayTeam and fixture.awayTeam.imageFile) %}active{% endif %}">
+                                    {{ component('ProfileImageComponent', {profile: fixture.awayParticipant, width: 150}) }}
+                                    <div class="card-body team-name">
+                                        <h5 class="card-title">{{ fixture.awayParticipant.ident }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Goal Buttons (Correctly Positioned) -->
+                        <div class="goal-controls-away position-absolute top-50 translate-middle-y" style="left: 0;">
+                            {{ component('GoalComponent', {participant: fixture.awayParticipant,  fixture: fixture, isHome: false}) }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

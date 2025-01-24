@@ -1,0 +1,21 @@
+<div {{ attributes }}
+        class="d-flex flex-column gap-2 align-items-center"
+        data-controller="goal"
+        data-goal-fixture-id="{{ fixture.id }}"
+        data-goal-participant-id="{{ participant.id }}"
+        data-goal-is-home="{{ isHome ? '1' : '0' }}">
+
+    <button class="btn btn-outline-primary btn-lg mb-3"
+            data-action="goal#increaseGoal">
+        + Tor
+    </button>
+
+    <span class="badge bg-secondary custom-font-size" data-goal-target="goalValue">
+        {{ this.goalValue }}
+    </span>
+</div>
+<style>
+    .custom-font-size {
+        font-size: 2rem;
+    }
+</style>
