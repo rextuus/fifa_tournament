@@ -26,7 +26,8 @@ final class RestoreSpotifyQueueHandler
 
         $this->spotifyService->restoreSpotifyQueueAsBeforeGoalHymnBreak(
             $message->getProgressTime(),
-            $user
+            $user,
+            $message->isPlaylistWasInterrupted()
         );
 
         $fixture = $this->fixtureRepository->find($message->getFixtureId());

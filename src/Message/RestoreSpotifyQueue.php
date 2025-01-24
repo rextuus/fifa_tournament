@@ -7,8 +7,9 @@ final class RestoreSpotifyQueue
     public function __construct(
         private readonly int $fixtureId,
         private readonly int $userId,
-        private readonly string $trackId,
-        private readonly int $progressTime
+        private readonly ?string $trackId,
+        private readonly ?int $progressTime,
+        private readonly bool $playlistWasInterrupted = true
     ) {
     }
 
@@ -22,13 +23,18 @@ final class RestoreSpotifyQueue
         return $this->userId;
     }
 
-    public function getTrackId(): string
+    public function getTrackId(): ?string
     {
         return $this->trackId;
     }
 
-    public function getProgressTime(): int
+    public function getProgressTime(): ?int
     {
         return $this->progressTime;
+    }
+
+    public function isPlaylistWasInterrupted(): bool
+    {
+        return $this->playlistWasInterrupted;
     }
 }

@@ -11,6 +11,7 @@ use App\Repository\SpotifyAccessTokenRepository;
 use DateTime;
 use SpotifyWebAPI\Session;
 use SpotifyWebAPI\SpotifyWebAPI;
+use SpotifyWebAPI\SpotifyWebAPIException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -200,11 +201,27 @@ class SpotifyService
 
         // save current song info
         $currentSongInfo = $api->getMyCurrentPlaybackInfo();
+        $playlistWasInterrupted = false;
+        $currentSongId = null;
+        $currentSongProgress = null;
+        if ($currentSongInfo !== null) {
+            $playlistWasInterrupted = true;
+            $currentSongId = $currentSongInfo->item->id;
+            $currentSongProgress = $currentSongInfo->progress_ms;
 
-        $currentSongId = $currentSongInfo->item->id;
-        $currentSongProgress = $currentSongInfo->progress_ms;
+        }
 
-        $api->queue($trackId);
+        try {
+            $api->queue($trackId);
+        } catch (SpotifyWebAPIException $e) {
+            if ($e->getMessage() === 'Player command failed: No active device found'){
+                $devices = $api->getMyDevices()->devices;
+                $id = $devices[0]->id;
+
+                $api->play($id);
+                $api->queue($trackId);
+            }
+        }
 
         $api->next();
         $api->seek(['position_ms' => $startTime * 1000]);
@@ -213,21 +230,34 @@ class SpotifyService
 
         $user = $this->security->getUser();
 
-        $message = new RestoreSpotifyQueue($fixtureId, $user->getId(), $currentSongId, $currentSongProgress);
+        $message = new RestoreSpotifyQueue(
+            $fixtureId,
+            $user->getId(),
+            $currentSongId,
+            $currentSongProgress,
+            $playlistWasInterrupted
+        );
 
         $this->messageBus->dispatch($message, [new DelayStamp($playTimeInSeconds * 1000)]);
 
         return true;
     }
 
-    public function restoreSpotifyQueueAsBeforeGoalHymnBreak(int $progress, User $user): void
-    {
+    public function restoreSpotifyQueueAsBeforeGoalHymnBreak(
+        int $progress,
+        User $user,
+        bool $playlistWasInterrupted
+    ): void {
         $this->api = null;
         $api = $this->getApi($user);
 
         // Move to the requeued current song and set playback position
-        $api->next();
-        $api->seek(['position_ms' => $progress]);
+        if ($playlistWasInterrupted){
+            $api->next();
+            $api->seek(['position_ms' => $progress]);
+        }else{
+            $api->pause();
+        }
     }
 
     /**
