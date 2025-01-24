@@ -41,7 +41,7 @@ class ImageStorageService
                 FileExtension::PNG
             );
 
-            $fileSystem = $this->filesystemProvider->getFilesystem(FilesystemProvider::IDENT_IMAGE);
+            $fileSystem = $this->filesystemProvider->getFilesystem(FilesystemProvider::IDENT_PUBLIC_IMAGE);
             $fileSystem->write($filePath, $imageContent);
 
             return FileGenerationResult::create(
