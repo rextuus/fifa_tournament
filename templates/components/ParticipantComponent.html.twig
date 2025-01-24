@@ -28,6 +28,8 @@
     {{ component('TrackComponent', {participant: participant, track: this.track}) }}
 
     <!-- Action Button -->
+    {% if this.track.spotifyId != '' %}
+
     <div class="text-center mb-4">
         <span>
                     <a href="#"
@@ -35,7 +37,7 @@
                        class="btn btn-outline-primary px-4">Edit</a>
         </span>
     </div>
-
+    {% endif %}
     <div class="text-center mb-4">
         <button type="button"
                 class="btn btn-outline-primary px-4"
