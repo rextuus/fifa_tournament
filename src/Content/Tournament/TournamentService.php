@@ -136,8 +136,6 @@ class TournamentService
 
     public function isValid(Tournament $tournament): bool
     {
-//        dump($tournament->getParticipants()->count());
-//        dd($tournament->getLevel()->value);
         if ($tournament->getParticipants()->count() >= $tournament->getLevel()->value) {
             return false;
         }
@@ -162,8 +160,6 @@ class TournamentService
         if ($teamListForTournament === false) {
             return false;
         }
-        dump($teamListForTournament->getTeams()->count());
-        dump($maximumAmount);
 //        dd($teamListForTournament->getTeams()->count() === $maximumAmount);
         return $teamListForTournament->getTeams()->count() === $maximumAmount;
     }
