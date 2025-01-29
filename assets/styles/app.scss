@@ -172,6 +172,74 @@ footer {
         margin-top: 1rem;
     }
 }
+/* General carousel styles scoped by ID */
+#goalCarouselHome,
+#goalCarouselAway {
+    .carousel-control-prev,
+    .carousel-control-next {
+        top: 50%;
+        width: auto; /* Ensure the buttons are sized automatically */
+        height: auto; /* Ensure the buttons adjust to text */
+        padding: 0; /* Remove extra padding around the controls */
+        background: none !important; /* Remove Bootstrap's default control background */
+        border: none !important; /* Remove any borders */
+        box-shadow: none !important; /* Prevent shadowing on controls */
+        transform: none !important; /* Ensure no flipping/scaling on hover */
+
+    }
+
+    .carousel-control-prev {
+        left: -20px; /* Adjust positioning for the left control */
+        transform: none !important; /* Ensure no flipping/scaling on hover */
+    }
+
+    .carousel-control-next {
+        right: -20px; /* Adjust positioning for the right control */
+        transform: none !important; /* Ensure no flipping/scaling on hover */
+
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        background: none !important; /* Ensure no background appears on hover */
+        transform: none !important; /* Prevent any unexpected transformations */
+    }
+
+    .custom-carousel-symbol {
+        font-size: 1.5rem; /* Size of the |< or >| symbols */
+        color: #000; /* Color for your custom symbols */
+        font-weight: bold;
+        display: inline-block; /* Prevent text wrapping or alignment issues */
+        transition: none; /* Prevent any animations */
+        transform: none !important; /* Ensure no flipping/scaling on hover */
+    }
+
+    .carousel-control-prev:hover .custom-carousel-symbol,
+    .carousel-control-next:hover .custom-carousel-symbol {
+        transform: none !important; /* Ensure no flipping/scaling on hover */
+    }
+
+    /* Stable dimensions for the controls to prevent flipping or misalignment */
+    .carousel-control-prev,
+    .carousel-control-next {
+        min-width: 2rem; /* Set a stable width */
+        height: 2rem;
+        margin: 5px;
+        transform: none !important; /* Ensure no flipping/scaling on hover */
+
+    }
+
+    .carousel-control-prev:focus,
+    .carousel-control-next:focus {
+        outline: none; /* Remove focus outlines */
+        transform: none !important; /* Ensure no flipping/scaling on hover */
+    }
+
+    .carousel-inner {
+        overflow: hidden; /* Ensure no overflow behavior */
+        transform: none !important; /* Ensure no flipping/scaling on hover */
+    }
+}
 
 // Typography Adjustments
 h1 {
@@ -280,4 +348,31 @@ td.test {
         //background: $accent-color;
         //color: white;
     }
+}
+
+.fixed-width-card {
+    width: 320px; // Default (desktop view)
+    max-width: 100%; // Prevent overflow on smaller containers
+    height: 320px; // Prevent overflow on smaller containers
+    max-height: 100%; // Prevent overflow on smaller containers
+
+    @media (max-width: 768px) {
+        width: 100%; // Full-width cards for mobile
+    }
+}
+
+
+#goal-overlay {
+    z-index: 1050; /* Above Bootstrap modals */
+}
+
+.goal-gif {
+    max-width: 80%; /* Responsive scaling */
+    max-height: 80%; /* Ensure it fits well */
+    border-radius: 10px; /* Add rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: subtle shadow */
+}
+
+.modal-content {
+    color: black;
 }
