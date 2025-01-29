@@ -69,7 +69,7 @@
                                 </td>
                                 <td class="{{ isValid }}">
                                     {{ component('ButtonComponent', {
-                                        text: 'Edit', classes: 'btn btn-sm btn-warning', route: path('tournament_manage', { id: tournament.id })
+                                        text: 'Edit', classes: 'btn btn-sm btn-warning', route: path(tournament.editRoute, { id: tournament.id })
                                     }) }}
                                 </td>
                             </tr>

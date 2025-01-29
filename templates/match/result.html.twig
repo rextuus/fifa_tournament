@@ -9,9 +9,10 @@
             <h1>{{ fixture.ident }}</h1>
         </div>
 
-        <div id="goal-overlay" class="d-none align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 mt-5">
+        <div id="goal-overlay" class="d-none align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75">
             <img src="https://i.giphy.com/FoH28ucxZFJZu.webp" alt="Goal Celebration" class="goal-gif">
         </div>
+
 
         <div class="row justify-content-center">
             <!-- Home Participant -->
@@ -39,7 +40,7 @@
 
                         <!-- Goal Buttons (Correctly Positioned) -->
                         <div class="goal-controls-home position-absolute top-50 translate-middle-y" style="right: 0;">
-                            {{ component('GoalComponent', {participant: fixture.homeParticipant, fixture: fixture, isHome: true, carouselId: 'goalCarouselHome'}) }}
+                            {{ component('GoalComponent', {participant: fixture.homeParticipant, fixture: fixture, isHome: true}) }}
                         </div>
                     </div>
                 </div>
@@ -70,21 +71,13 @@
 
                         <!-- Goal Buttons (Correctly Positioned) -->
                         <div class="goal-controls-away position-absolute top-50 translate-middle-y" style="left: 0;">
-                            {{ component('GoalComponent', {participant: fixture.awayParticipant,  fixture: fixture, isHome: false, carouselId: 'goalCarouselAway'}) }}
+                            {{ component('GoalComponent', {participant: fixture.awayParticipant,  fixture: fixture, isHome: false}) }}
                         </div>
                     </div>
                 </div>
             {% endif %}
         </div>
+        {{ component('Company:EditCompanyForm', { initialFormData: data, form: form}) }}
 
-        {% if fixture.played is null %}
-        <twig:AjaxFormModalLink
-                classes="btn btn-outline-secondary"
-                submitText="Speichern"
-                modalTitle="{{ 'label.create_entity'|trans({postFix: 's', entityName: 'label.deeplink'|trans()}) }}"
-                formUrl="{{ url('match_edit_result',  {'id' : fixture.id}) }}">
-            Ergebnis speichern
-        </twig:AjaxFormModalLink>
-        {% endif %}
     </div>
 {% endblock %}

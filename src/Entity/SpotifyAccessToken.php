@@ -14,10 +14,10 @@ class SpotifyAccessToken
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 1000)]
     private ?string $accessToken = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 1000)]
     private ?string $refreshToken = null;
 
     #[ORM\Column(type: 'integer', nullable: false)]

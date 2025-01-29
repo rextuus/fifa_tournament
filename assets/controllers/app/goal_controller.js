@@ -1,44 +1,53 @@
-// assets/controllers/goal_controller.js
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
     static targets = ['button', 'goalValue'];
 
     connect() {
-        // Initialization if required
         console.log('GoalController connected');
     }
 
     async increaseGoal(event) {
         event.preventDefault();
 
-        // Get the necessary data (e.g., fixtureId, participantId, isHome)
+        const button = event.target.closest('button');
+        const playerId = button.dataset.playerId;
+
+        if (!playerId) {
+            return; // Exit if the player ID is missing
+        }
+
+        // Show the GIF overlay
+        const overlay = document.getElementById('goal-overlay');
+        overlay.classList.remove('d-none'); // Make it visible
+
+        // Hide the overlay after 20 seconds
+        setTimeout(() => {
+            overlay.classList.add('d-none'); // Hide it after 20s
+        }, 20000);
+
+        // Fetch required data and logic goes here
         const fixtureId = this.element.dataset.goalFixtureId;
         const participantId = this.element.dataset.goalParticipantId;
-        const isHome = this.element.dataset.goalIsHome; // Assumes you add these as data-* to your element
+        const isHome = this.element.dataset.goalIsHome;
 
         try {
-            // Make the AJAX request to your run route
-            const response = await fetch(`/spotify/run/${fixtureId}/${participantId}?isHome=${isHome}`, {
-                method: 'GET'
-            });
+            const response = await fetch(
+                `/spotify/run/${fixtureId}/${participantId}/${playerId}?isHome=${isHome}`,
+                { method: 'GET' }
+            );
 
             if (!response.ok) {
                 throw new Error('Failed to increase goal');
             }
 
-            // Parse the response JSON
-            const updatedGoalValue = await response.json(); // Adjust based on response data
-            // Determine the correct value (homeGoals or awayGoals) to display
-            const goals = isHome === "1" ? updatedGoalValue.homeGoals : updatedGoalValue.awayGoals;
+            const updatedGoalValue = await response.json();
+            const goals = isHome === '1' ? updatedGoalValue.homeGoals : updatedGoalValue.awayGoals;
 
-            // Update the DOM with the correct value
             this.goalValueTarget.innerHTML = goals;
         } catch (error) {
-            if (error = 'Failed to increase goal'){
-                return;
-            }
-            console.error('Error: ', error);
+
+            // console.error('Error: ', error);
         }
     }
 }

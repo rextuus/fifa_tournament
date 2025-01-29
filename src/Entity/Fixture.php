@@ -55,6 +55,12 @@ class Fixture
     #[ORM\Column(type: 'integer', nullable: false, options: ['default' => 0])]
     private int $awayGoals = 0;
 
+    /**
+     * @var array<int>
+     */
+    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
+    private array $scorers = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -216,5 +222,22 @@ class Fixture
     {
         $this->awayGoals = $awayGoals;
         return $this;
+    }
+
+    public function getScorers(): array
+    {
+        return $this->scorers;
+    }
+
+    public function setScorers(array $scorers): static
+    {
+        $this->scorers = $scorers;
+
+        return $this;
+    }
+
+    public function addScorer(int $scorer): void
+    {
+        $this->scorers[] = $scorer;
     }
 }

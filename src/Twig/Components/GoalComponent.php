@@ -25,4 +25,5 @@ final class GoalComponent extends AbstractController
             return $this->fixture->getAwayGoals();
         }
     }
+
 }

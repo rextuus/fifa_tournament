@@ -1,8 +1,8 @@
 <?php
-
 namespace App\Form;
 
 use App\Content\Tournament\TournamentLevel;
+use App\Content\Tournament\TournamentType as TournamentTypeEnum; // Import the enum
 use App\Entity\Tournament;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TournamentType extends AbstractType
+class TournamentCreateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -24,11 +24,22 @@ class TournamentType extends AbstractType
                 'label' => 'Tournament Level',
                 'required' => true,
                 'choices' => array_combine(
-                    array_map(fn($level) => $level->name, TournamentLevel::cases()), // Display enum names
-                    TournamentLevel::cases() // Save enum objects
+                    array_map(fn($level) => $level->name, TournamentLevel::cases()),
+                    TournamentLevel::cases()
                 ),
-                'choice_label' => fn($choice) => $choice->name . ' (' . $choice->value . ')', // Visible labels: "ROUND_OF_32 (32)"
-                'choice_value' => fn(?TournamentLevel $choice) => $choice?->value, // Use enum value (integer) in the form's submission data
+                'choice_label' => fn($choice) => $choice->name . ' (' . $choice->value . ')',
+                'choice_value' => fn(?TournamentLevel $choice) => $choice?->value,
+                'attr' => ['class' => 'form-select'],
+            ])
+            ->add('type', ChoiceType::class, [ // Adding TournamentType
+                'label' => 'Tournament Type',
+                'required' => true,
+                'choices' => array_combine(
+                    array_map(fn($type) => $type->name, TournamentTypeEnum::cases()),
+                    TournamentTypeEnum::cases()
+                ),
+                'choice_label' => fn($choice) => $choice->name . ' (' . $choice->value . ')', // Visible labels: "CLASSIC (classic)"
+                'choice_value' => fn(?TournamentTypeEnum $choice) => $choice?->value, // Use string enum value in data
                 'attr' => ['class' => 'form-select'],
             ]);
     }

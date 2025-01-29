@@ -50,12 +50,19 @@ class Participant implements ImageAwareInterface, GoalHymnAwareInterface
     #[ORM\OneToMany(targetEntity: TeamList::class, mappedBy: 'participant', orphanRemoval: true)]
     private Collection $teamLists;
 
+    /**
+     * @var Collection<int, BattleRound>
+     */
+    #[ORM\ManyToMany(targetEntity: BattleRound::class, mappedBy: 'participants')]
+    private Collection $battleRounds;
+
     public function __construct()
     {
         $this->players = new ArrayCollection();
         $this->tournaments = new ArrayCollection();
         $this->fixtures = new ArrayCollection();
         $this->teamLists = new ArrayCollection();
+        $this->battleRounds = new ArrayCollection();
     }
 
     public function setId(?int $id): Participant
@@ -201,5 +208,32 @@ class Participant implements ImageAwareInterface, GoalHymnAwareInterface
     public function getDefaultImageType(): DefaultImageType
     {
         return DefaultImageType::USER_PROFILE;
+    }
+
+    /**
+     * @return Collection<int, BattleRound>
+     */
+    public function getBattleRounds(): Collection
+    {
+        return $this->battleRounds;
+    }
+
+    public function addBattleRound(BattleRound $battleRound): static
+    {
+        if (!$this->battleRounds->contains($battleRound)) {
+            $this->battleRounds->add($battleRound);
+            $battleRound->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBattleRound(BattleRound $battleRound): static
+    {
+        if ($this->battleRounds->removeElement($battleRound)) {
+            $battleRound->removeParticipant($this);
+        }
+
+        return $this;
     }
 }

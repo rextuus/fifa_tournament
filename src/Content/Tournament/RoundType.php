@@ -4,6 +4,7 @@ namespace App\Content\Tournament;
 
 enum RoundType: string
 {
+    case GROUP_ROUND = 'group_round';
     case ROUND_OF_128 = 'round_of_128';
     case ROUND_OF_64 = 'round_of_64';
     case ROUND_OF_32 = 'round_of_32';
@@ -37,6 +38,7 @@ enum RoundType: string
             self::QUARTER_FINAL => TournamentLevel::QUARTER_FINAL->value / 2,
             self::SEMI_FINAL => TournamentLevel::SEMI_FINAL->value / 2,
             self::FINAL => TournamentLevel::FINAL->value / 2,
+            self::GROUP_ROUND => throw new \Exception('To be implemented'),
         };
     }
 
@@ -50,6 +52,7 @@ enum RoundType: string
             self::QUARTER_FINAL => self::SEMI_FINAL,
             self::SEMI_FINAL => self::FINAL,
             self::FINAL => null,
+            self::GROUP_ROUND => throw new \Exception('To be implemented'),
         };
     }
 
@@ -63,6 +66,7 @@ enum RoundType: string
             self::QUARTER_FINAL => 'Viertelfinale',
             self::SEMI_FINAL => 'Halbfinale',
             self::FINAL => 'Finale',
+            self::GROUP_ROUND => throw new \Exception('To be implemented'),
         };
     }
 }

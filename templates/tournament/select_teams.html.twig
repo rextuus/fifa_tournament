@@ -6,7 +6,7 @@
     <div class="container my-5">
         <h1 class="mb-4">Teamauswahl für {{ participant.ident }} und das Turnier {{ tournament.ident }}</h1>
 
-        <p class="mb-4">Anzahl benötigter Teams: <strong>{{ listCount }}/{{ tournament.numberOfChoices }}</strong></p>
+        <p class="mb-4">Anzahl benötigter Teams: <strong>{{ listCount }}/{{ allowed }}</strong></p>
 
         <!-- Include the team listing component -->
         <div class="mb-5">
@@ -19,7 +19,7 @@
         <!-- Form for team selection -->
         <div class="card">
             <div class="card-body">
-                {% if listCount >= tournament.numberOfChoices %}
+                {% if listCount >= allowed %}
                     <h5 class="card-title">Du hast das Limit an Teams für dieses Turnier bereits erreicht</h5>
                 {% else %}
                     <h5 class="card-title">Wähle ein Teams aus</h5>

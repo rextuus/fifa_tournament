@@ -7,6 +7,7 @@ use App\Content\Spotify\NoAccessTokenFoundException;
 use App\Content\Spotify\SpotifyService;
 use App\Entity\Fixture;
 use App\Entity\Participant;
+use App\Entity\Player;
 use App\Entity\Tournament;
 use App\Entity\User;
 use App\Form\SelectSongPeriodType;
@@ -171,11 +172,12 @@ final class SpotifyController extends AbstractController
         ]);
     }
 
-    #[Route('/run/{fixtureId}/{participantId}', name: 'spotify_run', methods: ['GET', 'POST'])]
+    #[Route('/run/{fixtureId}/{participantId}/{playerId}', name: 'spotify_run', methods: ['GET', 'POST'])]
     public function run(
         Request $request,
         #[MapEntity(id: 'fixtureId')] Fixture $fixture,
         #[MapEntity(id: 'participantId')] Participant $participant,
+        #[MapEntity(id: 'playerId')] Player $player,
     ): JsonResponse {
         $isHome = $request->query->get('isHome');
 
@@ -211,6 +213,10 @@ final class SpotifyController extends AbstractController
         } else {
             $fixture->setAwayGoals($fixture->getAwayGoals() + 1);
         }
+
+        $fixture->addScorer($player->getId());
+        // add player to goal list
+
 
         $this->entityManager->persist($fixture);
         $this->entityManager->flush();

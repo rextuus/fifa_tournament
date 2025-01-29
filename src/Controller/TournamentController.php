@@ -2,24 +2,23 @@
 
 namespace App\Controller;
 
-use App\Content\Tournament\Calculation\TournamentCalculationService;
+use App\Content\Participant\ParticipantService;
 use App\Content\Tournament\TournamentService;
 use App\Content\Tournament\TournamentState;
-use App\Entity\Fixture;
+use App\Content\Tournament\TournamentType;
+use App\Entity\BattleRound;
 use App\Entity\Participant;
-use App\Entity\Round;
 use App\Entity\Team;
 use App\Entity\TeamList;
 use App\Entity\Tournament;
+use App\Form\ManageBattleTournamentType;
 use App\Form\ManageTournamentType;
 use App\Form\TeamSelectionData;
 use App\Form\TeamSelectionType;
-use App\Form\TournamentType;
-use App\Repository\TeamRepository;
+use App\Form\TournamentCreateType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -50,11 +49,17 @@ final class TournamentController extends AbstractController
         $tournament = new Tournament();
 
         // Create the form
-        $form = $this->createForm(TournamentType::class, $tournament);
+        $form = $this->createForm(TournamentCreateType::class, $tournament);
         $form->handleRequest($request);
 
         // Handle form submission
         if ($form->isSubmitted() && $form->isValid()) {
+            if($tournament->getType() === TournamentType::GROUP_BATTLE){
+                $battleRound = new BattleRound();
+                $battleRound->setTournament($tournament);
+                $entityManager->persist($battleRound);
+            }
+
             $entityManager->persist($tournament);
             $entityManager->flush();
 
@@ -74,6 +79,10 @@ final class TournamentController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
+        if ($tournament->getType() === TournamentType::GROUP_BATTLE){
+            return $this->redirectToRoute('tournament_manage_group_battle', ['id' => $tournament->getId()]);
+        }
+
         // Create a form for managing the tournament
         $form = $this->createForm(ManageTournamentType::class, $tournament);
         $form->handleRequest($request);
@@ -92,6 +101,43 @@ final class TournamentController extends AbstractController
         }
 
         return $this->render('tournament/manage.html.twig', [
+            'tournament' => $tournament,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/manage-group/{id}', name: 'tournament_manage_group_battle')]
+    public function manageGroupBattle(
+        Tournament $tournament,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        ParticipantService $participantService
+    ): Response {
+        if ($tournament->getType() !== TournamentType::GROUP_BATTLE){
+            return $this->redirectToRoute('tournament_manage', ['id' => $tournament->getId()]);
+        }
+
+        $form = $this->createForm(ManageBattleTournamentType::class, $tournament->getBattleRound());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var BattleRound $battleRound */
+            $battleRound = $form->getData();
+            foreach ($battleRound->getParticipants() as $participant) {
+                $battleRound->removeParticipant($participant);
+            }
+
+            $participants = $participantService->checkBattleRoundParticipantsExist($battleRound);
+            foreach ($participants as $participant) {
+                $entityManager->persist($participant);
+                $battleRound->addParticipant($participant);
+            }
+
+            $entityManager->flush();
+            return $this->redirectToRoute('tournament_manage_group_battle', ['id' => $tournament->getId()]);
+        }
+
+        return $this->render('tournament/manage_battle.html.twig', [
             'tournament' => $tournament,
             'form' => $form->createView(),
         ]);
@@ -151,11 +197,17 @@ final class TournamentController extends AbstractController
             );
         }
 
+        $allowed = $tournament->getNumberOfChoices();
+        if ($tournament->getType() === TournamentType::GROUP_BATTLE){
+            $allowed = 1;
+        }
+
         // Render the form
         return $this->render('tournament/select_teams.html.twig', [
             'tournament' => $tournament,
             'participant' => $participant,
             'listCount' => $teamList->getTeams()->count(),
+            'allowed' => $allowed,
             'form' => $form->createView(),
         ]);
     }

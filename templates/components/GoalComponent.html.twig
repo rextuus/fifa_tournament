@@ -1,16 +1,41 @@
-<div {{ attributes }}
-        class="d-flex flex-column gap-2 align-items-center"
-        data-controller="goal"
-        data-goal-fixture-id="{{ fixture.id }}"
-        data-goal-participant-id="{{ participant.id }}"
-        data-goal-is-home="{{ isHome ? '1' : '0' }}">
+<div id="{{ carouselId }}" class="carousel slide d-flex flex-column align-items-center"
+     data-bs-ride="false"
+     data-controller="goal"
+     data-goal-fixture-id="{{ fixture.id }}"
+     data-goal-participant-id="{{ participant.id }}"
+     data-goal-is-home="{{ isHome ? '1' : '0' }}">
 
-    <button class="btn btn-outline-primary btn-lg mb-3"
-            data-action="goal#increaseGoal">
-        + Tor
+
+    {% set disabled = '' %}
+    {% if fixture.played is not null %}
+        {% set disabled = 'disabled' %}
+    {% endif %}
+    <!-- Carousel Items -->
+    <div class="carousel-inner mt-3">
+        {% for player in participant.players %}
+            <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                <button class="btn btn-outline-primary btn-lg mb-3 {{ disabled }}"
+                        data-action="goal#increaseGoal"
+                        data-player-id="{{ player.id }}">
+                    + Tor
+                    {{ component('ProfileImageComponent', {profile: player, width: 40}) }}
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Carousel Navigation Controls -->
+    <button class="carousel-control-prev no-bg-control" type="button" data-bs-target="#{{ carouselId }}" data-bs-slide="prev">
+        <span aria-hidden="true" class="custom-carousel-symbol"><</span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next no-bg-control" type="button" data-bs-target="#{{ carouselId }}" data-bs-slide="next">
+        <span aria-hidden="true" class="custom-carousel-symbol">></span>
+        <span class="visually-hidden">Next</span>
     </button>
 
-    <span class="badge bg-secondary custom-font-size" data-goal-target="goalValue">
+    <!-- Goal Value Indicator -->
+    <span class="badge bg-secondary custom-font-size mt-5" data-goal-target="goalValue">
         {{ this.goalValue }}
     </span>
 </div>

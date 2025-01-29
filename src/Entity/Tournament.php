@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use \App\Content\Tournament\TournamentState;
 use Exception;
+use \App\Content\Tournament\TournamentType;
 
 #[ORM\Entity(repositoryClass: TournamentRepository::class)]
 class Tournament
@@ -50,6 +51,12 @@ class Tournament
 
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
     private bool $isTwoLeg = false;
+
+    #[ORM\Column(nullable: false, enumType: TournamentType::class, options: ['default' => TournamentType::CLASSIC])]
+    private TournamentType $type = TournamentType::CLASSIC;
+
+    #[ORM\OneToOne(mappedBy: 'tournament', cascade: ['persist', 'remove'])]
+    private ?BattleRound $battleRound = null;
 
     public function __construct()
     {
@@ -216,6 +223,45 @@ class Tournament
     public function setIsTwoLeg(bool $isTwoLeg): static
     {
         $this->isTwoLeg = $isTwoLeg;
+
+        return $this;
+    }
+
+    public function getType(): TournamentType
+    {
+        return $this->type;
+    }
+
+    public function setType(TournamentType $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getEditRoute(): string
+    {
+        match ($this->getType()) {
+            TournamentType::CLASSIC => $editRoute =  'tournament_manage',
+            TournamentType::GROUP_BATTLE => $editRoute =  'tournament_manage_group_battle'
+        };
+
+        return $editRoute;
+    }
+
+    public function getBattleRound(): ?BattleRound
+    {
+        return $this->battleRound;
+    }
+
+    public function setBattleRound(BattleRound $battleRound): static
+    {
+        // set the owning side of the relation if necessary
+        if ($battleRound->getTournament() !== $this) {
+            $battleRound->setTournament($this);
+        }
+
+        $this->battleRound = $battleRound;
 
         return $this;
     }
