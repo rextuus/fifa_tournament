@@ -8,7 +8,6 @@ use App\Content\Spotify\SpotifyService;
 use App\Entity\Fixture;
 use App\Entity\Participant;
 use App\Entity\Player;
-use App\Entity\Tournament;
 use App\Entity\User;
 use App\Form\SelectSongPeriodType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -172,6 +171,7 @@ final class SpotifyController extends AbstractController
         ]);
     }
 
+    // is called via goal_controller stimulus controller
     #[Route('/run/{fixtureId}/{participantId}/{playerId}', name: 'spotify_run', methods: ['GET', 'POST'])]
     public function run(
         Request $request,
@@ -188,24 +188,26 @@ final class SpotifyController extends AbstractController
         if ($participant->getGoalHymnSpotifyId() !== null) {
             $settings = $this->settingService->getSettingForUser($this->getUser());
 
-            $calculatedRuntime = $participant->getGoalHymnEndTime() - $participant->getGoalHymnStartTime();
+            if ($settings->isGoalMusicEnabled()){
+                $calculatedRuntime = $participant->getGoalHymnEndTime() - $participant->getGoalHymnStartTime();
 
-            if ($calculatedRuntime > $settings->getMaximumSongDuration()) {
-                $calculatedRuntime = $settings->getMaximumSongDuration();
+                if ($calculatedRuntime > $settings->getMaximumSongDuration()) {
+                    $calculatedRuntime = $settings->getMaximumSongDuration();
+                }
+
+                if ($calculatedRuntime > $this->forcedRuntime) {
+                    $calculatedRuntime = $this->forcedRuntime;
+                }
+
+                $this->spotifyService->breakQueueWithGoalHymn(
+                    $fixture->getId(),
+                    $participant->getGoalHymnSpotifyId(),
+                    $participant->getGoalHymnStartTime(),
+                    $calculatedRuntime,
+                );
+
+                $fixture->setIsGoalMusicRunning(true);
             }
-
-            if ($calculatedRuntime > $this->forcedRuntime) {
-                $calculatedRuntime = $this->forcedRuntime;
-            }
-
-            $this->spotifyService->breakQueueWithGoalHymn(
-                $fixture->getId(),
-                $participant->getGoalHymnSpotifyId(),
-                $participant->getGoalHymnStartTime(),
-                $calculatedRuntime,
-            );
-
-            $fixture->setIsGoalMusicRunning(true);
         }
 
         if ($isHome) {
@@ -216,7 +218,6 @@ final class SpotifyController extends AbstractController
 
         $fixture->addScorer($player->getId());
         // add player to goal list
-
 
         $this->entityManager->persist($fixture);
         $this->entityManager->flush();

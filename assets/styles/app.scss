@@ -273,6 +273,11 @@ h5 {
     position: relative;
 }
 
+.hover-container.special-card-body {
+    min-height: 400px;
+}
+
+
 /* Team container with default styles */
 .team-container {
     display: flex;

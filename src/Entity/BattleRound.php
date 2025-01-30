@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\BattleRoundRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BattleRoundRepository::class)]
@@ -30,6 +31,12 @@ class BattleRound
      */
     #[ORM\ManyToMany(targetEntity: Player::class, inversedBy: 'battleRounds')]
     private Collection $players;
+
+    /**
+     * @var array<int>
+     */
+    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
+    private array $fixtureOrder = [];
 
     public function __construct()
     {
@@ -98,6 +105,18 @@ class BattleRound
     public function removePlayer(Player $player): static
     {
         $this->players->removeElement($player);
+
+        return $this;
+    }
+
+    public function getFixtureOrder(): array
+    {
+        return $this->fixtureOrder;
+    }
+
+    public function setFixtureOrder(array $fixtureOrder): static
+    {
+        $this->fixtureOrder = $fixtureOrder;
 
         return $this;
     }

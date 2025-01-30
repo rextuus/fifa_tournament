@@ -9,8 +9,7 @@ class FixtureResultData
     private int $homeGoals = 0;
     private int $awayGoals = 0;
 
-    // Add a property for player goals
-    private array $playerGoals = []; // Player goals stored as an associative array
+    private array $playerGoals = [];
 
     public function getHomeGoals(): int
     {

@@ -23,6 +23,12 @@ class Setting
     #[ORM\Column]
     private ?int $songPlayTimeLimit = null;
 
+    #[ORM\Column]
+    private ?bool $goalMusicEnabled = null;
+
+    #[ORM\Column]
+    private ?bool $goalGifEnabled = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +66,30 @@ class Setting
     public function setSongPlayTimeLimit(int $songPlayTimeLimit): static
     {
         $this->songPlayTimeLimit = $songPlayTimeLimit;
+
+        return $this;
+    }
+
+    public function isGoalMusicEnabled(): ?bool
+    {
+        return $this->goalMusicEnabled;
+    }
+
+    public function setGoalMusicEnabled(bool $goalMusicEnabled): static
+    {
+        $this->goalMusicEnabled = $goalMusicEnabled;
+
+        return $this;
+    }
+
+    public function isGoalGifEnabled(): ?bool
+    {
+        return $this->goalGifEnabled;
+    }
+
+    public function setGoalGifEnabled(bool $goalGifEnabled): static
+    {
+        $this->goalGifEnabled = $goalGifEnabled;
 
         return $this;
     }

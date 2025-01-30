@@ -19,12 +19,15 @@ export default class extends Controller {
 
         // Show the GIF overlay
         const overlay = document.getElementById('goal-overlay');
-        overlay.classList.remove('d-none'); // Make it visible
+        if (overlay) {
+            overlay.classList.remove('d-none'); // Make it visible
 
-        // Hide the overlay after 20 seconds
-        setTimeout(() => {
-            overlay.classList.add('d-none'); // Hide it after 20s
-        }, 20000);
+            // Hide the overlay after 20 seconds
+            setTimeout(() => {
+                overlay.classList.add('d-none'); // Hide it after 20s
+            }, 20000);
+        }
+
 
         // Fetch required data and logic goes here
         const fixtureId = this.element.dataset.goalFixtureId;

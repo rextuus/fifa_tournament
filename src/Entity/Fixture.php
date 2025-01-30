@@ -43,6 +43,9 @@ class Fixture
     #[ORM\OneToOne(inversedBy: 'fixture', cascade: ['persist', 'remove'])]
     private ?Result $secondLeg = null;
 
+    #[ORM\OneToOne(inversedBy: 'fixture', cascade: ['persist', 'remove'])]
+    private ?Result $thirdLeg = null;
+
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
     private bool $isTwoLeg = false;
 
@@ -178,6 +181,18 @@ class Fixture
 
         return $this;
     }
+
+    public function getThirdLeg(): ?Result
+    {
+        return $this->thirdLeg;
+    }
+
+    public function setThirdLeg(?Result $thirdLeg): Fixture
+    {
+        $this->thirdLeg = $thirdLeg;
+        return $this;
+    }
+
 
     public function isTwoLeg(): bool
     {

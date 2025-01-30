@@ -7,7 +7,6 @@ namespace App\Content;
 use App\Entity\Setting;
 use App\Entity\User;
 use App\Repository\SettingRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 class SettingService
@@ -25,6 +24,8 @@ class SettingService
             $setting->setUser($user);
             $setting->setMaximumSongDuration(60);
             $setting->setSongPlayTimeLimit(60);
+            $setting->setGoalGifEnabled(false);
+            $setting->setGoalMusicEnabled(true);
 
             $this->entityManager->persist($setting);
             $this->entityManager->flush();

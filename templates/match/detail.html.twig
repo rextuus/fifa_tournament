@@ -9,9 +9,12 @@
             <h1>{{ fixture.ident }}</h1>
         </div>
 
-        <div id="goal-overlay" class="d-none align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 mt-5">
-            <img src="https://i.giphy.com/FoH28ucxZFJZu.webp" alt="Goal Celebration" class="goal-gif">
-        </div>
+        {% if settings.isGoalGifEnabled %}
+            <div id="goal-overlay"
+                 class="d-none align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 mt-5">
+                <img src="https://i.giphy.com/FoH28ucxZFJZu.webp" alt="Goal Celebration" class="goal-gif">
+            </div>
+        {% endif %}
 
         <div class="row justify-content-center">
             <!-- Home Participant -->
@@ -77,6 +80,54 @@
             {% endif %}
         </div>
 
+        <div class="container-sm my-4" style="max-width: 600px;">
+            {% if fixture.isTwoLeg %}
+                <ul class="list-group mb-3">
+                    {% if fixture.firstLeg is not null %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Hin</span>
+                            <span><strong>{{ fixture.firstLeg.homeGoals }} - {{ fixture.firstLeg.awayGoals }}</strong></span>
+                        </li>
+                    {% endif %}
+                    {% if fixture.secondLeg is not null %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Rück</span>
+                            <span><strong>{{ fixture.secondLeg.homeGoals }} - {{ fixture.secondLeg.awayGoals }}</strong></span>
+                        </li>
+                    {% endif %}
+                    {% if fixture.thirdLeg is not null %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Decider</span>
+                            <span><strong>{{ fixture.thirdLeg.homeGoals }} - {{ fixture.thirdLeg.awayGoals }}</strong></span>
+                        </li>
+                    {% endif %}
+                </ul>
+
+                {% set totalHomeGoals = 0 %}
+                {% set totalAwayGoals = 0 %}
+
+                {% if fixture.firstLeg %}
+                    {% set totalHomeGoals = totalHomeGoals + fixture.firstLeg.homeGoals %}
+                    {% set totalAwayGoals = totalAwayGoals + fixture.firstLeg.awayGoals %}
+                {% endif %}
+                {% if fixture.secondLeg %}
+                    {% set totalHomeGoals = totalHomeGoals + fixture.secondLeg.homeGoals %}
+                    {% set totalAwayGoals = totalAwayGoals + fixture.secondLeg.awayGoals %}
+                {% endif %}
+                {% if fixture.thirdLeg %}
+                    {% set totalHomeGoals = totalHomeGoals + fixture.thirdLeg.homeGoals %}
+                    {% set totalAwayGoals = totalAwayGoals + fixture.thirdLeg.awayGoals %}
+                {% endif %}
+
+                <hr class="my-3">
+
+                <div class="text-center">
+                    <h5>Total Result</h5>
+                    <p class="fw-bold">{{ totalHomeGoals }} - {{ totalAwayGoals }}</p>
+                </div>
+            {% endif %}
+        </div>
+
         {% if fixture.played is null %}
         <twig:AjaxFormModalLink
                 classes="btn btn-outline-secondary"
@@ -86,5 +137,14 @@
             Ergebnis speichern
         </twig:AjaxFormModalLink>
         {% endif %}
+
+        <div class="row mb-5 ">
+            <div class="col-md-2">
+                <a href="{{ path('tournament_detail_group_battle', {id: fixture.round.tournament.id, roundNr: fixture.round.nr}) }}"
+                   class="btn btn-primary mt-5">
+                    Übersicht
+                </a>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\Setting;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -29,7 +29,14 @@ class SettingType extends AbstractType
                     'min' => 0,
                     'max' => 300,
                 ],
-
+            ])
+            ->add('goalMusicEnabled', CheckboxType::class, [
+                'label' => 'Enable Goal Music',
+                'required' => false, // Optional, since booleans can be unchecked
+            ])
+            ->add('goalGifEnabled', CheckboxType::class, [
+                'label' => 'Enable Goal Gif',
+                'required' => false, // Optional, since booleans can be unchecked
             ]);
 
         $builder->add('save', SubmitType::class, ['label' => 'Speichern']);

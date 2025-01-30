@@ -6,6 +6,8 @@
   "build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-46e48f.js": "/build/vendors-node_modules_hotwired_turbo_dist_turbo_es2017-esm_js-node_modules_symfony_stimulus-br-46e48f.js",
   "build/fonts/fa-solid-900.ttf": "/build/fonts/fa-solid-900.2582b0e4.ttf",
   "build/fonts/fa-solid-900.woff2": "/build/fonts/fa-solid-900.2463b90d.woff2",
+  "build/images/thumbnails/nelson.gif": "/build/images/thumbnails/nelson.gif",
   "build/images/thumbnails/team_default.png": "/build/images/thumbnails/team_default.png",
-  "build/images/thumbnails/client_default.png": "/build/images/thumbnails/client_default.png"
+  "build/images/thumbnails/client_default.png": "/build/images/thumbnails/client_default.png",
+  "build/images/thumbnails/messi.gif": "/build/images/thumbnails/messi.gif"
 }

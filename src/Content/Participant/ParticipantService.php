@@ -6,6 +6,7 @@ namespace App\Content\Participant;
 
 use App\Entity\BattleRound;
 use App\Entity\Participant;
+use App\Entity\Player;
 use App\Repository\ParticipantRepository;
 use App\Repository\PlayerRepository;
 use Doctrine\ORM\EntityManager;
@@ -56,5 +57,28 @@ class ParticipantService
         }
 
         return $participantsForRound;
+    }
+
+    /**
+     * @param array<Player> $players
+     * @return Participant
+     */
+    public function findOrCreateParticipant(array $players): Participant
+    {
+        $participants = $this->participantRepository->findParticipantsByPlayerCombination($players);
+        if (count($participants) > 0) {
+            return $participants[0];
+        }
+
+        $newParticipant = new Participant();
+        $newParticipant->setPlayers($players);
+        $newParticipant->setIdent(
+            sprintf('%s', explode(' - ', $players[0]->getIdent())[0])
+        );
+
+        $this->entityManager->persist($newParticipant);
+        $this->entityManager->flush();
+
+        return $newParticipant;
     }
 }

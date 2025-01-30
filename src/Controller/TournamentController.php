@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Content\Participant\ParticipantService;
+use App\Content\Tournament\Calculation\TableFilter;
 use App\Content\Tournament\TournamentService;
 use App\Content\Tournament\TournamentState;
 use App\Content\Tournament\TournamentType;
@@ -123,17 +124,19 @@ final class TournamentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var BattleRound $battleRound */
             $battleRound = $form->getData();
-            foreach ($battleRound->getParticipants() as $participant) {
-                $battleRound->removeParticipant($participant);
-            }
 
-            $participants = $participantService->checkBattleRoundParticipantsExist($battleRound);
-            foreach ($participants as $participant) {
-                $entityManager->persist($participant);
-                $battleRound->addParticipant($participant);
-            }
-
-            $entityManager->flush();
+            $this->tournamentService->addPlayerToBattleRound($battleRound);
+//            foreach ($battleRound->getParticipants() as $participant) {
+//                $battleRound->removeParticipant($participant);
+//            }
+//
+//            $participants = $participantService->checkBattleRoundParticipantsExist($battleRound);
+//            foreach ($participants as $participant) {
+//                $entityManager->persist($participant);
+//                $battleRound->addParticipant($participant);
+//            }
+//
+//            $entityManager->flush();
             return $this->redirectToRoute('tournament_manage_group_battle', ['id' => $tournament->getId()]);
         }
 
@@ -252,6 +255,10 @@ final class TournamentController extends AbstractController
     #[Route('/detail/{id}', name: 'tournament_detail')]
     public function detail(Tournament $tournament): Response
     {
+        if ($tournament->getType() === TournamentType::GROUP_BATTLE) {
+            return $this->redirectToRoute('tournament_detail_group_battle', ['id' => $tournament->getId()]);
+        }
+
         $numberOfRounds = $tournament->getRounds()->count();
         $fixtures = [];
         for ($roundNr = 1; $roundNr <= $numberOfRounds; $roundNr++) {
@@ -265,4 +272,49 @@ final class TournamentController extends AbstractController
             'matrix' => $matrix,
         ]);
     }
+
+    #[Route('/detail-group/{id}/{roundNr}', name: 'tournament_detail_group_battle')]
+    public function detailGroupBattle(Tournament $tournament, int $roundNr = 1): Response
+    {
+        $fixtureOrder = $tournament->getBattleRound()->getFixtureOrder();
+        $round = $tournament->getRoundByNumber($roundNr);
+//dd($round->getFixtures());
+        $orderedFixtures = $round->getFixtures()->toArray();
+        $table = $this->tournamentService->calculateBattleRoundTable($tournament, $roundNr);
+        $goalLeader = $table->getOrderedBy(TableFilter::PERSONAL_GOALS)[0];
+        $shootingGallery = $table->getOrderedBy(TableFilter::AGAINST_GOALS)[0];
+
+        if ($roundNr === 1){
+            $orderedFixtures = $round->getFixturesByOrder($fixtureOrder);
+        }
+
+
+        if ($roundNr > 1){
+
+            $table = $this->tournamentService->calculateBattleRoundTableByParticipants($tournament, $roundNr);
+            $playerTableRound1 = $this->tournamentService->calculateBattleRoundTable($tournament, 1);
+            $playerTableRound2 = $this->tournamentService->calculateBattleRoundTable($tournament, $roundNr);
+
+            $merged = $playerTableRound1->mergeWith($playerTableRound2);
+
+            $goalLeader = $merged->getOrderedBy(TableFilter::PERSONAL_GOALS)[0];
+            $shootingGallery = $merged->getOrderedBy(TableFilter::AGAINST_GOALS)[0];
+        }
+
+
+
+        $rankedPlayers = $table->getOrderedBy(TableFilter::POINTS);
+
+        $hasNext = $tournament->getRounds()->count() - $roundNr > 0;
+        return $this->render('tournament/detail_battle.html.twig', [
+            'tournament' => $tournament,
+            'orderedFixtures' => $orderedFixtures,
+            'goalLeader' => $goalLeader,
+            'shootingGallery' => $shootingGallery,
+            'rankedPlayers' => $rankedPlayers,
+            'hasNext' => $hasNext,
+            'next' => $roundNr + 1,
+        ]);
+    }
+
 }

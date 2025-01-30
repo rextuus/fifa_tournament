@@ -4,6 +4,7 @@ namespace App\Content\Tournament;
 
 enum RoundType: string
 {
+    case BATTLE_ROUND = 'battle_round';
     case GROUP_ROUND = 'group_round';
     case ROUND_OF_128 = 'round_of_128';
     case ROUND_OF_64 = 'round_of_64';

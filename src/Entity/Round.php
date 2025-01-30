@@ -138,4 +138,22 @@ class Round
 
         return $this;
     }
+
+    /**
+     * @param array<int> $order
+     * @return array<Fixture>
+     */
+    public function getFixturesByOrder(array $order): array
+    {
+        $fixtures = [];
+        foreach ($order as $fixtureNr) {
+            $fixtures[] = $this->fixtures->filter(
+                function (Fixture $fixture) use ($fixtureNr) {
+                    return $fixtureNr === $fixture->getId();
+                }
+            )->first();
+        }
+
+        return $fixtures;
+    }
 }

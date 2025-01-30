@@ -1,14 +1,19 @@
-<div{{ attributes }} class="card mb-3 hover-container bg-dark text-white fixed-width-card">
+{% set isPlayed = fixture.played is not null %}
+
+<div{{ attributes }}
+        class="card mb-3 hover-container special-card-body fixed-width-card {{ isPlayed ? 'bg-secondary text-muted played-card' : 'bg-dark text-white' }}">
     <div class="card-body">
         <h5 class="card-title">
             {{ component('ButtonComponent', {
-                text: fixture.ident, classes: 'btn btn-info mb-3', route: path('match_detail', { id: fixture.id })
+                text: fixture.ident,
+                classes: isPlayed ? 'btn btn-info mb-3 disabled' : 'btn btn-info mb-3',
+                route: path('match_detail', { id: fixture.id })
             }) }}
         </h5>
         <div class="teams-content d-flex justify-content-between align-items-center">
             <!-- Home Team -->
             <div class="team-container d-flex flex-column align-items-center">
-                <!-- Team Image (Visible by Default) -->
+                <!-- Team Image -->
                 <img src="{{ fixture.homeTeam is not null and fixture.homeTeam.imageFile
                 ? image_url(fixture.homeTeam.imageFile, 'medium')
                 : asset('build/images/thumbnails/team_default.png') }}"
@@ -16,7 +21,7 @@
                      class="img-fluid team-image"
                      style="width: 80px; height: 80px; object-fit: cover;" />
 
-                <!-- Participant Image (Hidden by Default) -->
+                <!-- Participant Image -->
                 <img src="{{ fixture.homeParticipant is not null and fixture.homeParticipant.imageFile
                 ? image_url(fixture.homeParticipant.imageFile, 'large')
                 : asset('build/images/thumbnails/client_default.png') }}"
@@ -24,10 +29,10 @@
                      class="img-fluid participant-image rounded-circle border"
                      style="width: 80px; height: 80px; object-fit: cover;" />
 
-                <!-- Team Name (Visible by Default) -->
+                <!-- Team Name -->
                 <div class="team-name">{{ fixture.homeTeam.name ?? 'TBA' }}</div>
 
-                <!-- Participant Name (Hidden by Default) -->
+                <!-- Participant Name -->
                 <div class="participant-ident">{{ fixture.homeParticipant.ident ?? 'Unknown' }}</div>
             </div>
 
@@ -36,7 +41,7 @@
 
             <!-- Away Team -->
             <div class="team-container d-flex flex-column align-items-center">
-                <!-- Team Image (Visible by Default) -->
+                <!-- Team Image -->
                 <img src="{{ fixture.awayTeam is not null and fixture.awayTeam.imageFile
                 ? image_url(fixture.awayTeam.imageFile, 'medium')
                 : asset('build/images/thumbnails/team_default.png') }}"
@@ -44,7 +49,7 @@
                      class="img-fluid team-image"
                      style="width: 80px; height: 80px; object-fit: cover;" />
 
-                <!-- Participant Image (Hidden by Default) -->
+                <!-- Participant Image -->
                 <img src="{{ fixture.awayParticipant is not null and fixture.awayParticipant.imageFile
                 ? image_url(fixture.awayParticipant.imageFile, 'large')
                 : asset('build/images/thumbnails/client_default.png') }}"
@@ -52,13 +57,19 @@
                      class="img-fluid participant-image rounded-circle border"
                      style="width: 80px; height: 80px; object-fit: cover;" />
 
-                <!-- Team Name (Visible by Default) -->
+                <!-- Team Name -->
                 <div class="team-name">{{ fixture.awayTeam.name ?? 'TBA' }}</div>
 
-                <!-- Participant Name (Hidden by Default) -->
+                <!-- Participant Name -->
                 <div class="participant-ident">{{ fixture.awayParticipant.ident ?? 'Unknown' }}</div>
             </div>
         </div>
     </div>
-    <div class="card-footer text-white">0 - 0</div>
+    <div class="card-footer text-white">
+        {% if isPlayed %}
+            <span>{{ fixture.firstLeg.homeGoals  }} - {{ fixture.firstLeg.awayGoals  }}</span>
+        {% else %}
+            <span>0 - 0</span>
+        {% endif %}
+    </div>
 </div>

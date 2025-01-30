@@ -14,6 +14,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TeamService
 {
+    private const FALLBACK_TEAM = 'Fallback Team';
+
     public function __construct(
         private FileService $fileService,
         private EntityManagerInterface $entityManager,
@@ -46,5 +48,23 @@ class TeamService
         }
 
         $this->entityManager->flush();
+    }
+
+    public function getFallbackTeam(): Team
+    {
+        $fallbackTeam = $this->entityManager->getRepository(Team::class)->findOneBy(['name' => self::FALLBACK_TEAM]);
+        if (!$fallbackTeam) {
+            $fallbackTeam = new Team();
+            $fallbackTeam->setName(self::FALLBACK_TEAM);
+            $fallbackTeam->setLeague('Unknown');
+            $fallbackTeam->setStars(StarRating::HALF_STAR);
+            $fallbackTeam->setTeamLink('https://www.google.com');
+            $fallbackTeam->setImageLink('https://www.google.com');
+
+            $this->entityManager->persist($fallbackTeam);
+            $this->entityManager->flush();
+        }
+
+        return $fallbackTeam;
     }
 }
