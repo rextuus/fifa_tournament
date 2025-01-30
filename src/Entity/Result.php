@@ -28,7 +28,7 @@ class Result
     /**
      * @var array<int>
      */
-    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
+    #[ORM\Column(type: Types::JSON)]
     private array $playerGoals = [];
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

@@ -35,7 +35,7 @@ class BattleRound
     /**
      * @var array<int>
      */
-    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
+    #[ORM\Column(type: Types::JSON)]
     private array $fixtureOrder = [];
 
     public function __construct()

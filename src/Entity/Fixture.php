@@ -61,7 +61,7 @@ class Fixture
     /**
      * @var array<int>
      */
-    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
+    #[ORM\Column(type: Types::JSON)]
     private array $scorers = [];
 
     public function getId(): ?int
