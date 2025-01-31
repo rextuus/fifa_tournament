@@ -1,7 +1,7 @@
 <div{{ attributes }}>
     {% if this.profile.imageFile %}
         {% set imageMarkup %}
-            <img src="{{ image_url(this.profile.imageFile, 'large') }}"
+            <img src="{{ image_url(this.profile.imageFile, 'x-large') }}"
                  class="img-fluid {{ this.additionalClasses }}" style="max-width: {{ this.width }}px;"/>
         {% endset %}
     {% else %}

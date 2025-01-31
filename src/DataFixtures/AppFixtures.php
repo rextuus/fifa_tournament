@@ -98,7 +98,7 @@ class AppFixtures extends Fixture
         }
 
         // add players to tournamnent => will auto create participant
-        $this->tournamentService->addPlayerToBattleRound($battleRound);
+        $this->tournamentService->addAndRemovePlayersToBattleRound($battleRound);
 
         // add 1 team for each participant
         $teamRepository = $manager->getRepository(Team::class);

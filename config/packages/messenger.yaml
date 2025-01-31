@@ -17,6 +17,7 @@ framework:
 
     routing:
       App\Message\RestoreSpotifyQueue: async
+      App\Message\CheckQueue: async
 
       # Route your messages to the transports
       # 'App\Message\YourMessage': async

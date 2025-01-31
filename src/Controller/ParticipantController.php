@@ -30,7 +30,7 @@ final class ParticipantController extends BaseController
     {
         $participants = $participantRepository->findAll();
 
-        return $this->render('participant/index.html.twig', [
+        return $this->render('participant/list.html.twig', [
             'participants' => $participants,
         ]);
     }

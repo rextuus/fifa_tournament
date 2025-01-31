@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Content\Tournament;
 
 use App\Content\Participant\ParticipantService;
+use App\Content\Team\TeamService;
 use App\Content\Tournament\Calculation\BattleRoundCalculationService;
 use App\Content\Tournament\Calculation\BattleRoundTable;
 use App\Content\Tournament\Calculation\FixtureMap;
@@ -12,6 +13,7 @@ use App\Content\Tournament\Calculation\TournamentCalculationService;
 use App\Entity\BattleRound;
 use App\Entity\Fixture;
 use App\Entity\Participant;
+use App\Entity\Player;
 use App\Entity\Result;
 use App\Entity\Round;
 use App\Entity\TeamList;
@@ -25,6 +27,7 @@ class TournamentService
         private readonly EntityManagerInterface $entityManager,
         private readonly ParticipantService $participantService,
         private readonly BattleRoundCalculationService $battleRoundCalculationService,
+        private readonly TeamService $teamService,
     ) {
     }
 
@@ -256,7 +259,7 @@ class TournamentService
         return $matrix;
     }
 
-    public function addPlayerToBattleRound(BattleRound $battleRound): void
+    public function addAndRemovePlayersToBattleRound(BattleRound $battleRound): void
     {
         $tournament = $battleRound->getTournament();
         foreach ($battleRound->getParticipants() as $participant) {
@@ -272,6 +275,73 @@ class TournamentService
         }
 
         $this->entityManager->persist($tournament);
+        $this->entityManager->flush();
+    }
+
+    public function addPlayerToBattleRound(Player $newPlayer, BattleRound $battleRound): void
+    {
+        $existingPlayers = $battleRound->getPlayers()->toArray();
+        $existingParticipants = $battleRound->getParticipants()->toArray();
+        $tournament = $battleRound->getTournament();
+
+        // get the new participants and add them
+        $newParticipants = $this->participantService->checkParticipantsForPlayer($newPlayer, $existingPlayers);
+
+        foreach ($newParticipants as $participant) {
+            $this->entityManager->persist($participant);
+            $battleRound->addParticipant($participant);
+            $tournament->addParticipant($participant);
+        }
+dump($existingParticipants);
+dump($newParticipants);
+        // create new fixture between existing participants and the new ones
+        $round = $tournament->getRoundByNumber(1);
+        $fixtureNr = $round->getFixtures()->count() + 1;
+        foreach ($existingParticipants as $existingParticipant) {
+            foreach ($newParticipants as $newParticipant) {
+                // check if a player is in both participants
+                $wouldPlayAgainstHimself = false;
+                foreach ($existingParticipant->getPlayers() as $existingPlayer) {
+                    foreach ($newParticipant->getPlayers() as $newPlayer) {
+                        if ($existingPlayer->getId() === $newPlayer->getId()) {
+                            $wouldPlayAgainstHimself = true;
+                        }
+                    }
+                }
+                if ($wouldPlayAgainstHimself) {
+                    continue;
+                }
+
+                $fixture = new Fixture();
+                $fixture->setHomeParticipant($existingParticipant);
+                $fixture->setAwayParticipant($newParticipant);
+                $fixture->setIdent('Gruppenphase - '.$fixtureNr);
+                $fixture->setPlayed(null);
+                $fixture->setRound($round);
+
+                $fallbackTeam = $this->teamService->getFallbackTeam();
+                $fixture->setHomeTeam($fallbackTeam);
+                $fixture->setAwayTeam($fallbackTeam);
+
+                $this->entityManager->persist($fixture);
+                $round->addFixture($fixture);
+                $fixtureNr++;
+            }
+        }
+
+        $this->entityManager->persist($tournament);
+        $this->entityManager->flush();
+
+        $fixtures = $tournament->getRoundByNumber(1)->getFixtures()->toArray();
+        shuffle($fixtures);
+
+        $shuffledIds = array_map(
+            fn(Fixture $fixture) => $fixture->getId(),
+            $fixtures
+        );
+
+        $battleRound->setFixtureOrder($shuffledIds);
+        $this->entityManager->persist($battleRound);
         $this->entityManager->flush();
     }
 

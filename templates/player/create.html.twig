@@ -6,8 +6,8 @@
     <div class="container my-5">
         <!-- Page Header -->
         <div class="text-center mb-4">
-            <h1 class="display-5">Create New Player</h1>
-            <p class="lead">Add a new player or view the existing ones below.</p>
+            <h1 class="display-5">Neuen Spieler anlegen</h1>
+            <p class="lead">Erstelle neue Spieler oder bearbeite existierende</p>
         </div>
 
         <div class="row">
@@ -15,15 +15,15 @@
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-header bg-success text-white">
-                        <h5>Create Player</h5>
+                        <h5>Spieler erstellen</h5>
                     </div>
                     <div class="card-body">
                         <form action="{{ path('player_create') }}" method="post">
                             <div class="mb-3">
-                                <label for="playerIdent" class="form-label">Player Ident</label>
+                                <label for="playerIdent" class="form-label text-white">Spieler-Name</label>
                                 <input type="text" class="form-control" id="playerIdent" name="playerIdent" required>
                             </div>
-                            <button type="submit" class="btn btn-success w-100">Create Player</button>
+                            <button type="submit" class="btn btn-success w-100">Erstellen</button>
                         </form>
                     </div>
                 </div>
@@ -41,8 +41,8 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Player Ident</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -50,26 +50,17 @@
                                     <tr>
                                         <th scope="row">{{ player.id }}</th>
                                         <td>
-                                            {% if player.imageFile %}
-                                                {% set imageMarkup %}
-                                                    <img src="{{ image_url(player.imageFile, 'large') }}"
-                                                         class="img-fluid rounded-circle" style="max-width: 40px;"/>
-                                                {% endset %}
-                                            {% else %}
-                                                {% set imageMarkup %}
-                                                    <img src="{{ asset('build/images/thumbnails/client_default.png') }}"
-                                                         class="img-fluid rounded-circle"/>
-                                                {% endset %}
-                                            {% endif %}
-                                            {{ imageMarkup }}
+                                            {{ component('ProfileImageComponent', {profile: player}) }}
                                             {{ player.ident }}
                                         </td>
 
                                         <td>
-                                            <a href="{{ path('player_edit', { id: player.id }) }}"
-                                               class="btn btn-sm btn-warning">
-                                                Edit
-                                            </a>
+                                            {{ component('ButtonComponent', {
+                                                text: 'Edit', classes: 'btn btn-sm btn-warning', route: path('player_edit', { id: player.id })
+                                            }) }}
+                                            {{ component('ButtonComponent', {
+                                                text: 'Torhymne', classes: 'btn btn-sm btn-warning', route: path('spotify_search', { type: 'player', id: player.id })
+                                            }) }}
                                         </td>
                                     </tr>
                                 {% endfor %}

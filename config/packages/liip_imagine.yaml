@@ -15,24 +15,24 @@ liip_imagine:
         image_square_small:
             data_loader: image
             cache: public_image
-            quality: 80
+            quality: 100
             filters:
                 fixed: { width: 60, height: 60}
         image_square_medium:
             data_loader: image
             cache: public_image
-            quality: 80
+            quality: 100
             filters:
                 fixed: { width: 126, height: 126}
         image_square_large:
             data_loader: image
             cache: public_image
-            quality: 80
+            quality: 100
             filters:
                 fixed: { width: 250, height: 250}
         image_square_x_large:
             data_loader: image
             cache: public_image
-            quality: 80
+            quality: 100
             filters:
                 fixed: { width: 500, height: 500 }

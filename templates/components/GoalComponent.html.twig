@@ -17,8 +17,8 @@
                 <button class="btn btn-outline-primary btn-lg mb-3 {{ disabled }}"
                         data-action="goal#increaseGoal"
                         data-player-id="{{ player.id }}">
-                    + Tor
                     {{ component('ProfileImageComponent', {profile: player, width: 40}) }}
+                    <p class="short-ident">{{ this.getShortIdent(player) }} +</p>
                 </button>
             </div>
         {% endfor %}
@@ -42,5 +42,10 @@
 <style>
     .custom-font-size {
         font-size: 2rem;
+    }
+    .short-ident {
+        font-size: 0.8rem;
+        text-align: center;
+        color: #666;
     }
 </style>

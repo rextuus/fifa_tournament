@@ -27,7 +27,7 @@ class ImageExtension extends AbstractExtension
         ];
     }
 
-    public function resolveImageUrl(File $file, string $size = 'small'): string
+    public function resolveImageUrl(File $file, string $size = 'x-large'): string
     {
         return $this->imageService->resolveUrl($file, $size);
     }

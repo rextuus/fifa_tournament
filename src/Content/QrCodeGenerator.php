@@ -17,11 +17,16 @@ class QrCodeGenerator
     {
     }
 
-    public function generateQrCode(string $route, int $id): string
+    public function generateQrCode(string $route, int $id, ?string $type = null): string
     {
+        $args = ['id' => $id];
+        if ($type) {
+            $args['type'] = $type;
+        }
+
         $qrCodeUrl = $this->router->generate(
             $route,
-            ['id' => $id],
+            $args,
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 

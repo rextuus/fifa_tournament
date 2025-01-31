@@ -1,7 +1,7 @@
 {% block cropped_image_upload_widget %}
     {% set imageUrl = asset(default_image_path) %}
     {% if current_image_url %}
-        {% set imageUrl = image_url(current_image_url, 'large') %}
+        {% set imageUrl = image_url(current_image_url, 'x-large') %}
     {% endif %}
     <div class="cropped-image-upload" data-controller="cropped-image-upload"
          data-cropped-image-upload-width-value="{{ width }}"

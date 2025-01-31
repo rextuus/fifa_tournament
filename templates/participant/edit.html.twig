@@ -12,7 +12,7 @@
         <div class="col my-auto mx-auto mb-3" style="max-width: 200px;">
             {% if participant.imageFile %}
                 {% set imageMarkup %}
-                    <img src="{{ image_url(participant.imageFile, 'medium') }}"
+                    <img src="{{ image_url(participant.imageFile, 'x-large') }}"
                          class="img-fluid rounded-circle"/>
                 {% endset %}
             {% else %}
@@ -52,6 +52,10 @@
                         <!-- Players Multi-select -->
                         <div class="mb-3">
                             {{ form_row(form.players, { 'attr': { 'class': 'form-control' } }) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_row(form.forceGoalHymn, { 'attr': { 'class': 'form-control' } }) }}
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">Save Changes</button>

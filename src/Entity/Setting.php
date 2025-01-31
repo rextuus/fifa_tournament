@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SettingRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SettingRepository::class)]
@@ -28,6 +29,9 @@ class Setting
 
     #[ORM\Column]
     private ?bool $goalGifEnabled = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $queueCheck = null;
 
     public function getId(): ?int
     {
@@ -90,6 +94,18 @@ class Setting
     public function setGoalGifEnabled(bool $goalGifEnabled): static
     {
         $this->goalGifEnabled = $goalGifEnabled;
+
+        return $this;
+    }
+
+    public function getQueueCheck(): ?\DateTimeInterface
+    {
+        return $this->queueCheck;
+    }
+
+    public function setQueueCheck(?\DateTimeInterface $queueCheck): static
+    {
+        $this->queueCheck = $queueCheck;
 
         return $this;
     }

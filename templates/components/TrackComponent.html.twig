@@ -11,7 +11,7 @@
                 <h5 class="mb-1 text-dark fw-bold">{{ track.trackName }}</h5>
                 <p class="mb-1 text-muted mb-0">{{ track.artistName }} - {{ track.albumName }}</p>
                 <small class="text-muted">Spotify ID: {{ track.spotifyId }}</small>
-                <p class="text-muted">{{ duration_in_minutes(participant.goalHymnStartTime) }} - {{ duration_in_minutes(participant.goalHymnEndTime) }}</p>
+                <p class="text-muted">{{ duration_in_minutes(this.entity.goalHymnStartTime) }} - {{ duration_in_minutes(this.entity.goalHymnEndTime) }}</p>
             </div>
         {% else %}
             <span class="text-danger">Noch kein Track ausgewählt</span>

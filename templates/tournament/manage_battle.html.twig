@@ -15,12 +15,21 @@
             <div class="col-md-8">
                 <div class="card shadow-sm mb-4">
                     <div class="card-body">
-                        {{ form_start(form) }}
-                        <hr>
-                        <h5>Add/Remove Participants</h5>
-                        {{ form_row(form.players, { 'attr': { 'class': 'form-check' } }) }}
-                        <button type="submit" class="btn btn-primary w-100 mt-3">Speichern</button>
-                        {{ form_end(form) }}
+                        {% if showAddPlayer %}
+                            {{ form_start(addForm) }}
+                            <hr>
+                            <h5>Add Participants</h5>
+                            {{ form_row(addForm.player, { 'attr': { 'class': 'form-check' } }) }}
+                            <button type="submit" class="btn btn-primary w-100 mt-3">Speichern</button>
+                            {{ form_end(addForm) }}
+                        {% else %}
+                            {{ form_start(form) }}
+                            <hr>
+                            <h5>Add/Remove Participants</h5>
+                            {{ form_row(form.players, { 'attr': { 'class': 'form-check' } }) }}
+                            <button type="submit" class="btn btn-primary w-100 mt-3" {% if tournament.state.value != 'open' %} disabled {% endif %}>Speichern</button>
+                            {{ form_end(form) }}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -52,21 +61,24 @@
         <div class="row justify-content-center mt-4">
             {% set isValid = '' %}
             {% set disabled = '' %}
-            {% if tournament_is_valid(tournament) %}
+            {% if tournament_is_valid(tournament)%}
                 {% set isValid = 'bg-success' %}
             {% else %}
                 {% set isValid = 'bg-danger' %}
                 {% set disabled = 'disabled' %}
             {% endif %}
+
+            {% if tournament.state.value == 'open' %}
             <div class="col-md-8">
                 <form method="post" action="{{ path('tournament_calculate', {
                     'id': tournament.id
                 }) }}" style="display: inline;">
-                    <button type="submit" class="btn btn-success w-100 {{ isValid }}">
+                    <button type="submit" class="btn btn-success w-100 disabled {{ isValid }}">
                         Turnier starten
                     </button>
                 </form>
             </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

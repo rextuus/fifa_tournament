@@ -4,21 +4,44 @@
 
 {% block body %}
     <div class="container mt-5">
-        <h2>Edit Settings</h2>
 
+        <!-- Section Heading -->
+        <div class="d-flex align-items-center mb-4">
+            <h2 class="me-3">Edit Settings</h2>
+            <div>
+                {% if queueIsRunning %}
+                    <!-- Indicator for Queue Running -->
+                    <span class="badge bg-success">Queue Running</span>
+                {% else %}
+                    <!-- Indicator for Queue Idle -->
+                    <span class="badge bg-secondary">Queue Idle</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
         {% for message in app.flashes('success') %}
-            <div class="alert alert-success">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endfor %}
 
-        <div class="form-wrapper mt-4">
+        <!-- Form Wrapper -->
+        <div class="form-wrapper border p-4 rounded">
             <!-- Render the entire form -->
             {{ form_start(form, { 'attr': { 'class': 'needs-validation', 'novalidate': 'novalidate' } }) }}
             {{ form_widget(form, {
                 'attr': { 'class': 'form-group' },
             }) }}
             {{ form_end(form) }}
+        </div>
+
+        <!-- Trigger Button -->
+        <div class="mt-4">
+            {{ component('ButtonComponent', {
+                text: 'Trigger Queue Check', classes: 'btn btn-success btn-lg px-5', route: path('check_queue')
+            }) }}
         </div>
     </div>
 {% endblock %}

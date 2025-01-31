@@ -1,14 +1,14 @@
 <div{{ attributes }} class="card col-md-8 mb-3 p-3 shadow-sm border-0 rounded-3">
     <!-- Participant Identifier -->
     <div class="h3 text-primary text-center mb-4 fw-bold">
-        {{ this.participant.ident }}
+        {{ this.entity.ident }}
     </div>
 
     <!-- Image Section -->
     <div class="text-center mb-5">
-        {% if this.participant.imageFile %}
+        {% if this.entity.imageFile %}
             {% set imageMarkup %}
-                <img src="{{ image_url(this.participant.imageFile, 'large') }}"
+                <img src="{{ image_url(this.entity.imageFile, 'x-large') }}"
                      alt="Participant Image"
                      class="img-fluid rounded shadow-sm"
                      style="max-width: 300px;">
@@ -25,7 +25,7 @@
     </div>
 
     <!-- Track Information Section -->
-    {{ component('TrackComponent', {participant: participant, track: this.track}) }}
+    {{ component('TrackComponent', {participant: participant, player: player, track: this.track}) }}
 
     <!-- Action Button -->
     {% if this.track.spotifyId != '' %}
@@ -33,7 +33,7 @@
     <div class="text-center mb-4">
         <span>
                     <a href="#"
-                       onclick="location.href='{{ path('app_select_song', { id: participant.id, spotifyTrack: this.track.spotifyId }) }}'"
+                       onclick="location.href='{{ path('app_select_song', { id: this.entity.id, spotifyTrack: this.track.spotifyId, type: this.typeForEntity }) }}'"
                        class="btn btn-outline-primary px-4">Edit</a>
         </span>
     </div>

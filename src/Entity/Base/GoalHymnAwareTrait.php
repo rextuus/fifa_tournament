@@ -15,6 +15,9 @@ trait GoalHymnAwareTrait
     #[ORM\Column(type: 'integer', options: ['default' => 0])]
     private int $goalHymnEndTime = 0;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $forceGoalHymn = false;
+
     public function getGoalHymnSpotifyId(): ?string
     {
         return $this->goalHymnSpotifyId;
@@ -46,6 +49,17 @@ trait GoalHymnAwareTrait
     {
         $this->goalHymnEndTime = $goalHymnEndTime;
 
+        return $this;
+    }
+
+    public function isForceGoalHymn(): bool
+    {
+        return $this->forceGoalHymn;
+    }
+
+    public function setForceGoalHymn(bool $forceGoalHymn): static
+    {
+        $this->forceGoalHymn = $forceGoalHymn;
         return $this;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Content\Spotify;
 
 use App\Content\Spotify\Representation\SpotifyTrack;
+use App\Entity\Base\GoalHymnAwareInterface;
 use App\Entity\Participant;
 use App\Entity\SpotifyAccessToken;
 use App\Entity\User;
@@ -284,7 +285,7 @@ class SpotifyService
         return $tracks;
     }
 
-    public function getGoalHymnForParticipant(Participant $participant): SpotifyTrack
+    public function getGoalHymnForParticipant(GoalHymnAwareInterface $participant): SpotifyTrack
     {
         $api = $this->getApi();
 

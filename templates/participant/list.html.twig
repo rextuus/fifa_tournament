@@ -63,7 +63,7 @@
                                         text: 'Mitglieder', classes: 'btn btn-sm btn-warning', route: path('participant_edit', { id: participant.id })
                                     }) }}
                                     {{ component('ButtonComponent', {
-                                        text: 'Torhymne', classes: 'btn btn-sm btn-warning', route: path('spotify_search', { id: participant.id })
+                                        text: 'Torhymne', classes: 'btn btn-sm btn-warning', route: path('spotify_search', { type: 'participant', id: participant.id })
                                     }) }}
                                 </td>
 

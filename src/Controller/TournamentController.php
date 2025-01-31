@@ -3,15 +3,19 @@
 namespace App\Controller;
 
 use App\Content\Participant\ParticipantService;
+use App\Content\Team\TeamService;
 use App\Content\Tournament\Calculation\TableFilter;
 use App\Content\Tournament\TournamentService;
 use App\Content\Tournament\TournamentState;
 use App\Content\Tournament\TournamentType;
 use App\Entity\BattleRound;
+use App\Entity\Fixture;
 use App\Entity\Participant;
 use App\Entity\Team;
 use App\Entity\TeamList;
 use App\Entity\Tournament;
+use App\Form\AddSinglePlayerBattleTournamentType;
+use App\Form\Data\AddSinglePlayerBattleTournamentData;
 use App\Form\ManageBattleTournamentType;
 use App\Form\ManageTournamentType;
 use App\Form\TeamSelectionData;
@@ -29,6 +33,7 @@ final class TournamentController extends AbstractController
 {
     public function __construct(
         private readonly TournamentService $tournamentService,
+        private readonly TeamService $teamService,
     ) {
     }
 
@@ -108,14 +113,14 @@ final class TournamentController extends AbstractController
     }
 
     #[Route('/manage-group/{id}', name: 'tournament_manage_group_battle')]
-    public function manageGroupBattle(
-        Tournament $tournament,
-        Request $request,
-        EntityManagerInterface $entityManager,
-        ParticipantService $participantService
-    ): Response {
+    public function manageGroupBattle(Tournament $tournament, Request $request): Response {
         if ($tournament->getType() !== TournamentType::GROUP_BATTLE){
             return $this->redirectToRoute('tournament_manage', ['id' => $tournament->getId()]);
+        }
+
+        $showAddPlayer = false;
+        if ($tournament->getRounds()->count() === 1){
+            $showAddPlayer = true;
         }
 
         $form = $this->createForm(ManageBattleTournamentType::class, $tournament->getBattleRound());
@@ -125,24 +130,44 @@ final class TournamentController extends AbstractController
             /** @var BattleRound $battleRound */
             $battleRound = $form->getData();
 
-            $this->tournamentService->addPlayerToBattleRound($battleRound);
-//            foreach ($battleRound->getParticipants() as $participant) {
-//                $battleRound->removeParticipant($participant);
-//            }
-//
-//            $participants = $participantService->checkBattleRoundParticipantsExist($battleRound);
-//            foreach ($participants as $participant) {
-//                $entityManager->persist($participant);
-//                $battleRound->addParticipant($participant);
-//            }
-//
-//            $entityManager->flush();
+            $this->tournamentService->addAndRemovePlayersToBattleRound($battleRound);
+
+            return $this->redirectToRoute('tournament_manage_group_battle', ['id' => $tournament->getId()]);
+        }
+
+        $addForm = $this->createForm(
+            AddSinglePlayerBattleTournamentType::class,
+            new AddSinglePlayerBattleTournamentData()
+        );
+
+        $addForm->handleRequest($request);
+
+        if ($addForm->isSubmitted() && $addForm->isValid()) {
+            $playerToAdd = $addForm->getData()->getPlayer();
+            // check Tournament not has this player already
+            $players = $tournament->getBattleRound()->getPlayers();
+            $hasPlayer = false;
+            foreach ($players as $player) {
+                if ($player === $playerToAdd) {
+                    $hasPlayer = true;
+                }
+            }
+
+            if ($hasPlayer){
+                throw new \Exception('Player already added');
+            }
+
+            $this->tournamentService->addPlayerToBattleRound($playerToAdd, $tournament->getBattleRound());
+
+
             return $this->redirectToRoute('tournament_manage_group_battle', ['id' => $tournament->getId()]);
         }
 
         return $this->render('tournament/manage_battle.html.twig', [
             'tournament' => $tournament,
             'form' => $form->createView(),
+            'addForm' => $addForm->createView(),
+            'showAddPlayer' => $showAddPlayer,
         ]);
     }
 
@@ -193,7 +218,26 @@ final class TournamentController extends AbstractController
             $entityManager->persist($teamList);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Teams successfully selected!');
+
+            // check if for battle tournament some team is not set in round 1
+            if ($tournament->getType() === TournamentType::GROUP_BATTLE) {
+                $fallBackTeam = $this->teamService->getFallbackTeam();
+
+                $round = $tournament->getRoundByNumber(1);
+                foreach ($round->getFixtures() as $fixture) {
+                    if ($fixture->getHomeParticipant() === $participant && $fixture->getHomeTeam() === $fallBackTeam) {
+                        $fixture->setHomeTeam($data->getTeam());
+                        $entityManager->persist($fixture);
+                    }
+                    if ($fixture->getAwayParticipant() === $participant && $fixture->getAwayTeam() === $fallBackTeam) {
+                        $fixture->setAwayTeam($data->getTeam());
+                        $entityManager->persist($fixture);
+                    }
+                }
+
+                $entityManager->flush();
+            }
+
             return $this->redirectToRoute(
                 'tournament_team_selection',
                 ['tournamentId' => $tournament->getId(), 'participantId' => $participant->getId()]
@@ -241,6 +285,7 @@ final class TournamentController extends AbstractController
     #[Route('/calculate/{id}', name: 'tournament_calculate')]
     public function calculate(Tournament $tournament, TournamentService $tournamentService): Response
     {
+
         if ($tournament->getState() !== TournamentState::OPEN || !$this->tournamentService->isValid($tournament)) {
             return $this->redirectToRoute('dashboard');
         }
@@ -301,6 +346,12 @@ final class TournamentController extends AbstractController
             $shootingGallery = $merged->getOrderedBy(TableFilter::AGAINST_GOALS)[0];
         }
 
+        $playedCount = count(array_filter(
+            $orderedFixtures,
+            function (Fixture $fixture){
+                return $fixture->getPlayed() !== null;
+            }
+        ));
 
 
         $rankedPlayers = $table->getOrderedBy(TableFilter::POINTS);
@@ -314,6 +365,7 @@ final class TournamentController extends AbstractController
             'rankedPlayers' => $rankedPlayers,
             'hasNext' => $hasNext,
             'next' => $roundNr + 1,
+            'playedCount' => $playedCount,
         ]);
     }
 

@@ -22,6 +22,7 @@ class ImageService
     public const SIZE_SMALL = 'small';
     public const SIZE_MEDIUM = 'medium';
     public const SIZE_LARGE = 'large';
+    public const SIZE_X_LARGE = 'x-large';
 
     public const TEAM_IMAGE = 'team_image';
     public const USER_PROFILE_IMAGE = 'user_profile_image';
@@ -36,21 +37,25 @@ class ImageService
             self::SIZE_SMALL => LiipImagineFilterIdents::IMAGE_SQUARE_SMALL,
             self::SIZE_MEDIUM => LiipImagineFilterIdents::IMAGE_SQUARE_MEDIUM,
             self::SIZE_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_LARGE,
+            self::SIZE_X_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_X_LARGE,
         ],
         self::USER_PROFILE_IMAGE => [
             self::SIZE_SMALL => LiipImagineFilterIdents::IMAGE_SQUARE_SMALL,
             self::SIZE_MEDIUM => LiipImagineFilterIdents::IMAGE_SQUARE_MEDIUM,
             self::SIZE_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_LARGE,
+            self::SIZE_X_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_X_LARGE,
         ],
         self::PARTICIPANT_PROFILE_IMAGE => [
             self::SIZE_SMALL => LiipImagineFilterIdents::IMAGE_SQUARE_SMALL,
             self::SIZE_MEDIUM => LiipImagineFilterIdents::IMAGE_SQUARE_MEDIUM,
             self::SIZE_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_LARGE,
+            self::SIZE_X_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_X_LARGE,
         ],
         self::PLAYER_PROFILE_IMAGE => [
             self::SIZE_SMALL => LiipImagineFilterIdents::IMAGE_SQUARE_SMALL,
             self::SIZE_MEDIUM => LiipImagineFilterIdents::IMAGE_SQUARE_MEDIUM,
             self::SIZE_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_LARGE,
+            self::SIZE_X_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_X_LARGE,
         ],
     ];
 

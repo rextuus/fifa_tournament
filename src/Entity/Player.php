@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Content\File\DefaultImageType;
 use App\Content\File\ImageAwareInterface;
+use App\Entity\Base\GoalHymnAwareInterface;
+use App\Entity\Base\GoalHymnAwareTrait;
 use App\Entity\Base\ImageFileAwareTrait;
 use App\Repository\PlayerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,9 +13,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
-class Player implements ImageAwareInterface
+class Player implements ImageAwareInterface, GoalHymnAwareInterface
 {
     use ImageFileAwareTrait;
+    use GoalHymnAwareTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

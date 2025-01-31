@@ -5,11 +5,15 @@ namespace App\Controller;
 use App\Content\SettingService;
 use App\Content\Spotify\NoAccessTokenFoundException;
 use App\Content\Spotify\SpotifyService;
+use App\Entity\Base\GoalHymnAwareInterface;
 use App\Entity\Fixture;
 use App\Entity\Participant;
 use App\Entity\Player;
 use App\Entity\User;
 use App\Form\SelectSongPeriodType;
+use App\Repository\ParticipantRepository;
+use App\Repository\PlayerRepository;
+use App\Twig\Helper\GoalHymnEntityWrapper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,6 +34,8 @@ final class SpotifyController extends AbstractController
         private readonly SpotifyService $spotifyService,
         private readonly EntityManagerInterface $entityManager,
         private readonly SettingService $settingService,
+        private readonly ParticipantRepository $participantRepository,
+        private readonly PlayerRepository $playerRepository,
         #[Autowire('%env(FORCED_RUNNING_TIME)%')]
         private readonly int $forcedRuntime,
     ) {
@@ -67,9 +73,25 @@ final class SpotifyController extends AbstractController
         return new Response("Authorization failed.");
     }
 
-    #[Route('/{id}/search', name: 'spotify_search')]
-    public function search(Request $request, Participant $participant, FormFactoryInterface $formFactory): Response
+    #[Route('/{type}/{id}/search', name: 'spotify_search')]
+    public function search(Request $request, string $type, int $id, FormFactoryInterface $formFactory): Response
     {
+        $targetEntity = null;
+
+        $participant = null;
+        $player = null;
+        if ($type === 'participant') {
+            $participant = $this->participantRepository->find($id);
+            $targetEntity = $participant;
+        } elseif ($type === 'player') {
+            $player = $this->playerRepository->find($id);
+            $targetEntity = $player;
+        }
+
+        if (!$participant && !$player) {
+            throw $this->createNotFoundException('Participant not found.');
+        }
+
         $form = $formFactory->createBuilder()
             ->setMethod('GET') // Use GET to enable query parameter handling
             ->add('q', TextType::class, [
@@ -98,29 +120,49 @@ final class SpotifyController extends AbstractController
             }
         }
 
+
         return $this->render('spotify/search.html.twig', [
             'form' => $form->createView(),
             'participant' => $participant,
+            'player' => $player,
             'tracks' => $tracks,
+            'type' => $type,
+            'targetEntity' => $targetEntity,
             'spotifyIsAvailable' => $this->spotifyService->checkSpotifyIsLoggedIn(),
         ]);
     }
 
-    #[Route('/select-song/{id}/{spotifyTrack}', name: 'app_select_song')]
-    public function selectSong(Request $request, Participant $participant, string $spotifyTrack): Response
+    #[Route('/select-song/{type}/{id}/{spotifyTrack}', name: 'app_select_song')]
+    public function selectSong(Request $request, string $type, int $id, string $spotifyTrack): Response
     {
+        $targetEntity = null;
+
+        $participant = null;
+        $player = null;
+        if ($type === 'participant') {
+            $participant = $this->participantRepository->find($id);
+            $targetEntity = $participant;
+        } elseif ($type === 'player') {
+            $player = $this->playerRepository->find($id);
+            $targetEntity = $player;
+        }
+
+        if (!$participant && !$player) {
+            throw $this->createNotFoundException('Participant not found.');
+        }
+
         $track = $this->spotifyService->getTrackById($spotifyTrack); // Duration in milliseconds
         $durationInSeconds = intval($track->getDuration() / 1000);
 
         $settings = $this->settingService->getSettingForUser($this->getUser());
         $playTimeLimit = $settings->getSongPlayTimeLimit();
 
-        $currentTrack = $participant->getGoalHymnSpotifyId();
+        $currentTrack = $targetEntity->getGoalHymnSpotifyId();
         $start = 0;
         $end = 0;
         if ($currentTrack === $spotifyTrack) {
-            $start = $participant->getGoalHymnStartTime();
-            $end = $participant->getGoalHymnEndTime();
+            $start = $targetEntity->getGoalHymnStartTime();
+            $end = $targetEntity->getGoalHymnEndTime();
         }
 
         $form = $this->createForm(
@@ -138,14 +180,14 @@ final class SpotifyController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            $participant->setGoalHymnStartTime($data['start']);
-            $participant->setGoalHymnEndTime($data['end']);
-            $participant->setGoalHymnSpotifyId($spotifyTrack);
+            $targetEntity->setGoalHymnStartTime($data['start']);
+            $targetEntity->setGoalHymnEndTime($data['end']);
+            $targetEntity->setGoalHymnSpotifyId($spotifyTrack);
 
-            $this->entityManager->persist($participant);
+            $this->entityManager->persist($targetEntity);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('spotify_search', ['id' => $participant->getId()]);
+            return $this->redirectToRoute('spotify_search', ['id' => $targetEntity->getId(), 'type' => $type]);
         }
 
         return $this->render('spotify/select_duration.html.twig', [
@@ -153,6 +195,7 @@ final class SpotifyController extends AbstractController
             'trackDuration' => $durationInSeconds,
             'track' => $track,
             'participant' => $participant,
+            'player' => $player,
             'playTimeLimit' => $playTimeLimit,
         ]);
     }
@@ -185,11 +228,24 @@ final class SpotifyController extends AbstractController
             return new JsonResponse(['error' => 'Goal music is already running'], Response::HTTP_BAD_REQUEST);
         }
 
-        if ($participant->getGoalHymnSpotifyId() !== null) {
+        if ($participant->getGoalHymnSpotifyId() !== null || $player->getGoalHymnSpotifyId() !== null) {
             $settings = $this->settingService->getSettingForUser($this->getUser());
 
+            // default is participant hymn
+            $goalHymnSource = $participant;
+
+            // use player if set
+            if ($player->getGoalHymnSpotifyId() !== null){
+                $goalHymnSource = $player;
+
+                // go back to participant if is forced but only if participant is set
+                if ($participant->isForceGoalHymn() && $participant->getGoalHymnSpotifyId() !== null){
+                    $goalHymnSource = $participant;
+                }
+            }
+
             if ($settings->isGoalMusicEnabled()){
-                $calculatedRuntime = $participant->getGoalHymnEndTime() - $participant->getGoalHymnStartTime();
+                $calculatedRuntime = $goalHymnSource->getGoalHymnEndTime() - $goalHymnSource->getGoalHymnStartTime();
 
                 if ($calculatedRuntime > $settings->getMaximumSongDuration()) {
                     $calculatedRuntime = $settings->getMaximumSongDuration();
@@ -201,8 +257,8 @@ final class SpotifyController extends AbstractController
 
                 $this->spotifyService->breakQueueWithGoalHymn(
                     $fixture->getId(),
-                    $participant->getGoalHymnSpotifyId(),
-                    $participant->getGoalHymnStartTime(),
+                    $goalHymnSource->getGoalHymnSpotifyId(),
+                    $goalHymnSource->getGoalHymnStartTime(),
                     $calculatedRuntime,
                 );
 

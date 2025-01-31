@@ -60,6 +60,31 @@ class ParticipantService
     }
 
     /**
+     * * @param array<Player> $otherPlayers
+     */
+    public function checkParticipantsForPlayer(Player $player, array $otherPlayers): array
+    {
+        $participantsForRound = [];
+        foreach ($otherPlayers as $otherPlayer) {
+            $participants = $this->participantRepository->findParticipantsByPlayerCombination([$player, $otherPlayer]);
+            if (count($participants) > 0) {
+                $participantsForRound[] = $participants[0];
+                continue;
+            };
+
+            $newParticipant = new Participant();
+            $newParticipant->setPlayers([$player, $otherPlayer]);
+            $newParticipant->setIdent(
+                sprintf('%s - %s', $player->getIdent(), $otherPlayer->getIdent())
+            );
+
+            $participantsForRound[] = $newParticipant;
+        }
+
+        return $participantsForRound;
+    }
+
+    /**
      * @param array<Player> $players
      * @return Participant
      */
