@@ -49,9 +49,11 @@
                                 <th scope="row" class="{{ isValid }}">{{ tournament.id }}</th>
                                 <td class="{{ isValid }}">
                                     {{ tournament.ident }}
+                                    {% if tournament.state.value != 'open' %}
                                     {{ component('ButtonComponent', {
                                         text: 'Zum Turnier', classes: 'btn btn-sm btn-primary mt-3', route: path('tournament_detail', { id: tournament.id })
                                     }) }}
+                                    {% endif %}
                                 </td>
                                 <td class="{{ isValid }}">{{ tournament.state.value }}</td>
                                 <td class="{{ isValid }}">
