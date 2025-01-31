@@ -34,8 +34,6 @@ final class TrackComponent
 
     public function getEntity(): GoalHymnAwareInterface
     {
-        dump($this->participant);
-        dump($this->player);
         if ($this->participant !== null){
             return $this->participant;
         }

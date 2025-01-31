@@ -284,7 +284,7 @@ final class SpotifyController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route('/test/{id}', name: 'test')]
+    #[Route('/test/{id}', name: 'spotify_test')]
     public function test(Participant $participant): Response
     {
         // logout

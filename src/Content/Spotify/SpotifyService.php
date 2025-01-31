@@ -269,7 +269,7 @@ class SpotifyService
         $api = $this->getApi();
 
         $response = $api->search($searchTerm, ['track'], ['return_assoc' => true, 'market' => 'DE']);
-;
+
         $tracks = [];
         foreach ($response->tracks->items as $item) {
             $tracks[] = new SpotifyTrack(
