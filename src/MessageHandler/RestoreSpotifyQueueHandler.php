@@ -30,9 +30,10 @@ final class RestoreSpotifyQueueHandler
             $message->isPlaylistWasInterrupted()
         );
 
-        $fixture = $this->fixtureRepository->find($message->getFixtureId());
-        $fixture->setIsGoalMusicRunning(false);
-
-        $this->entityManager->flush();
+        if ($message->getFixtureId() !== -1){
+            $fixture = $this->fixtureRepository->find($message->getFixtureId());
+            $fixture->setIsGoalMusicRunning(false);
+            $this->entityManager->flush();
+        }
     }
 }

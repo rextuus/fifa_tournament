@@ -46,6 +46,12 @@
                     Sign in
                 </button>
             </form>
+            <div class="text-center mt-3">
+                {{ component('ButtonComponent', {
+                    text: 'Registrieren', classes: 'btn btn-primary', route: path('app_register')
+                }) }}
+            </div>
+
         </div>
     </div>
 {% endblock %}

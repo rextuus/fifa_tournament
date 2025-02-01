@@ -235,16 +235,16 @@ final class SpotifyController extends AbstractController
             $goalHymnSource = $participant;
 
             // use player if set
-            if ($player->getGoalHymnSpotifyId() !== null){
+            if ($player->getGoalHymnSpotifyId() !== null) {
                 $goalHymnSource = $player;
 
                 // go back to participant if is forced but only if participant is set
-                if ($participant->isForceGoalHymn() && $participant->getGoalHymnSpotifyId() !== null){
+                if ($participant->isForceGoalHymn() && $participant->getGoalHymnSpotifyId() !== null) {
                     $goalHymnSource = $participant;
                 }
             }
 
-            if ($settings->isGoalMusicEnabled()){
+            if ($settings->isGoalMusicEnabled()) {
                 $calculatedRuntime = $goalHymnSource->getGoalHymnEndTime() - $goalHymnSource->getGoalHymnStartTime();
 
                 if ($calculatedRuntime > $settings->getMaximumSongDuration()) {
@@ -284,28 +284,56 @@ final class SpotifyController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route('/test/{id}', name: 'spotify_test')]
-    public function test(Participant $participant): Response
+    #[Route('/test/player/{id}', name: 'spotify_test_player')]
+    public function testPlayer(Player $player): Response
     {
         // logout
         // https://www.spotify.com/uk/account/apps/
+        $calculatedRuntime = $this->startTestRun($player);
 
-        $this->spotifyService->breakQueueWithGoalHymn(
-            1,
-            $participant->getGoalHymnSpotifyId(),
-            $participant->getGoalHymnStartTime(),
-            $participant->getGoalHymnEndTime() - $participant->getGoalHymnStartTime(),
-        );
-        // Handle the user's selection (e.g., store the track in a session, database, etc.)
-        $track = $this->spotifyService->getTrackDetails($id);
+        return $this->render('spotify/test.html.twig', [
+            'calculatedRuntime' => $calculatedRuntime,
+            'redirectUrl' => $this->generateUrl('spotify_search', ['type' => 'player', 'id' => $player->getId()]),
+        ]);
+    }
 
-        // Do something with the selected track
-        if (!$track) {
-            throw $this->createNotFoundException('Track not found.');
+    #[Route('/test/participant/{id}', name: 'spotify_test_participant')]
+    public function testParticipant(Participant $participant): Response
+    {
+        // logout
+        // https://www.spotify.com/uk/account/apps/
+        $calculatedRuntime = $this->startTestRun($participant);
+
+        return $this->render('spotify/test.html.twig', [
+            'calculatedRuntime' => $calculatedRuntime,
+            'redirectUrl' => $this->generateUrl(
+                'spotify_search',
+                ['type' => 'participant', 'id' => $participant->getId()]
+            ),
+        ]);
+    }
+
+    private function startTestRun(GoalHymnAwareInterface $participant): int
+    {
+        $settings = $this->settingService->getSettingForUser($this->getUser());
+
+        $calculatedRuntime = $participant->getGoalHymnEndTime() - $participant->getGoalHymnStartTime();
+
+        if ($calculatedRuntime > $settings->getMaximumSongDuration()) {
+            $calculatedRuntime = $settings->getMaximumSongDuration();
         }
 
-        return $this->render('spotify/track_details.html.twig', [
-            'track' => $track,
-        ]);
+        if ($calculatedRuntime > $this->forcedRuntime) {
+            $calculatedRuntime = $this->forcedRuntime;
+        }
+
+        $this->spotifyService->breakQueueWithGoalHymn(
+            -1,
+            $participant->getGoalHymnSpotifyId(),
+            $participant->getGoalHymnStartTime(),
+            $calculatedRuntime,
+        );
+
+        return $calculatedRuntime;
     }
 }

@@ -47,6 +47,16 @@
         </button>
     </div>
 
+    <div class="text-warning text-center">
+        <div class="mb-3">
+        {{ component('ButtonComponent', {
+            text: 'Test', classes: 'btn btn-sm btn-warning', route: this.testRoute
+        }) }}
+        </div>
+        <span class="mt-5">Achtung unterbricht den laufenden Stream des verknüpften Spotify-Kontos! (momentan: {{ this.spotifyName }})</span>
+    </div>
+
+
     <!-- QR Code Display -->
     {% set qrCode = this.qrCode %}
     {% if qrCode is not null %}
