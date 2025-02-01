@@ -93,7 +93,7 @@ final class ParticipantComponent
                 ['id' => $this->participant->getId()]
             );
         }
-        dump($this->participant);
+
         return $this->urlGenerator->generate(
             'spotify_test_player',
             ['id' => $this->player->getId()]
