@@ -1,80 +1,49 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Manage Participants{% endblock %}
+{% block title %}Truppen{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <!-- Page Header -->
-        <div class="text-center mb-4">
-            <h1 class="display-5">Truppen verwalten</h1>
-            <p class="lead">Neue Truppen anlegen und verwalten</p>
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">{{ icons.icon('users', 14) }} Kader</div>
+            <h1 class="page-title">Truppen</h1>
         </div>
-
-        <!-- Buttons for Actions -->
-        <div class="row mb-4">
-            <div class="col-md-6 text-center">
-                <a href="{{ path('participant_create') }}" class="btn btn-primary btn-lg w-75">Neue Truppe erstellen</a>
-            </div>
-            <div class="col-md-6 text-center">
-                <a href="{{ path('player_create') }}" class="btn btn-success btn-lg w-75">Neuen Spieler erstellen</a>
-            </div>
-        </div>
-
-        <!-- Participants List -->
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Truppen</h5>
-            </div>
-            <div class="card-body">
-                {% if participants|length > 0 %}
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Truppe</th>
-                            <th scope="col">Spieler</th>
-                            <th scope="col"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for participant in participants %}
-                            <tr>
-                                <th scope="row">{{ participant.id }}</th>
-                                <td>
-                                    {{ component('ProfileImageComponent', {profile: participant, width: 90}) }}
-                                    {{ participant.ident }}
-                                </td>
-                                <td>
-                                    {% if participant.players|length > 0 %}
-                                        <ul class="list-unstyled mb-0">
-                                            {% for player in participant.players %}
-                                                <li>
-                                                    {{ component('ProfileImageComponent', {profile: player}) }}
-                                                    {{ player.ident }}
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    {% else %}
-                                        <em>No players assigned</em>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {{ component('ButtonComponent', {
-                                        text: 'Mitglieder', classes: 'btn btn-sm btn-warning', route: path('participant_edit', { id: participant.id })
-                                    }) }}
-                                    {{ component('ButtonComponent', {
-                                        text: 'Torhymne', classes: 'btn btn-sm btn-warning', route: path('spotify_search', { type: 'participant', id: participant.id })
-                                    }) }}
-                                </td>
-
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                {% else %}
-                    <p class="text-muted">No participants found. Create one to get started.</p>
-                {% endif %}
-            </div>
+        <div class="page-actions">
+            <a href="{{ path('player_create') }}" class="btn btn-secondary">{{ icons.icon('user', 18) }} Spieler</a>
+            <a href="{{ path('participant_create') }}" class="btn btn-primary">{{ icons.icon('plus', 18) }} Neue Truppe</a>
         </div>
     </div>
+
+    {% if participants|length > 0 %}
+        <div class="tile-list two-col">
+            {% for participant in participants %}
+                <div class="tile is-link align-items-start">
+                    {{ component('ProfileImageComponent', {profile: participant, width: 52}) }}
+                    <div class="tile-body">
+                        <a href="{{ path('participant_edit', { id: participant.id }) }}" class="tile-title stretched d-block">{{ participant.ident }}</a>
+                        {% if participant.players|length > 0 %}
+                            <div class="people">
+                                {% for player in participant.players %}
+                                    <span class="person">{{ component('ProfileImageComponent', {profile: player, width: 24}) }}{{ player.ident }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="tile-meta">Noch keine Spieler</div>
+                        {% endif %}
+                    </div>
+                    <div class="tile-actions">
+                        <a href="{{ path('spotify_search', { type: 'participant', id: participant.id }) }}" class="btn btn-secondary btn-icon btn-sm"
+                           title="Torhymne" aria-label="Torhymne">{{ icons.icon('music', 17) }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="panel empty">
+            {{ icons.icon('users', 44) }}
+            <p>Noch keine Truppen angelegt.</p>
+            <a href="{{ path('participant_create') }}" class="btn btn-primary">{{ icons.icon('plus', 18) }} Truppe anlegen</a>
+        </div>
+    {% endif %}
 {% endblock %}

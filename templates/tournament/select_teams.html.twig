@@ -1,35 +1,43 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Select Teams for Tournament{% endblock %}
+{% block title %}Teamauswahl{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <h1 class="mb-4">Teamauswahl für {{ participant.ident }} und das Turnier {{ tournament.ident }}</h1>
-
-        <p class="mb-4">Anzahl benötigter Teams: <strong>{{ listCount }}/{{ allowed }}</strong></p>
-
-        <!-- Include the team listing component -->
-        <div class="mb-5">
-            {{ component('TeamListing', {
-                participant: participant,
-                tournament: tournament
-            }) }}
-        </div>
-
-        <!-- Form for team selection -->
-        <div class="card">
-            <div class="card-body">
-                {% if listCount >= allowed %}
-                    <h5 class="card-title">Du hast das Limit an Teams für dieses Turnier bereits erreicht</h5>
-                {% else %}
-                    <h5 class="card-title">Wähle ein Teams aus</h5>
-                    <hr>
-                    {{ form_start(form, { 'attr': {'class': 'needs-validation'} }) }}
-                    {{ form_widget(form) }}
-                    <button type="submit" class="btn btn-primary mt-3">Hinzufügen</button>
-                    {{ form_end(form) }}
-                {% endif %}
+    <a href="{{ path(tournament.editRoute, {id: tournament.id}) }}" class="back-link">{{ icons.icon('back', 18) }} {{ tournament.ident }}</a>
+    <div class="page-head">
+        <div class="d-flex align-items-center gap-3">
+            {{ component('ProfileImageComponent', {profile: participant, width: 56}) }}
+            <div>
+                <div class="eyebrow">{{ icons.icon('shield', 14) }} Teamauswahl</div>
+                <h1 class="page-title">{{ participant.ident }}</h1>
             </div>
         </div>
+    </div>
+
+    <div class="stack-lg">
+        <section class="panel">
+            <div class="progress-ring mb-3">
+                <div class="bar"><span style="width: {{ allowed > 0 ? (listCount / allowed * 100)|round : 0 }}%"></span></div>
+                <strong>{{ listCount }}/{{ allowed }}</strong>
+            </div>
+            {% if listCount >= allowed %}
+                <p class="mb-0 text-muted">{{ icons.icon('check', 18, 'text-success') }} Alle Teams gewählt. Zum Tauschen erst ein Team entfernen.</p>
+            {% else %}
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn btn-primary btn-block mt-3">{{ icons.icon('plus', 18) }} Team hinzufügen</button>
+                {{ form_end(form) }}
+            {% endif %}
+        </section>
+
+        <section>
+            <h2 class="section-title">Gewählte Teams</h2>
+            {% if listCount > 0 %}
+                {{ component('TeamListing', { participant: participant, tournament: tournament }) }}
+            {% else %}
+                <div class="panel empty"><p class="mb-0">Noch kein Team gewählt.</p></div>
+            {% endif %}
+        </section>
     </div>
 {% endblock %}

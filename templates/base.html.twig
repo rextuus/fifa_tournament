@@ -1,28 +1,48 @@
+{% import '_icons.html.twig' as icons %}
 <!DOCTYPE html>
-<html>
+<html lang="de" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="turbo-prefetch" content="false">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <meta name="theme-color" content="#0a0e15">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>{% block title %}Turniere{% endblock %} · EAT</title>
     <link rel="icon"
-          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
-    {% endblock %}
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%230a0e15%22/><path d=%22M10 7h12v6a6 6 0 0 1-12 0Z%22 fill=%22%23c6ff3d%22/><path d=%22M13 24h6M16 19v5%22 stroke=%22%23c6ff3d%22 stroke-width=%222.4%22 stroke-linecap=%22round%22/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,700;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     {% block javascripts %}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
+    {# Nach der Importmap, damit das eigene Theme Bootstrap überschreibt. #}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
+    {% endblock %}
 </head>
-<body>
-{% include 'header.html.twig' %} {# Include the header here #}
+<body class="{% block body_class %}{% endblock %}">
+<div class="app-bg" aria-hidden="true"></div>
 
-<main>
+{% block header %}{% include 'header.html.twig' %}{% endblock %}
+
+<main class="app-main">
+    <div class="flash-stack">
+        {% for type, messages in app.flashes(['success', 'error']) %}
+            {% for message in messages %}
+                <div class="flash flash-{{ type }}" role="status">
+                    {{ icons.icon(type == 'success' ? 'check' : 'x', 18) }}
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     {% block body %}{% endblock %}
 </main>
 
-{% include 'footer.html.twig' %} {# Include the footer here #}
+{% block footer %}{% include 'footer.html.twig' %}{% endblock %}
 {% embed 'layout/_common-modal.html.twig' %}{% endembed %}
 </body>
 </html>

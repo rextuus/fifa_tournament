@@ -1,37 +1,19 @@
-<div class="container">
-    <div class="row g-3">
-        {% for team in this.teams %}
-            <div class="col-6 col-md-4 col-lg-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <div class="mb-3">
-                            {% if team.imageFile %}
-                                <img src="{{ image_url(team.imageFile, 'x-large') }}"
-                                     alt="Team Image"
-                                     class="img-fluid"
-                                     style="width: 80px; height: 80px; object-fit: cover;" />
-                            {% else %}
-                                <img src="{{ asset('images/thumbnails/client_default.png') }}"
-                                     alt="Default Team Image"
-                                     class="img-fluid"
-                                     style="width: 80px; height: 80px; object-fit: cover;" />
-                            {% endif %}
-                        </div>
-                        <h6 class="card-title">{{ team }}</h6>
-                        <!-- Change to Button -->
-                        <div>
-                            <form method="post" action="{{ path('tournament_team_remove', {
-                                'teamListId': this.getTeamListId,
-                                'teamId': team.id
-                            }) }}" style="display: inline;">
-                                <button type="submit" class="btn btn-danger btn-sm mt-2">
-                                    X
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+<div{{ attributes.defaults({class: 'team-grid'}) }}>
+    {% for team in this.teams %}
+        <div class="team-card">
+            <span class="avatar is-crest lg">
+                <img src="{{ team.imageFile ? image_url(team.imageFile, 'x-large') : asset('images/thumbnails/team_default.png') }}"
+                     alt="" loading="lazy">
+            </span>
+            <div class="team-card-name">{{ team }}</div>
+            <form method="post" action="{{ path('tournament_team_remove', {
+                'teamListId': this.getTeamListId,
+                'teamId': team.id
+            }) }}">
+                <button type="submit" class="btn btn-danger btn-sm btn-icon" title="Team entfernen" aria-label="Team entfernen">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </form>
+        </div>
+    {% endfor %}
 </div>

@@ -14,6 +14,16 @@ enum TournamentLevel: int
     case SEMI_FINAL = 4;
     case FINAL = 2;
 
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::FINAL => 'Finale (2 Teilnehmer)',
+            self::SEMI_FINAL => 'Halbfinale (4 Teilnehmer)',
+            self::QUARTER_FINAL => 'Viertelfinale (8 Teilnehmer)',
+            default => sprintf('Runde der letzten %d', $this->value),
+        };
+    }
+
     public function getNumberOfRounds(): int
     {
         return (int) log($this->value, 2);

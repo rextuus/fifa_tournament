@@ -1,87 +1,58 @@
 {% extends 'base.html.twig' %}
-{% block title %}Manage Tournaments{% endblock %}
+{% import '_icons.html.twig' as icons %}
+
+{% block title %}Turniere{% endblock %}
+
 {% block body %}
-    <div class="container my-5">
-        <!-- Page Header -->
-        <div class="text-center mb-4">
-            <h1 class="display-5">Manage Tournaments</h1>
-            <p class="lead">View, create, and manage tournaments.</p>
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">{{ icons.icon('trophy', 14) }} Übersicht</div>
+            <h1 class="page-title">Turniere</h1>
         </div>
-        <!-- Buttons for Actions -->
-        <div class="row mb-4">
-            <div class="col-md-6 text-center">
-                {{ component('ButtonComponent', {
-                    text: 'Neues Turnier', classes: 'btn btn-primary btn-lg w-75', route: path('tournament_create')
-                }) }}
-            </div>
-            <div class="col-md-6 text-center">
-                {{ component('ButtonComponent', {
-                    text: 'Neuer Teilnehmer', classes: 'btn btn-success btn-lg w-75', route: path('participant_create')
-                }) }}
-            </div>
-        </div>
-        <!-- Tournament List -->
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Tournaments</h5>
-            </div>
-            <div class="card-body">
-                {% if tournaments|length > 0 %}
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Ident</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Teilnehmer</th>
-                            <th scope="col">Optionen</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for tournament in tournaments %}
-                            {% set isValid = '' %}
-                            {% if tournament_is_valid(tournament) %}
-                                {% set isValid = 'bg-success' %}
-                            {% else %}
-                                {% set isValid = 'bg-danger' %}
-                            {% endif %}
-                            <tr>
-                                <th scope="row" class="{{ isValid }}">{{ tournament.id }}</th>
-                                <td class="{{ isValid }}">
-                                    {{ tournament.ident }}
-                                    {% if tournament.state.value != 'open' %}
-                                    {{ component('ButtonComponent', {
-                                        text: 'Zum Turnier', classes: 'btn btn-sm btn-primary mt-3', route: path('tournament_detail', { id: tournament.id })
-                                    }) }}
-                                    {% endif %}
-                                </td>
-                                <td class="{{ isValid }}">{{ tournament.state.value }}</td>
-                                <td class="{{ isValid }}">
-                                    {% if tournament.participants|length > 0 %}
-                                        <div class="participants-list" style="max-height: 150px; overflow-y: auto;">
-                                            <ul class="list-unstyled mb-0">
-                                                {% for participant in tournament.participants %}
-                                                    <li>{{ participant.ident }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    {% else %}
-                                        <em>No participants</em>
-                                    {% endif %}
-                                </td>
-                                <td class="{{ isValid }}">
-                                    {{ component('ButtonComponent', {
-                                        text: 'Edit', classes: 'btn btn-sm btn-warning', route: path(tournament.editRoute, { id: tournament.id })
-                                    }) }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                {% else %}
-                    <p class="text-muted">No tournaments found. Create one to get started.</p>
-                {% endif %}
-            </div>
+        <div class="page-actions">
+            <a href="{{ path('tournament_create') }}" class="btn btn-primary">{{ icons.icon('plus', 18) }} Neues Turnier</a>
         </div>
     </div>
+
+    {% set stateLabels = {open: 'Offen', active: 'Läuft', finished: 'Beendet'} %}
+    {% set typeLabels = {classic: 'K.-o.-Turnier', group_battle: 'Gruppen-Battle'} %}
+
+    {% if tournaments|length > 0 %}
+        <div class="tile-list two-col">
+            {% for tournament in tournaments %}
+                {% set valid = tournament_is_valid(tournament) %}
+                {% set state = tournament.state.value %}
+                {% set people = tournament.type.value == 'group_battle' and tournament.battleRound ? tournament.battleRound.participants : tournament.participants %}
+                <div class="tile is-link">
+                    <span class="avatar md is-crest" style="color: var({{ state == 'finished' ? '--gold' : (state == 'active' ? '--accent' : '--info') }})">
+                        {{ icons.icon(tournament.type.value == 'group_battle' ? 'users' : 'trophy', 26) }}
+                    </span>
+                    <div class="tile-body">
+                        <a class="tile-title stretched d-block"
+                           href="{{ state != 'open' ? path('tournament_detail', { id: tournament.id }) : path(tournament.editRoute, { id: tournament.id }) }}">
+                            {{ tournament.ident }}
+                        </a>
+                        <div class="tile-meta">
+                            <span class="chip is-{{ state }}">{{ stateLabels[state] ?? state }}</span>
+                            <span>{{ typeLabels[tournament.type.value] ?? tournament.type.value }}</span>
+                            <span>· {{ people|length }} {{ people|length == 1 ? 'Teilnehmer' : 'Teilnehmer' }}</span>
+                            {% if state == 'open' and not valid %}
+                                <span class="text-danger">· unvollständig</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="tile-actions">
+                        <a href="{{ path(tournament.editRoute, { id: tournament.id }) }}" class="btn btn-secondary btn-icon btn-sm"
+                           title="Verwalten" aria-label="Verwalten">{{ icons.icon('settings', 17) }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="panel empty">
+            {{ icons.icon('trophy', 44) }}
+            <p>Noch keine Turniere. Zeit für das erste!</p>
+            <a href="{{ path('tournament_create') }}" class="btn btn-primary">{{ icons.icon('plus', 18) }} Turnier anlegen</a>
+        </div>
+    {% endif %}
 {% endblock %}

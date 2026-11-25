@@ -1,47 +1,40 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Edit Settings{% endblock %}
+{% block title %}Einstellungen{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-
-        <!-- Section Heading -->
-        <div class="d-flex align-items-center mb-4">
-            <h2 class="me-3">Edit Settings</h2>
+    <div class="narrow">
+        <div class="page-head">
             <div>
-                {% if queueIsRunning %}
-                    <!-- Indicator for Queue Running -->
-                    <span class="badge bg-success">Queue Running</span>
-                {% else %}
-                    <!-- Indicator for Queue Idle -->
-                    <span class="badge bg-secondary">Queue Idle</span>
-                {% endif %}
+                <div class="eyebrow">{{ icons.icon('settings', 14) }} Setup</div>
+                <h1 class="page-title">Einstellungen</h1>
             </div>
         </div>
 
-        <!-- Flash Messages -->
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="stack-lg">
+            <div class="panel">
+                {{ form_start(form) }}
+                {{ form_row(form.maximumSongDuration) }}
+                {{ form_row(form.songPlayTimeLimit) }}
+                {{ form_row(form.goalMusicEnabled) }}
+                {{ form_row(form.goalGifEnabled) }}
+                {{ form_widget(form.save, {attr: {class: 'btn btn-primary btn-lg btn-block mt-2'}}) }}
+                {{ form_end(form) }}
             </div>
-        {% endfor %}
 
-        <!-- Form Wrapper -->
-        <div class="form-wrapper border p-4 rounded">
-            <!-- Render the entire form -->
-            {{ form_start(form, { 'attr': { 'class': 'needs-validation', 'novalidate': 'novalidate' } }) }}
-            {{ form_widget(form, {
-                'attr': { 'class': 'form-group' },
-            }) }}
-            {{ form_end(form) }}
-        </div>
-
-        <!-- Trigger Button -->
-        <div class="mt-4">
-            {{ component('ButtonComponent', {
-                text: 'Trigger Queue Check', classes: 'btn btn-success btn-lg px-5', route: path('check_queue')
-            }) }}
+            <div class="panel">
+                <div class="panel-head">
+                    <h2>Queue</h2>
+                    {% if queueIsRunning %}
+                        <span class="chip is-active">Läuft</span>
+                    {% else %}
+                        <span class="chip">Idle</span>
+                    {% endif %}
+                </div>
+                <p class="text-muted small">Prüft die Hintergrund-Queue (z. B. Torhymnen-Stopp) und stößt sie bei Bedarf an.</p>
+                <a href="{{ path('check_queue') }}" class="btn btn-secondary btn-block">{{ icons.icon('bolt', 18) }} Queue prüfen</a>
+            </div>
         </div>
     </div>
 {% endblock %}

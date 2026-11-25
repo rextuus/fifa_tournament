@@ -1,77 +1,46 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Create Player{% endblock %}
+{% block title %}Spieler{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <!-- Page Header -->
-        <div class="text-center mb-4">
-            <h1 class="display-5">Neuen Spieler anlegen</h1>
-            <p class="lead">Erstelle neue Spieler oder bearbeite existierende</p>
+    <a href="{{ path('participant_manage') }}" class="back-link">{{ icons.icon('back', 18) }} Truppen</a>
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">{{ icons.icon('user', 14) }} Kader</div>
+            <h1 class="page-title">Spieler</h1>
         </div>
+    </div>
 
-        <div class="row">
-            <!-- Create Player Form -->
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h5>Spieler erstellen</h5>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ path('player_create') }}" method="post">
-                            <div class="mb-3">
-                                <label for="playerIdent" class="form-label text-white">Spieler-Name</label>
-                                <input type="text" class="form-control" id="playerIdent" name="playerIdent" required>
+    <div class="stack-lg">
+        <form action="{{ path('player_create') }}" method="post" class="panel">
+            <label for="playerIdent" class="form-label">Neuer Spieler</label>
+            <div class="d-flex gap-2">
+                <input type="text" class="form-control" id="playerIdent" name="playerIdent" placeholder="Name" required>
+                <button type="submit" class="btn btn-primary" style="flex-shrink: 0">{{ icons.icon('plus', 18) }} Anlegen</button>
+            </div>
+        </form>
+
+        <section>
+            <h2 class="section-title">Alle Spieler <span class="count">{{ players|length }}</span></h2>
+            {% if players|length > 0 %}
+                <div class="tile-list two-col">
+                    {% for player in players %}
+                        <div class="tile is-link">
+                            {{ component('ProfileImageComponent', {profile: player, width: 44}) }}
+                            <div class="tile-body">
+                                <a href="{{ path('player_edit', { id: player.id }) }}" class="tile-title stretched d-block">{{ player.ident }}</a>
                             </div>
-                            <button type="submit" class="btn btn-success w-100">Erstellen</button>
-                        </form>
-                    </div>
+                            <div class="tile-actions">
+                                <a href="{{ path('spotify_search', { type: 'player', id: player.id }) }}" class="btn btn-secondary btn-icon btn-sm"
+                                   title="Torhymne" aria-label="Torhymne">{{ icons.icon('music', 17) }}</a>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-            </div>
-
-            <!-- Existing Players List -->
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5>Existing Players</h5>
-                    </div>
-                    <div class="card-body">
-                        {% if players|length > 0 %}
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for player in players %}
-                                    <tr>
-                                        <th scope="row">{{ player.id }}</th>
-                                        <td>
-                                            {{ component('ProfileImageComponent', {profile: player}) }}
-                                            {{ player.ident }}
-                                        </td>
-
-                                        <td>
-                                            {{ component('ButtonComponent', {
-                                                text: 'Edit', classes: 'btn btn-sm btn-warning', route: path('player_edit', { id: player.id })
-                                            }) }}
-                                            {{ component('ButtonComponent', {
-                                                text: 'Torhymne', classes: 'btn btn-sm btn-warning', route: path('spotify_search', { type: 'player', id: player.id })
-                                            }) }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        {% else %}
-                            <p class="text-muted">No existing players found.</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
+            {% else %}
+                <div class="panel empty"><p class="mb-0">Noch keine Spieler angelegt.</p></div>
+            {% endif %}
+        </section>
     </div>
 {% endblock %}

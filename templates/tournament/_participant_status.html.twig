@@ -1,0 +1,29 @@
+{# Teilnehmerliste mit Team-Auswahl-Status (manage + manage_battle). Erwartet: tournament, participants #}
+{% import '_icons.html.twig' as icons %}
+<section>
+    <h2 class="section-title">Teamauswahl <span class="count">{{ participants|length }}</span></h2>
+    {% if participants|length > 0 %}
+        <div class="tile-list two-col">
+            {% for participant in participants %}
+                {% set valid = tournament_participant_is_valid(tournament, participant) %}
+                <a class="tile is-link {{ valid ? 'is-ok' : 'is-bad' }}"
+                   href="{{ path('tournament_team_selection', { tournamentId: tournament.id, participantId: participant.id }) }}">
+                    {{ component('ProfileImageComponent', {profile: participant, width: 44}) }}
+                    <div class="tile-body">
+                        <div class="tile-title">{{ participant.ident }}</div>
+                        <div class="tile-meta">
+                            {% if valid %}
+                                <span class="chip is-ok">Teams komplett</span>
+                            {% else %}
+                                <span class="chip is-bad">Teams fehlen</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <span class="tile-chevron">{{ icons.icon('chevron', 20) }}</span>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="panel empty"><p class="mb-0">Noch keine Teilnehmer hinzugefügt.</p></div>
+    {% endif %}
+</section>

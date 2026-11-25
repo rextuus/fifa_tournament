@@ -19,6 +19,8 @@ class AddSinglePlayerBattleTournamentType extends AbstractType
                 'class' => Player::class, // The Player entity
                 'choice_label' => 'ident', // Display the Player's "ident" property in the dropdown
                 'expanded' => false, // Use a dropdown instead of radio buttons
+                'autocomplete' => true, // Tom Select mit Suche
+                'placeholder' => 'Spieler suchen…',
                 'multiple' => false, // Allow only one player to be selected
                 'label' => 'Teilnehmer',
                 'required' => false, // Player selection is optional

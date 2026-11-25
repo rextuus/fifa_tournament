@@ -1,67 +1,42 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Edit Participant{% endblock %}
+{% block title %}{{ participant.ident }}{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <div class="text-center mb-4">
-            <h1 class="display-5">Team bearbeiten</h1>
-            <p class="lead">QR-Code nutzen um Bilder per Smartphone hochzuladen</p>
-        </div>
+    <div class="narrow">
+        <a href="{{ path('participant_manage') }}" class="back-link">{{ icons.icon('back', 18) }} Truppen</a>
 
-        <div class="col my-auto mx-auto mb-3" style="max-width: 200px;">
-            {% if participant.imageFile %}
-                {% set imageMarkup %}
-                    <img src="{{ image_url(participant.imageFile, 'x-large') }}"
-                         class="img-fluid rounded-circle"/>
-                {% endset %}
-            {% else %}
-                {% set imageMarkup %}
-                    <img src="{{ asset('images/thumbnails/client_default.png') }}"
-                         class="img-fluid rounded-circle"/>
-                {% endset %}
-            {% endif %}
-
-            <twig:AjaxFormModalLink
-                    modalTitle="{{ 'form.profile_image.headline'|trans() }}"
-                    classes="btn btn-outline-secondary"
-                    submitText="Speichern"
-                    formUrl="{{ url('participant_edit_profile_image',  {'id' : participant.id}) }}">
-                {{ imageMarkup }}
-            </twig:AjaxFormModalLink>
-
-            <div class="row my-4 text-center">
-                <!-- QR code container -->
-                <div class="col-auto">
-                    <img src="{{ qrCodeDataUri }}" alt="QR Code" class="img-fluid" style="max-width: 200px;">
+        <div class="stack-lg">
+            <div class="profile-head">
+                <twig:AjaxFormModalLink
+                        modalTitle="Profilbild ändern"
+                        classes="profile-image-link"
+                        submitText="Speichern"
+                        formUrl="{{ url('participant_edit_profile_image',  {'id' : participant.id}) }}">
+                    {% import '_icons.html.twig' as icons %}
+                    {{ component('ProfileImageComponent', {profile: participant, width: 128}) }}
+                    <span class="edit-badge">{{ icons.icon('edit', 16) }}</span>
+                </twig:AjaxFormModalLink>
+                <div>
+                    <div class="eyebrow">{{ icons.icon('users', 14) }} Truppe</div>
+                    <h1>{{ participant.ident }}</h1>
                 </div>
+                <a href="{{ path('spotify_search', { type: 'participant', id: participant.id }) }}" class="btn btn-secondary btn-sm">{{ icons.icon('music', 16) }} Torhymne</a>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        {{ form_start(form) }}
+            <div class="qr-box">
+                <img src="{{ qrCodeDataUri }}" alt="QR-Code">
+                <p><strong>Bild per Handy</strong>QR-Code scannen und direkt ein Foto als Profilbild hochladen.</p>
+            </div>
 
-                        <!-- Participant Identifier -->
-                        <div class="mb-3">
-                            {{ form_row(form.ident, { 'attr': { 'class': 'form-control' } }) }}
-                        </div>
-
-                        <!-- Players Multi-select -->
-                        <div class="mb-3">
-                            {{ form_row(form.players, { 'attr': { 'class': 'form-control' } }) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_row(form.forceGoalHymn, { 'attr': { 'class': 'form-control' } }) }}
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
-                        {{ form_end(form) }}
-                    </div>
-                </div>
+            <div class="panel">
+                {{ form_start(form) }}
+                {{ form_row(form.ident) }}
+                {{ form_row(form.players) }}
+                {{ form_row(form.forceGoalHymn) }}
+                <button type="submit" class="btn btn-primary btn-lg btn-block mt-2">{{ icons.icon('check', 20) }} Speichern</button>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>

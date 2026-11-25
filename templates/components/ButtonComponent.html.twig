@@ -1,12 +1,1 @@
-{#<div{{ attributes }} class="mt-2">#}
-{#    <form method="{{ this.method }}" action="{{ this.route }}" style="display: inline;">#}
-{#        <button type="submit" class="{{ this.classes }}">#}
-{#            {{ this.text }}#}
-{#        </button>#}
-{#    </form>#}
-{#</div>#}
-<div{{ attributes }} class="mt-2">
-    <a href="{{ this.route }}" class="{{ this.classes }}" style="display: inline;">
-        {{ this.text }}
-    </a>
-</div>
+<a{{ attributes }} href="{{ this.route }}" class="{{ this.classes }}">{{ this.text }}</a>

@@ -1,30 +1,24 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Match Details{% endblock %}
+{% block title %}{{ team.name }}{% endblock %}
 
 {% block body %}
-
-    <div class="col my-auto mx-auto" style="max-width: 100px;">
-        {% if team.imageFile %}
-            {% set imageMarkup %}
-                <img src="{{ image_url(team.imageFile, 'x-large') }}"
-                     class="img-fluid rounded-circle"/>
-            {% endset %}
-        {% else %}
-            {% set imageMarkup %}
-                <img src="{{ asset('images/thumbnails/client_default.png') }}"
-                     class="img-fluid rounded-circle"/>
-            {% endset %}
-        {% endif %}
-
+    <div class="narrow">
+        <div class="profile-head">
             <twig:AjaxFormModalLink
-                    modalTitle="{{ 'form.profile_image.headline'|trans() }}"
-                    classes="btn btn-outline-secondary"
-                    submitText="{{ 'label.save'|trans() }}"
+                    modalTitle="Profilbild ändern"
+                    classes="profile-image-link"
+                    submitText="Speichern"
                     formUrl="{{ url('team_edit_profile_image',  {'id' : team.id}) }}">
-                {{ imageMarkup }}
+                    {% import '_icons.html.twig' as icons %}
+                {{ component('ProfileImageComponent', {profile: team, width: 128}) }}
+                <span class="edit-badge">{{ icons.icon('edit', 16) }}</span>
             </twig:AjaxFormModalLink>
-
+            <div>
+                <div class="eyebrow">{{ icons.icon('shield', 14) }} Team</div>
+                <h1>{{ team.name }}</h1>
+            </div>
+        </div>
     </div>
-{#    {{ form(form) }}#}
 {% endblock %}

@@ -1,39 +1,40 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Tournament Details{% endblock %}
+{% block title %}{{ tournament.ident }}{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <h1 class="text-center mb-4">{{ tournament.ident }} - Tournament Bracket</h1>
-
-        <div class="table-responsive">
-            <table class="table text-center align-middle">
-                <thead class="table-dark">
-                <tr>
-                    {% for round in tournament.rounds %}
-                        <th>{{ round.roundType.getRoundDescription }}</th>
-                    {% endfor %}
-                </tr>
-                </thead>
-                <tbody>
-
-                {% for row in matrix %}
-                    <tr>
-                        {% for column in row %}
-                            <td class="test">
-                                <span class="fixture">
-                                    {% if column != 'X' %}
-                                        {{ component('FixtureComponent', {fixture: column}) }}
-                                    {% else %}
-
-                                    {% endif %}
-                                </span>
-                            </td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+    <a href="{{ path('tournament_list') }}" class="back-link">{{ icons.icon('back', 18) }} Turniere</a>
+    <div class="page-head">
+        <div>
+            <div class="eyebrow">{{ icons.icon('trophy', 14) }} K.-o.-Baum</div>
+            <h1 class="page-title">{{ tournament.ident }}</h1>
         </div>
+        <div class="page-actions">
+            <a href="{{ path(tournament.editRoute, { id: tournament.id }) }}" class="btn btn-secondary">{{ icons.icon('settings', 18) }} Verwalten</a>
+        </div>
+    </div>
+
+    <div class="bracket">
+        {% for round in tournament.rounds %}
+            {% set col = loop.index0 %}
+            {% set fixtures = [] %}
+            {% for row in matrix %}
+                {% if row[col] is defined and row[col] != 'X' %}
+                    {% set fixtures = fixtures|merge([row[col]]) %}
+                {% endif %}
+            {% endfor %}
+            <section class="bracket-round">
+                <div class="bracket-title">
+                    <span>{{ round.roundType.getRoundDescription }}</span>
+                    <span>{{ loop.index }}/{{ loop.length }}</span>
+                </div>
+                <div class="bracket-matches">
+                    {% for fixture in fixtures %}
+                        {{ component('FixtureComponent', {fixture: fixture}) }}
+                    {% endfor %}
+                </div>
+            </section>
+        {% endfor %}
     </div>
 {% endblock %}

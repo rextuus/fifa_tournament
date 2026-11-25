@@ -24,6 +24,8 @@ class ManageBattleTournamentType extends AbstractType
                 'choice_label' => 'ident', // Display the Participant's "ident" property in the dropdown
                 'multiple' => true, // Allow selection of multiple participants
                 'expanded' => false, // Use a dropdown instead of checkboxes
+                'autocomplete' => true, // Tom Select: Tags mit Suche, mobil gut bedienbar
+                'placeholder' => 'Spieler suchen…',
                 'label' => 'Teilnehmer',
                 'required' => false, // Participants are optional
                 'attr' => ['class' => 'form-control'], // Use the same form-control class for consistent styling

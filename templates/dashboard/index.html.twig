@@ -1,75 +1,48 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <!-- Page Header -->
-        <div class="text-center mb-5">
-            <h1 class="display-4">Tournament Management Dashboard</h1>
-            <p class="lead">Create and manage tournaments and participants easily.</p>
+    <section class="hero">
+        <div class="eyebrow">{{ icons.icon('bolt', 14) }} Anpfiff</div>
+        <h1>Wer holt sich<br><em>den Pott?</em></h1>
+        <p>Turniere anlegen, Teams losen, Tore feiern – mit Torhymne und allem Drum und Dran.</p>
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ path('tournament_create') }}" class="btn btn-primary btn-lg">{{ icons.icon('plus', 20) }} Neues Turnier</a>
+            <a href="{{ path('tournament_list') }}" class="btn btn-secondary btn-lg">Alle Turniere</a>
         </div>
+        <span class="hero-ball">{{ icons.icon('ball', 220) }}</span>
+    </section>
 
-        <!-- Action Cards -->
-        <div class="row justify-content-center">
-            <!-- Card: Create New Tournament -->
-            <div class="col-md-4 mb-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5>Turniere verwalten</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Lege neue Turniere an oder verwalte existierende</p>
-                        {{ component('ButtonComponent', {
-                            text: 'Zu den Turnieren', classes: 'btn btn-primary', route: path('tournament_list')
-                        }) }}
-                    </div>
-                </div>
+    <div class="action-grid">
+        <a href="{{ path('tournament_list') }}" class="action-card">
+            <span class="action-icon">{{ icons.icon('trophy', 22) }}</span>
+            <div>
+                <h3>Turniere</h3>
+                <p>Anlegen, verwalten, spielen</p>
             </div>
-
-            <!-- Card: Manage Participants -->
-            <div class="col-md-4 mb-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-header bg-secondary text-white">
-                        <h5>Truppen verwalten</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Lege neue Truppen oder Mitspieler an</p>
-                        {{ component('ButtonComponent', {
-                            text: 'Zu den Truppen', classes: 'btn btn-success', route: path('participant_manage')
-                        }) }}
-                    </div>
-                </div>
+        </a>
+        <a href="{{ path('participant_manage') }}" class="action-card tone-info">
+            <span class="action-icon">{{ icons.icon('users', 22) }}</span>
+            <div>
+                <h3>Truppen</h3>
+                <p>Teams &amp; Spieler pflegen</p>
             </div>
-
-            <!-- Card: Placeholder for Future Features -->
-            <div class="col-md-4 mb-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h5>Spotify Verwalten</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Verbinde die App mit deinem Spotify Account</p>
-                        {{ component('ButtonComponent', {
-                            text: 'Spotify Verwaltung', classes: 'btn btn-success', route: path('spotify_info')
-                        }) }}
-                    </div>
-                </div>
+        </a>
+        <a href="{{ path('spotify_info') }}" class="action-card tone-gold">
+            <span class="action-icon">{{ icons.icon('music', 22) }}</span>
+            <div>
+                <h3>Spotify</h3>
+                <p>Torhymnen verbinden</p>
             </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-header bg-info text-white">
-                        <h5>Einstellungen</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Allgemeine Einstellungen</p>
-                        {{ component('ButtonComponent', {
-                            text: 'Einstellungen', classes: 'btn btn-success', route: path('setting_edit')
-                        }) }}
-                    </div>
-                </div>
+        </a>
+        <a href="{{ path('setting_edit') }}" class="action-card tone-danger">
+            <span class="action-icon">{{ icons.icon('settings', 22) }}</span>
+            <div>
+                <h3>Setup</h3>
+                <p>Allgemeine Einstellungen</p>
             </div>
-        </div>
+        </a>
     </div>
 {% endblock %}

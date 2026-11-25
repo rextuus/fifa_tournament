@@ -1,14 +1,5 @@
-<div{{ attributes }}>
-    {% if this.profile.imageFile %}
-        {% set imageMarkup %}
-            <img src="{{ image_url(this.profile.imageFile, 'x-large') }}"
-                 class="img-fluid {{ this.additionalClasses }}" style="max-width: {{ this.width }}px;"/>
-        {% endset %}
-    {% else %}
-        {% set imageMarkup %}
-            <img src="{{ asset(this.getDefaultImage()) }}"
-                 class="img-fluid {{ this.additionalClasses }}" style="max-width: {{ this.width }}px;"/>
-        {% endset %}
-    {% endif %}
-    {{ imageMarkup }}
-</div>
+{% set isCrest = this.profile.defaultImageType.name == 'TEAM_PROFILE' %}
+<span{{ attributes.defaults({class: 'avatar' ~ (isCrest ? ' is-crest' : ''), style: '--size: ' ~ this.width ~ 'px'}) }}>
+    <img src="{{ this.profile.imageFile ? image_url(this.profile.imageFile, 'x-large') : asset(this.getDefaultImage()) }}"
+         alt="" loading="lazy">
+</span>

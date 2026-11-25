@@ -1,75 +1,49 @@
 {% set isPlayed = fixture.played is not null %}
-
-<div{{ attributes }}
-        class="card mb-3 hover-container special-card-body fixed-width-card {{ isPlayed ? 'bg-secondary text-muted played-card' : 'bg-dark text-white' }}">
-    <div class="card-body">
-        <h5 class="card-title">
-            {{ component('ButtonComponent', {
-                text: fixture.ident,
-                classes: isPlayed ? 'btn btn-info mb-3 disabled' : 'btn btn-info mb-3',
-                route: path('match_detail', { id: fixture.id })
-            }) }}
-        </h5>
-        <div class="teams-content d-flex justify-content-between align-items-center">
-            <!-- Home Team -->
-            <div class="team-container d-flex flex-column align-items-center">
-                <!-- Team Image -->
-                <img src="{{ fixture.homeTeam is not null and fixture.homeTeam.imageFile
-                ? image_url(fixture.homeTeam.imageFile, 'x-large')
-                : asset('images/thumbnails/team_default.png') }}"
-                     alt="Home Team Logo"
-                     class="img-fluid team-image"
-                     style="width: 80px; height: 80px; object-fit: cover;" />
-
-                <!-- Participant Image -->
-                <img src="{{ fixture.homeParticipant is not null and fixture.homeParticipant.imageFile
-                ? image_url(fixture.homeParticipant.imageFile, 'x-large')
-                : asset('images/thumbnails/client_default.png') }}"
-                     alt="Home Participant Image"
-                     class="img-fluid participant-image rounded-circle border"
-                     style="width: 80px; height: 80px; object-fit: cover;" />
-
-                <!-- Team Name -->
-                <div class="team-name">{{ fixture.homeTeam.name ?? 'TBA' }}</div>
-
-                <!-- Participant Name -->
-                <div class="participant-ident">{{ fixture.homeParticipant.ident ?? 'Unknown' }}</div>
-            </div>
-
-            <!-- VS Divider -->
-            <div class="vs-divider text-center font-weight-bold mx-3">VS</div>
-
-            <!-- Away Team -->
-            <div class="team-container d-flex flex-column align-items-center">
-                <!-- Team Image -->
-                <img src="{{ fixture.awayTeam is not null and fixture.awayTeam.imageFile
-                ? image_url(fixture.awayTeam.imageFile, 'x-large')
-                : asset('images/thumbnails/team_default.png') }}"
-                     alt="Away Team Logo"
-                     class="img-fluid team-image"
-                     style="width: 80px; height: 80px; object-fit: cover;" />
-
-                <!-- Participant Image -->
-                <img src="{{ fixture.awayParticipant is not null and fixture.awayParticipant.imageFile
-                ? image_url(fixture.awayParticipant.imageFile, 'x-large')
-                : asset('images/thumbnails/client_default.png') }}"
-                     alt="Away Participant Image"
-                     class="img-fluid participant-image rounded-circle border"
-                     style="width: 80px; height: 80px; object-fit: cover;" />
-
-                <!-- Team Name -->
-                <div class="team-name">{{ fixture.awayTeam.name ?? 'TBA' }}</div>
-
-                <!-- Participant Name -->
-                <div class="participant-ident">{{ fixture.awayParticipant.ident ?? 'Unknown' }}</div>
-            </div>
+{% set sides = [
+    {team: fixture.homeTeam, participant: fixture.homeParticipant},
+    {team: fixture.awayTeam, participant: fixture.awayParticipant},
+] %}
+<div{{ attributes }}>
+    <a href="{{ path('match_detail', { id: fixture.id }) }}"
+       class="match-card {{ isPlayed ? 'is-played' }} {{ highlight ? 'is-next' }}">
+        <div class="match-top">
+            <span class="match-ident">{{ fixture.ident }}</span>
+            {% if isPlayed %}
+                <span class="chip is-finished no-dot">Gespielt</span>
+            {% elseif highlight %}
+                <span class="chip is-live">Als Nächstes</span>
+            {% else %}
+                <span class="chip no-dot">Offen</span>
+            {% endif %}
         </div>
-    </div>
-    <div class="card-footer text-white">
-        {% if isPlayed %}
-            <span>{{ fixture.firstLeg.homeGoals  }} - {{ fixture.firstLeg.awayGoals  }}</span>
-        {% else %}
-            <span>0 - 0</span>
-        {% endif %}
-    </div>
+        <div class="match-body">
+            {% for side in sides %}
+                {% if loop.index == 2 %}
+                    {% if isPlayed and fixture.firstLeg %}
+                        <div class="score">{{ fixture.firstLeg.homeGoals }}:{{ fixture.firstLeg.awayGoals }}</div>
+                    {% elseif fixture.homeGoals > 0 or fixture.awayGoals > 0 %}
+                        <div class="score">{{ fixture.homeGoals }}:{{ fixture.awayGoals }}</div>
+                    {% else %}
+                        <div class="score is-vs">VS</div>
+                    {% endif %}
+                {% endif %}
+                <div class="side">
+                    <div class="crest-wrap">
+                        <span class="avatar is-crest md">
+                            <img src="{{ side.team is not null and side.team.imageFile ? image_url(side.team.imageFile, 'x-large') : asset('images/thumbnails/team_default.png') }}"
+                                 alt="" loading="lazy">
+                        </span>
+                        {% if side.participant %}
+                            <span class="avatar owner">
+                                <img src="{{ side.participant.imageFile ? image_url(side.participant.imageFile, 'x-large') : asset('images/thumbnails/client_default.png') }}"
+                                     alt="" loading="lazy">
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="side-team">{{ side.team.name ?? 'TBA' }}</div>
+                    <div class="side-player">{{ side.participant.ident ?? '–' }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </a>
 </div>

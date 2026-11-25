@@ -1,25 +1,31 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Spotify Song Suche{% endblock %}
+{% block title %}Spotify{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <h1 class="text-center">Spotify Verwaltung</h1>
-    </div>
-
-    <!-- Render the Search Form -->
-    <div class="container my-5">
-
-    <div class="row justify-content-center mt-4">
-        Eingeloggt als:
-        {{ displayName }}
-        <div
-
-        {% if displayName == 'not_logged_in' %}
-            <div class="row justify-content-center mt-4">
-                <a href="{{ path('spotify_login') }}">Login</a>
+    {% set loggedIn = displayName != 'not_logged_in' %}
+    <div class="narrow">
+        <div class="page-head">
+            <div>
+                <div class="eyebrow">{{ icons.icon('music', 14) }} Torhymnen</div>
+                <h1 class="page-title">Spotify</h1>
+                <p class="page-sub">Torhymnen laufen über das verbundene Spotify-Konto.</p>
             </div>
-        {% endif %}
-    </div>
+        </div>
 
+        <div class="panel stack">
+            <div class="spotify-status">
+                <span class="spotify-logo">{{ icons.icon('spotify', 30) }}</span>
+                <div class="flex-fill" style="min-width: 0">
+                    <div class="text-muted small">Verbunden als</div>
+                    <div class="fw-semibold text-white text-truncate fs-5">{{ loggedIn ? displayName : 'Nicht verbunden' }}</div>
+                </div>
+                <span class="chip {{ loggedIn ? 'is-ok' : 'is-bad' }}">{{ loggedIn ? 'Online' : 'Offline' }}</span>
+            </div>
+            <a href="{{ path('spotify_login') }}" class="btn {{ loggedIn ? 'btn-secondary' : 'btn-primary' }} btn-lg btn-block">
+                {{ icons.icon('login', 20) }} {{ loggedIn ? 'Neu verbinden' : 'Mit Spotify verbinden' }}
+            </a>
+        </div>
+    </div>
 {% endblock %}

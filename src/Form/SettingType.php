@@ -15,24 +15,24 @@ class SettingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('maximumSongDuration', IntegerType::class, [
-            'label' => 'Maximum Song Duration (seconds)',
+            'label' => 'Maximale Songlänge (Sekunden)',
             'attr' => [
                 'class' => 'form-control',
                 'min' => 0,
                 'max' => 300,
             ],
         ])->add('songPlayTimeLimit', IntegerType::class, [
-            'label' => 'Song Play Time Limit (seconds)',
+            'label' => 'Abspieldauer Torhymne (Sekunden)',
             'attr' => [
                 'class' => 'form-control',
                 'min' => 0,
                 'max' => 300,
             ],
         ])->add('goalMusicEnabled', CheckboxType::class, [
-            'label' => 'Enable Goal Music',
+            'label' => 'Torhymnen abspielen',
             'required' => false, // Optional, since booleans can be unchecked
         ])->add('goalGifEnabled', CheckboxType::class, [
-            'label' => 'Enable Goal Gif',
+            'label' => 'Tor-GIF anzeigen',
             'required' => false, // Optional, since booleans can be unchecked
         ]);
 

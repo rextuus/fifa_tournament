@@ -1,150 +1,106 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Fixture Details{% endblock %}
+{% block title %}{{ fixture.ident }}{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <!-- Fixture Header -->
-        <div class="text-center mb-5">
-            <h1>{{ fixture.ident }}</h1>
-        </div>
+    {% set tournament = fixture.round.tournament %}
+    {% set backUrl = tournament.type.value == 'group_battle'
+        ? path('tournament_detail_group_battle', {id: tournament.id, roundNr: fixture.round.nr})
+        : path('tournament_detail', {id: tournament.id}) %}
+    {% set isPlayed = fixture.played is not null %}
+    {% set homeScore = isPlayed and fixture.firstLeg ? fixture.firstLeg.homeGoals : fixture.homeGoals %}
+    {% set awayScore = isPlayed and fixture.firstLeg ? fixture.firstLeg.awayGoals : fixture.awayGoals %}
 
-        {% if settings.isGoalGifEnabled %}
-            <div id="goal-overlay"
-                 class="d-none align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 mt-5">
-                <img src="https://i.giphy.com/FoH28ucxZFJZu.webp" alt="Goal Celebration" class="goal-gif">
+    {% if settings.isGoalGifEnabled %}
+        <div id="goal-overlay"
+             class="d-none align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100"
+             title="Antippen zum Schließen">
+            <img src="https://i.giphy.com/FoH28ucxZFJZu.webp" alt="Tor!" class="goal-gif">
+        </div>
+    {% endif %}
+
+    <div class="medium">
+        <a href="{{ backUrl }}" class="back-link">{{ icons.icon('back', 18) }} {{ tournament.ident }}</a>
+
+        <section class="scoreboard">
+            <div class="sb-label">
+                {{ fixture.ident }} ·
+                {% if isPlayed %}<span class="text-warning">Abgepfiffen</span>{% else %}<span style="color: var(--accent)">Live</span>{% endif %}
             </div>
-        {% endif %}
-
-        <div class="row justify-content-center">
-            <!-- Home Participant -->
-            {% if fixture.homeParticipant %}
-                <div class="col-md-5 mb-4">
-                    <div class="card text-center shadow-sm position-relative">
-                        <!-- Participant Image Carousel -->
-                        <div id="homeParticipantCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        {{ component('ProfileImageComponent', {profile: fixture.homeTeam, width: 150}) }}
-                                        <div class="card-body team-name">
-                                            <h5 class="card-title">{{ fixture.homeTeam.name }}</h5>
-                                        </div>
-                                    </div>
-                                <div class="carousel-item
-                                    {% if not (fixture.homeTeam and fixture.homeTeam.imageFile) %}active{% endif %}">
-                                    {{ component('ProfileImageComponent', {profile: fixture.homeParticipant, width: 150}) }}
-                                    <div class="card-body team-name">
-                                        <h5 class="card-title">{{ fixture.homeParticipant.ident }}</h5>
-                                    </div>
-                                </div>
+            <div class="sb-grid">
+                {% for side in [
+                    {team: fixture.homeTeam, participant: fixture.homeParticipant},
+                    {team: fixture.awayTeam, participant: fixture.awayParticipant},
+                ] %}
+                    {% if loop.index == 2 %}
+                        <div class="sb-score-col">
+                            <div class="sb-score">
+                                <span data-score-home>{{ homeScore }}</span><span class="sep">:</span><span data-score-away>{{ awayScore }}</span>
                             </div>
                         </div>
-
-                        <!-- Goal Buttons (Correctly Positioned) -->
-                        <div class="goal-controls-home position-absolute top-50 translate-middle-y" style="right: 0;">
-                            {{ component('GoalComponent', {participant: fixture.homeParticipant, fixture: fixture, isHome: true, carouselId: 'goalCarouselHome'}) }}
+                    {% endif %}
+                    <div class="sb-side">
+                        <div class="sb-crest">
+                            {% if side.team %}
+                                {{ component('ProfileImageComponent', {profile: side.team, width: 76}) }}
+                            {% else %}
+                                <span class="avatar is-crest"><img src="{{ asset('images/thumbnails/team_default.png') }}" alt=""></span>
+                            {% endif %}
+                            {% if side.participant %}
+                                {{ component('ProfileImageComponent', {profile: side.participant, width: 34, class: 'owner'}) }}
+                            {% endif %}
                         </div>
+                        <div class="sb-team">{{ side.team.name ?? 'TBA' }}</div>
+                        <div class="sb-owner">{{ side.participant.ident ?? '–' }}</div>
                     </div>
-                </div>
-            {% endif %}
+                {% endfor %}
+            </div>
 
-            <!-- Away Participant -->
-            {% if fixture.awayParticipant %}
-                <div class="col-md-5 mb-4">
-                    <div class="card text-center shadow-sm position-relative">
-                        <!-- Participant Image Carousel -->
-                        <div id="awayParticipantCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    {{ component('ProfileImageComponent', {profile: fixture.awayTeam, width: 150}) }}
-                                    <div class="card-body team-name">
-                                        <h5 class="card-title">{{ fixture.awayTeam.name }}</h5>
-                                    </div>
-                                </div>
-                                <div class="carousel-item
-                                    {% if not (fixture.awayTeam and fixture.awayTeam.imageFile) %}active{% endif %}">
-                                    {{ component('ProfileImageComponent', {profile: fixture.awayParticipant, width: 150}) }}
-                                    <div class="card-body team-name">
-                                        <h5 class="card-title">{{ fixture.awayParticipant.ident }}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Goal Buttons (Correctly Positioned) -->
-                        <div class="goal-controls-away position-absolute top-50 translate-middle-y" style="left: 0;">
-                            {{ component('GoalComponent', {participant: fixture.awayParticipant,  fixture: fixture, isHome: false, carouselId: 'goalCarouselAway'}) }}
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-
-        <div class="container-sm my-4" style="max-width: 600px;">
             {% if fixture.isTwoLeg %}
-                <ul class="list-group mb-3">
-                    {% if fixture.firstLeg is not null %}
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Hin</span>
-                            <span><strong>{{ fixture.firstLeg.homeGoals }} - {{ fixture.firstLeg.awayGoals }}</strong></span>
-                        </li>
-                    {% endif %}
-                    {% if fixture.secondLeg is not null %}
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Rück</span>
-                            <span><strong>{{ fixture.secondLeg.homeGoals }} - {{ fixture.secondLeg.awayGoals }}</strong></span>
-                        </li>
-                    {% endif %}
-                    {% if fixture.thirdLeg is not null %}
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Decider</span>
-                            <span><strong>{{ fixture.thirdLeg.homeGoals }} - {{ fixture.thirdLeg.awayGoals }}</strong></span>
-                        </li>
-                    {% endif %}
-                </ul>
-
-                {% set totalHomeGoals = 0 %}
-                {% set totalAwayGoals = 0 %}
-
-                {% if fixture.firstLeg %}
-                    {% set totalHomeGoals = totalHomeGoals + fixture.firstLeg.homeGoals %}
-                    {% set totalAwayGoals = totalAwayGoals + fixture.firstLeg.awayGoals %}
-                {% endif %}
-                {% if fixture.secondLeg %}
-                    {% set totalHomeGoals = totalHomeGoals + fixture.secondLeg.homeGoals %}
-                    {% set totalAwayGoals = totalAwayGoals + fixture.secondLeg.awayGoals %}
-                {% endif %}
-                {% if fixture.thirdLeg %}
-                    {% set totalHomeGoals = totalHomeGoals + fixture.thirdLeg.homeGoals %}
-                    {% set totalAwayGoals = totalAwayGoals + fixture.thirdLeg.awayGoals %}
-                {% endif %}
-
-                <hr class="my-3">
-
-                <div class="text-center">
-                    <h5>Total Result</h5>
-                    <p class="fw-bold">{{ totalHomeGoals }} - {{ totalAwayGoals }}</p>
+                {% set legs = [
+                    {label: 'Hinspiel', leg: fixture.firstLeg},
+                    {label: 'Rückspiel', leg: fixture.secondLeg},
+                    {label: 'Entscheidung', leg: fixture.thirdLeg},
+                ] %}
+                {% set totalHome = 0 %}
+                {% set totalAway = 0 %}
+                <div class="legs">
+                    {% for item in legs %}
+                        {% if item.leg is not null %}
+                            {% set totalHome = totalHome + item.leg.homeGoals %}
+                            {% set totalAway = totalAway + item.leg.awayGoals %}
+                            <div class="leg"><span>{{ item.label }}</span><strong>{{ item.leg.homeGoals }} : {{ item.leg.awayGoals }}</strong></div>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="leg is-total"><span>Gesamt</span><strong>{{ totalHome }} : {{ totalAway }}</strong></div>
                 </div>
+            {% endif %}
+        </section>
+
+        <div class="goal-pads">
+            {% if fixture.homeParticipant %}
+                {{ component('GoalComponent', {participant: fixture.homeParticipant, fixture: fixture, isHome: true}) }}
+            {% endif %}
+            {% if fixture.awayParticipant %}
+                {{ component('GoalComponent', {participant: fixture.awayParticipant, fixture: fixture, isHome: false}) }}
             {% endif %}
         </div>
 
-        {% if fixture.played is null %}
-        <twig:AjaxFormModalLink
-                classes="btn btn-outline-secondary"
-                submitText="Speichern"
-                modalTitle="{{ 'label.create_entity'|trans({postFix: 's', entityName: 'label.deeplink'|trans()}) }}"
-                formUrl="{{ url('match_edit_result',  {'id' : fixture.id}) }}">
-            Ergebnis speichern
-        </twig:AjaxFormModalLink>
-        {% endif %}
-
-        <div class="row mb-5 ">
-            <div class="col-md-2">
-                <a href="{{ path('tournament_detail_group_battle', {id: fixture.round.tournament.id, roundNr: fixture.round.nr}) }}"
-                   class="btn btn-primary mt-5">
-                    Übersicht
-                </a>
-            </div>
+        <div class="action-dock">
+            <a href="{{ backUrl }}" class="btn btn-secondary btn-lg" style="flex: 0 0 auto">{{ icons.icon('list', 20) }}</a>
+            {% if not isPlayed %}
+                <twig:AjaxFormModalLink
+                        classes="btn btn-primary btn-lg"
+                        submitText="Speichern"
+                        modalTitle="Ergebnis eintragen"
+                        formUrl="{{ url('match_edit_result',  {'id' : fixture.id}) }}">
+                    {% import '_icons.html.twig' as icons %}
+                    {{ icons.icon('check', 20) }} Abpfiff &amp; Ergebnis
+                </twig:AjaxFormModalLink>
+            {% else %}
+                <a href="{{ backUrl }}" class="btn btn-primary btn-lg">Zur Übersicht</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

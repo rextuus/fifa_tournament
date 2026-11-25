@@ -17,11 +17,11 @@ class FixtureResultType extends AbstractType
     {
         // Add static fields for home and away goals
         $builder->add('homeGoals', IntegerType::class, [
-            'label' => 'Home Goals',
-            'attr' => ['class' => 'form-control', 'placeholder' => 'Enter home goals'],
+            'label' => 'Tore Heim',
+            'attr' => ['class' => 'form-control', 'placeholder' => '0'],
         ])->add('awayGoals', IntegerType::class, [
-            'label' => 'Away Goals',
-            'attr' => ['class' => 'form-control', 'placeholder' => 'Enter away goals'],
+            'label' => 'Tore Auswärts',
+            'attr' => ['class' => 'form-control', 'placeholder' => '0'],
         ]);
 
         // Add dynamic player fields

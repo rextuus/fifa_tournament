@@ -12,4 +12,7 @@ final class FixtureComponent
     use DefaultActionTrait;
 
     public Fixture $fixture;
+
+    /** Hebt das nächste offene Spiel in der Liste hervor. */
+    public bool $highlight = false;
 }

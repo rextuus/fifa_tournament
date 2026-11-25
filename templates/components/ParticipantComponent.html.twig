@@ -1,71 +1,43 @@
-<div{{ attributes }} class="card col-md-8 mb-3 p-3 shadow-sm border-0 rounded-3">
-    <!-- Participant Identifier -->
-    <div class="h3 text-primary text-center mb-4 fw-bold">
-        {{ this.entity.ident }}
+{% import '_icons.html.twig' as icons %}
+<div{{ attributes.defaults({class: 'stack'}) }}>
+    <div class="profile-head">
+        {{ component('ProfileImageComponent', {profile: this.entity, width: 112}) }}
+        <div>
+            <div class="eyebrow">{{ icons.icon('music', 14) }} Torhymne für</div>
+            <h1>{{ this.entity.ident }}</h1>
+        </div>
     </div>
 
-    <!-- Image Section -->
-    <div class="text-center mb-5">
-        {% if this.entity.imageFile %}
-            {% set imageMarkup %}
-                <img src="{{ image_url(this.entity.imageFile, 'x-large') }}"
-                     alt="Participant Image"
-                     class="img-fluid rounded shadow-sm"
-                     style="max-width: 300px;">
-            {% endset %}
-        {% else %}
-            {% set imageMarkup %}
-                <img src="{{ asset('images/thumbnails/client_default.png') }}"
-                     alt="Default Participant Image"
-                     class="img-fluid rounded shadow-sm"
-                     style="max-width: {{ this.size }}px;">
-            {% endset %}
-        {% endif %}
-        {{ imageMarkup }}
-    </div>
-
-    <!-- Track Information Section -->
     {{ component('TrackComponent', {participant: participant, player: player, track: this.track}) }}
 
-    <!-- Action Button -->
-    {% if this.track.spotifyId != '' %}
-
-    <div class="text-center mb-4">
-        <span>
-                    <a href="#"
-                       onclick="location.href='{{ path('app_select_song', { id: this.entity.id, spotifyTrack: this.track.spotifyId, type: this.typeForEntity }) }}'"
-                       class="btn btn-outline-primary px-4">Edit</a>
-        </span>
-    </div>
-    {% endif %}
-    <div class="text-center mb-4">
-        <button type="button"
-                class="btn btn-outline-primary px-4"
+    <div class="d-flex gap-2 flex-wrap">
+        {% if this.track.spotifyId != '' %}
+            <a href="{{ path('app_select_song', { id: this.entity.id, spotifyTrack: this.track.spotifyId, type: this.typeForEntity }) }}"
+               class="btn btn-secondary flex-fill">{{ icons.icon('clock', 18) }} Ausschnitt</a>
+            <a href="{{ this.testRoute }}" class="btn btn-secondary flex-fill"
+               title="Unterbricht den laufenden Stream des verknüpften Spotify-Kontos ({{ this.spotifyName }})">
+                {{ icons.icon('play', 18) }} Anhören
+            </a>
+        {% endif %}
+        <button type="button" class="btn btn-secondary flex-fill"
                 data-action="live#action"
                 data-live-action-param="debounce(500)|createQrCode">
-            {{ showQrCode ? 'QR Code' : 'QR Code' }}
+            {{ icons.icon('qr', 18) }} QR-Code
         </button>
     </div>
 
-    <div class="text-warning text-center">
-        <div class="mb-3">
-        {{ component('ButtonComponent', {
-            text: 'Test', classes: 'btn btn-sm btn-warning', route: this.testRoute
-        }) }}
-        </div>
-        <span class="mt-5">Achtung unterbricht den laufenden Stream des verknüpften Spotify-Kontos! (momentan: {{ this.spotifyName }})</span>
-    </div>
+    {% if this.track.spotifyId != '' %}
+        <p class="text-muted small mb-0">
+            „Anhören“ unterbricht den laufenden Stream des verknüpften Spotify-Kontos
+            (momentan: <strong class="text-white">{{ this.spotifyName }}</strong>).
+        </p>
+    {% endif %}
 
-
-    <!-- QR Code Display -->
     {% set qrCode = this.qrCode %}
     {% if qrCode is not null %}
-        <div class="text-center mt-4">
-            <h5 class="text-muted mb-3">QR-Code zu dieser Seite</h5>
-            <img src="{{ qrCode }}"
-                 alt="QR Code"
-                 class="img-fluid shadow-sm rounded"
-                 style="max-width: {{ size }}px;">
+        <div class="qr-box">
+            <img src="{{ qrCode }}" alt="QR-Code">
+            <p><strong>Am Handy weitermachen</strong>QR-Code scannen, um die Torhymne direkt auf dem Smartphone auszuwählen.</p>
         </div>
     {% endif %}
 </div>

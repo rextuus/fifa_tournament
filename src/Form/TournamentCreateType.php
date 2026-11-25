@@ -16,27 +16,30 @@ class TournamentCreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('ident', TextType::class, [
-            'label' => 'Tournament Identifier',
+            'label' => 'Name des Turniers',
             'required' => true,
-            'attr' => ['class' => 'form-control', 'placeholder' => 'e.g., Tournament2023'],
+            'attr' => ['class' => 'form-control', 'placeholder' => 'z. B. Winter-Cup 2026'],
         ])->add('level', ChoiceType::class, [
-            'label' => 'Tournament Level',
+            'label' => 'Startrunde (Teilnehmerplätze)',
             'required' => true,
             'choices' => array_combine(
                 array_map(fn($level) => $level->name, TournamentLevel::cases()),
                 TournamentLevel::cases(),
             ),
-            'choice_label' => fn($choice) => $choice->name . ' (' . $choice->value . ')',
+            'choice_label' => fn(TournamentLevel $choice) => $choice->getLabel(),
             'choice_value' => fn(?TournamentLevel $choice) => $choice?->value,
             'attr' => ['class' => 'form-select'],
         ])->add('type', ChoiceType::class, [ // Adding TournamentType
-            'label' => 'Tournament Type',
+            'label' => 'Modus',
             'required' => true,
             'choices' => array_combine(
                 array_map(fn($type) => $type->name, TournamentTypeEnum::cases()),
                 TournamentTypeEnum::cases(),
             ),
-            'choice_label' => fn($choice) => $choice->name . ' (' . $choice->value . ')', // Visible labels: "CLASSIC (classic)"
+            'choice_label' => fn(TournamentTypeEnum $choice) => match ($choice) {
+                TournamentTypeEnum::CLASSIC => 'K.-o.-Turnier',
+                TournamentTypeEnum::GROUP_BATTLE => 'Gruppen-Battle',
+            },
             'choice_value' => fn(?TournamentTypeEnum $choice) => $choice?->value, // Use string enum value in data
             'attr' => ['class' => 'form-select'],
         ]);

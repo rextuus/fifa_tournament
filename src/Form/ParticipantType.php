@@ -15,8 +15,11 @@ class ParticipantType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('forceGoalHymn', CheckboxType::class, ['required' => false])->add('ident', TextType::class, [
-            'label' => 'Participant Identifier',
+        $builder->add('forceGoalHymn', CheckboxType::class, [
+            'required' => false,
+            'label' => 'Torhymne der Truppe erzwingen',
+        ])->add('ident', TextType::class, [
+            'label' => 'Name der Truppe',
             'required' => true,
             'attr' => [
                 'class' => 'form-control',
@@ -26,7 +29,9 @@ class ParticipantType extends AbstractType
             'choice_label' => 'ident', // Display the Player's "ident" property in the dropdown
             'multiple' => true, // Allow multiple players to be selected
             'expanded' => false, // Use a dropdown UI, not checkboxes
-            'label' => 'Associated Players',
+            'autocomplete' => true, // Tom Select: Tags mit Suche, mobil gut bedienbar
+            'placeholder' => 'Spieler suchen…',
+            'label' => 'Spieler',
             'required' => false, // Players are optional
         ]);
     }

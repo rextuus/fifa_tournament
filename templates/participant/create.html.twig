@@ -1,26 +1,25 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Create Participant{% endblock %}
+{% block title %}Neue Truppe{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <div class="text-center mb-4">
-            <h1 class="display-5">Create New Participant</h1>
+    <div class="narrow">
+        <a href="{{ path('participant_manage') }}" class="back-link">{{ icons.icon('back', 18) }} Truppen</a>
+        <div class="page-head">
+            <div>
+                <div class="eyebrow">{{ icons.icon('plus', 14) }} Anlegen</div>
+                <h1 class="page-title">Neue Truppe</h1>
+            </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        {{ form_start(form) }}
-                        {{ form_row(form.ident, { 'attr': {'class': 'form-control'} }) }}
-                        {{ form_row(form.players, { 'attr': {'class': 'form-control'} }) }}
-
-                        <button type="submit" class="btn btn-primary w-100 mt-3">Create Participant</button>
-                        {{ form_end(form) }}
-                    </div>
-                </div>
-            </div>
+        <div class="panel">
+            {{ form_start(form) }}
+            {{ form_row(form.ident) }}
+            {{ form_row(form.players) }}
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-primary btn-lg btn-block mt-2">{{ icons.icon('check', 20) }} Truppe anlegen</button>
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}

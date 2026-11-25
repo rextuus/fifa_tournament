@@ -1,30 +1,26 @@
 {% extends 'base.html.twig' %}
+{% import '_icons.html.twig' as icons %}
 
-{% block title %}Create Tournament{% endblock %}
+{% block title %}Neues Turnier{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <h1 class="text-center">Create a New Tournament</h1>
-
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        {{ form_start(form) }}
-                        <div class="mb-3">
-                            {{ form_row(form.ident, { 'attr': { 'class': 'form-control' } }) }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form_row(form.level, { 'attr': { 'class': 'form-select' } }) }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form_row(form.type, { 'attr': { 'class': 'form-select' } }) }}
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Create Tournament</button>
-                        {{ form_end(form) }}
-                    </div>
-                </div>
+    <div class="narrow">
+        <a href="{{ path('tournament_list') }}" class="back-link">{{ icons.icon('back', 18) }} Turniere</a>
+        <div class="page-head">
+            <div>
+                <div class="eyebrow">{{ icons.icon('plus', 14) }} Anlegen</div>
+                <h1 class="page-title">Neues Turnier</h1>
+                <p class="page-sub">Name, Größe und Modus – Teilnehmer kommen im nächsten Schritt.</p>
             </div>
+        </div>
+
+        <div class="panel">
+            {{ form_start(form) }}
+            {{ form_row(form.ident) }}
+            {{ form_row(form.level) }}
+            {{ form_row(form.type) }}
+            <button type="submit" class="btn btn-primary btn-lg btn-block mt-2">{{ icons.icon('check', 20) }} Turnier anlegen</button>
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}
