@@ -1,19 +1,16 @@
 export UID := $(shell id -u)
 export GID := $(shell id -g)
 
-# Optional: eigene Werte für Compose (WEB_PORT, WEB_LAN_IP, WEB_LAN_PORT) in .env.docker.local.
-ENV_FILE ?= .env.docker.local
-DC        = docker compose $(if $(wildcard $(ENV_FILE)),--env-file $(ENV_FILE))
+DC        = docker compose
 PHP       = $(DC) exec -T app php
 COMPOSER  = $(DC) exec -T app composer
-WEB_PORT ?= 8000
-LAN_IP   ?= $(shell hostname -I 2>/dev/null | awk '{print $$1}')
+URL       = http://localhost:8199
 
 EMAIL    ?= admin@eat.local
 PASSWORD ?= admin123
 
 .DEFAULT_GOAL := help
-.PHONY: help secrets setup up up-lan down restart ps logs sh console install db user worker-restart sass \
+.PHONY: help secrets setup up down restart ps logs sh console install db user worker-restart sass \
 	test mago-lint mago-analyze mago-fmt fmt lint-twig qa
 
 help: ## Diese Hilfe
@@ -24,16 +21,11 @@ secrets: ## APP_SECRET in .env.local anlegen, falls er fehlt (überschreibt nich
 	@grep -q '^APP_SECRET=.\+' .env.local || ( echo "APP_SECRET=$$(openssl rand -hex 32)" >> .env.local && echo "APP_SECRET in .env.local erzeugt" )
 
 setup: up install db user ## Erstes Hochfahren: starten, Abhängigkeiten, Datenbank, Login-Benutzer
-	@echo; echo "Fertig: http://localhost:$(WEB_PORT)  (Login: $(EMAIL) / $(PASSWORD))"
+	@echo; echo "Fertig: $(URL)  (Login: $(EMAIL) / $(PASSWORD))"
 
-up: secrets ## Umgebung starten (app, worker, sass-Watcher, web) → http://localhost:8000
+up: secrets ## Umgebung starten (app, worker, sass-Watcher, web) → http://localhost:8199
 	$(DC) up -d --build --wait
-	@echo; echo "Läuft: http://localhost:$(WEB_PORT)"
-
-up-lan: secrets ## Wie up, zusätzlich im Heimnetz erreichbar (Handy-Test) → http://<LAN-IP>:8001
-	WEB_LAN_IP=$(LAN_IP) $(DC) up -d --build --wait
-	@echo; echo "Lokal: http://localhost:$(WEB_PORT)   Handy (gleiches WLAN): http://$(LAN_IP):$${WEB_LAN_PORT:-8001}"
-	@echo "Hinweis: Der Spotify-Login funktioniert nur über localhost (Redirect-URI)."
+	@echo; echo "Läuft: $(URL)"
 
 down: ## Alles stoppen
 	$(DC) down

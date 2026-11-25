@@ -427,21 +427,20 @@ Ohne `VOLUME_PREFIX` verweigert `pre-deploy.sh` den Lauf unter einem anderen Pro
 
 Lokal läuft alles in Docker (`compose.yaml`, Projekt `eat-dev`, Docker-Stufe `dev`) und wird über das `Makefile`
 bedient – lokal installiertes PHP ist nicht nötig (Symfony 8.1 braucht PHP ≥ 8.4). Dienste: `app` (PHP-FPM),
-`web` (Caddy, http://localhost:8000), `worker` (Messenger) und `sass` (baut `assets/styles/app.scss` bei Änderungen).
+`web` (Caddy, http://localhost:8199 – derselbe Port wie live), `worker` (Messenger) und `sass` (baut `assets/styles/app.scss` bei Änderungen).
 Datenbank ist SQLite (`var/data.db`), Bilder kommen im Original aus `data/images` (ohne `IMGPROXY_KEY` kein imgproxy).
 JavaScript braucht keinen Build (AssetMapper, `importmap.php`; neue Pakete mit `importmap:require`).
 
 ```bash
 make setup        # erstes Mal: starten, composer/importmap install, Schema anlegen, Login admin@eat.local / admin123
-make up           # danach: starten → http://localhost:8000
-make up-lan       # zusätzlich im WLAN erreichbar, zum Testen am Handy (http://<LAN-IP>:8001)
+make up           # danach: starten → http://localhost:8199
 make qa           # mago lint/analyze/format, Twig-Lint, PHPUnit
 make help         # alle Befehle
 ```
 
 Die Migrationen sind MySQL-spezifisch (Produktion); lokal legt `make db` das SQLite-Schema per
 `doctrine:schema:update` aus dem Mapping an. Der Worker hält Code im Speicher – nach PHP-Änderungen
-`make worker-restart`. Eigene Ports (`WEB_PORT`, `WEB_LAN_PORT`, `WEB_LAN_IP`) optional in `.env.docker.local`.
+`make worker-restart`.
 
 Tests: Unit-Tests der Turnierberechnung plus Smoke-Tests (`tests/Smoke`: `/healthz`, Login, Registrierung aus,
 Dashboard, Turnier anlegen/verwalten/ansehen, Teilnehmer) gegen eine SQLite-Testdatenbank.

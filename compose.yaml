@@ -53,11 +53,8 @@ services:
       - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
     ports:
-      # http://localhost:8000 – passt zu DEFAULT_URI und SPOTIFY_REDIRECT_URI aus .env.
-      - "127.0.0.1:${WEB_PORT:-8000}:80"
-      # Fürs Handy im Heimnetz: `make up-lan` (oder WEB_LAN_IP in .env.docker.local).
-      # Ohne Angabe nur ein zweiter Port auf diesem Rechner – nichts wird nach außen geöffnet.
-      - "${WEB_LAN_IP:-127.0.0.1}:${WEB_LAN_PORT:-8001}:80"
+      # Derselbe Port wie live (compose.prod.yaml) statt des überall belegten 8000 → http://localhost:8199
+      - "127.0.0.1:8199:80"
     depends_on:
       app:
         condition: service_healthy
