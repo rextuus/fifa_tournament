@@ -11,7 +11,6 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 #[AsTwigComponent]
 final class GoalComponent extends AbstractController
 {
-
     public Participant $participant;
 
     public Fixture $fixture;
@@ -22,7 +21,7 @@ final class GoalComponent extends AbstractController
     {
         if ($this->isHome) {
             return $this->fixture->getHomeGoals();
-        }else{
+        } else {
             return $this->fixture->getAwayGoals();
         }
     }

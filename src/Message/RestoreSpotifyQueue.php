@@ -9,9 +9,8 @@ final class RestoreSpotifyQueue
         private readonly int $userId,
         private readonly ?string $trackId,
         private readonly ?int $progressTime,
-        private readonly bool $playlistWasInterrupted = true
-    ) {
-    }
+        private readonly bool $playlistWasInterrupted = true,
+    ) {}
 
     public function getFixtureId(): int
     {

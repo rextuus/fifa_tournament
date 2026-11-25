@@ -13,7 +13,7 @@ class TeamSelectionType extends AbstractType
         $builder->add('team', TeamAutoCompleteField::class, [
             'extra_options' => [
                 'excluded_teams' => $options['excluded_teams'],
-            ]
+            ],
         ]);
     }
 

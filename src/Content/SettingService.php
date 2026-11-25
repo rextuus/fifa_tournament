@@ -11,10 +11,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class SettingService
 {
-
-    public function __construct(private SettingRepository $settingRepository, private EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(
+        private SettingRepository $settingRepository,
+        private EntityManagerInterface $entityManager,
+    ) {}
 
     public function createSettingForUser(User $user): Setting
     {

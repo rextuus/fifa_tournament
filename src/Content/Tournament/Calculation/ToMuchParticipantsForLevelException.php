@@ -4,7 +4,4 @@ declare(strict_types=1);
 
 namespace App\Content\Tournament\Calculation;
 
-class ToMuchParticipantsForLevelException extends \Exception
-{
-
-}
+class ToMuchParticipantsForLevelException extends \Exception {}

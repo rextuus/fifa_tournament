@@ -6,6 +6,4 @@ namespace App\Content\Tournament;
 
 use App\Entity\Tournament;
 
-class TournamentFactory
-{
-}
+class TournamentFactory {}

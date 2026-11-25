@@ -17,30 +17,30 @@ class ParticipantRepository extends ServiceEntityRepository
         parent::__construct($registry, Participant::class);
     }
 
-//    /**
-//     * @return Participant[] Returns an array of Participant objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Participant[] Returns an array of Participant objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('p.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Participant
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Participant
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 
     /**
      * @param array<Player> $players
@@ -55,9 +55,7 @@ class ParticipantRepository extends ServiceEntityRepository
             ->innerJoin('p.players', 'player') // Join participants with players
             ->where($qb->expr()->in('player.id', ':player_ids')) // Ensure provided players are in participant
             ->andHaving('COUNT(player.id) = :count') // Ensure the participant has exactly the same number of players
-            ->andWhere(
-                $qb->expr()->eq('SIZE(p.players)', ':count') // Ensure no extra players in the participant
-            )
+            ->andWhere($qb->expr()->eq('SIZE(p.players)', ':count')) // Ensure no extra players in the participant
             ->setParameter('player_ids', array_map(fn(Player $player) => $player->getId(), $players))
             ->setParameter('count', count($players)) // Exact number of players
             ->groupBy('p.id') // Group by participant for counting

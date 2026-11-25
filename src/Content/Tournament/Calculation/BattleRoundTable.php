@@ -20,6 +20,7 @@ class BattleRoundTable
     private const KEY_TEAM_GOALS = 'team_goals';
     private const KEY_PERSONAL_GOALS = 'personal_goals';
     private const KEY_AGAINST_GOALS = 'against_goals';
+
     public array $map = [];
 
     public function addPlayer(Player|Participant $player): void
@@ -61,20 +62,20 @@ class BattleRoundTable
 
     public function addPersonalGoals(Player|Participant $player, int $goals): void
     {
-        $this->map[$player->getId()][self::KEY_PERSONAL_GOALS] = $this->map[$player->getId(
-            )][self::KEY_PERSONAL_GOALS] + $goals;
+        $this->map[$player->getId()][self::KEY_PERSONAL_GOALS] =
+            $this->map[$player->getId()][self::KEY_PERSONAL_GOALS] + $goals;
     }
 
     public function addTeamGoals(Player|Participant $player, int $goals): void
     {
-        $this->map[$player->getId()][self::KEY_TEAM_GOALS] = $this->map[$player->getId(
-            )][self::KEY_TEAM_GOALS] + $goals;
+        $this->map[$player->getId()][self::KEY_TEAM_GOALS] =
+            $this->map[$player->getId()][self::KEY_TEAM_GOALS] + $goals;
     }
 
     public function addAgainstGoal(Player|Participant $player, int $goals): void
     {
-        $this->map[$player->getId()][self::KEY_AGAINST_GOALS] = $this->map[$player->getId(
-            )][self::KEY_AGAINST_GOALS] + $goals;
+        $this->map[$player->getId()][self::KEY_AGAINST_GOALS] =
+            $this->map[$player->getId()][self::KEY_AGAINST_GOALS] + $goals;
     }
 
     /**
@@ -126,12 +127,9 @@ class BattleRoundTable
      */
     public function getOrderedPlayersBy(TableFilter $filter): array
     {
-        return array_map(
-            function ($item) {
-                return $item[self::KEY_PLAYER];
-            },
-            $this->getOrderedBy($filter)
-        );
+        return array_map(function ($item) {
+            return $item[self::KEY_PLAYER];
+        }, $this->getOrderedBy($filter));
     }
 
     public function mergeWith(BattleRoundTable $otherBattleRoundTable): BattleRoundTable

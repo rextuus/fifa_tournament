@@ -20,8 +20,10 @@ class ScoringMap
      * @param array<Player> $players
      * @param array<int> $scores
      */
-    public function __construct(array $players, private readonly array $scores)
-    {
+    public function __construct(
+        array $players,
+        private readonly array $scores,
+    ) {
         foreach ($players as $participant) {
             $this->map[$participant->getId()] = 0;
         }

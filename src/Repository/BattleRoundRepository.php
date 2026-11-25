@@ -30,7 +30,6 @@ class BattleRoundRepository extends ServiceEntityRepository
     //            ->getResult()
     //        ;
     //    }
-
     //    public function findOneBySomeField($value): ?BattleRound
     //    {
     //        return $this->createQueryBuilder('b')

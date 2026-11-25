@@ -13,15 +13,16 @@ use App\Entity\Tournament;
 
 class FixtureService
 {
-    public function __construct(private readonly TournamentService $tournamentService, private readonly ParticipantService $participantService)
-    {
-    }
+    public function __construct(
+        private readonly TournamentService $tournamentService,
+        private readonly ParticipantService $participantService,
+    ) {}
 
     public function getScoringMap(Fixture $fixture): ScoringMap
     {
         $players = array_merge(
             $fixture->getHomeParticipant()->getPlayers()->toArray(),
-            $fixture->getAwayParticipant()->getPlayers()->toArray()
+            $fixture->getAwayParticipant()->getPlayers()->toArray(),
         );
 
         return new ScoringMap($players, $fixture->getScorers());
@@ -53,7 +54,7 @@ class FixtureService
         $finalResult = $table->getOrderedPlayersBy(TableFilter::POINTS);
 
         $singleParticipant = null;
-        if (count($finalResult) % 2 === 1){
+        if ((count($finalResult) % 2) === 1) {
             // remove last player from result
             $lastPlayer = array_pop($finalResult);
 

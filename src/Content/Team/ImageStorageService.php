@@ -18,8 +18,7 @@ class ImageStorageService
         private readonly FilesystemProvider $filesystemProvider,
         private readonly HttpClientInterface $httpClient,
         private readonly FilePathGenerator $filePathGenerator,
-    ) {
-    }
+    ) {}
 
     public function downloadAndSaveImage(string $imageUrl, string $filename): ?FileGenerationResult
     {
@@ -35,11 +34,7 @@ class ImageStorageService
 
             $hashedFolderName = self::TEAM_IMAGE_FOLDER_NAME;
 
-            $filePath = $this->filePathGenerator->getFullFilePath(
-                $hashedFolderName,
-                $filename,
-                FileExtension::PNG
-            );
+            $filePath = $this->filePathGenerator->getFullFilePath($hashedFolderName, $filename, FileExtension::PNG);
 
             $fileSystem = $this->filesystemProvider->getFilesystem(FilesystemProvider::IDENT_IMAGE);
             $fileSystem->write($filePath, $imageContent);
@@ -48,7 +43,7 @@ class ImageStorageService
                 $filePath,
                 $hashedFolderName,
                 $filename,
-                FilesystemProvider::IDENT_IMAGE
+                FilesystemProvider::IDENT_IMAGE,
             );
         } catch (\Exception $e) {
             // Handle exceptions (logging can be added here)

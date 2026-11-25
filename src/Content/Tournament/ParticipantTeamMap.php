@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Content\Tournament;
 
-
 use App\Entity\Participant;
 use App\Entity\Team;
 use App\Entity\TeamList;
@@ -30,9 +29,10 @@ class ParticipantTeamMap
     public function initFromTeamlist(Tournament $tournament): ParticipantTeamMap
     {
         foreach ($tournament->getParticipants() as $participant) {
-            $teamList = $participant->getTeamLists()->filter(
-                fn(TeamList $teamList) => $teamList->getTournament() === $tournament
-            )->first();
+            $teamList = $participant
+                ->getTeamLists()
+                ->filter(fn(TeamList $teamList) => $teamList->getTournament() === $tournament)
+                ->first();
 
             $this->teamsLists[$participant->getId()] = $teamList;
 
@@ -78,9 +78,9 @@ class ParticipantTeamMap
             }
         }
 
-        $teams =  array_filter(
+        $teams = array_filter(
             $this->teamsLists[$participant->getId()]->getTeams()->toArray(),
-            fn(Team $team) => $team->getId() === $teamId
+            fn(Team $team) => $team->getId() === $teamId,
         );
 
         return $teams[array_key_first($teams)];

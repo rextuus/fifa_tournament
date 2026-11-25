@@ -14,13 +14,11 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ParticipantService
 {
-
     public function __construct(
         private ParticipantRepository $participantRepository,
         private PlayerRepository $playerRepository,
-        private EntityManagerInterface $entityManager
-    ) {
-    }
+        private EntityManagerInterface $entityManager,
+    ) {}
 
     /**
      * @return array<Participant>
@@ -44,13 +42,13 @@ class ParticipantService
                 if (count($participants) > 0) {
                     $participantsForRound[] = $participants[0];
                     continue;
-                };
+                }
+
+                ;
 
                 $newParticipant = new Participant();
                 $newParticipant->setPlayers([$player, $partner]);
-                $newParticipant->setIdent(
-                    sprintf('%s - %s', $player->getIdent(), $partner->getIdent())
-                );
+                $newParticipant->setIdent(sprintf('%s - %s', $player->getIdent(), $partner->getIdent()));
 
                 $participantsForRound[] = $newParticipant;
             }
@@ -70,13 +68,13 @@ class ParticipantService
             if (count($participants) > 0) {
                 $participantsForRound[] = $participants[0];
                 continue;
-            };
+            }
+
+            ;
 
             $newParticipant = new Participant();
             $newParticipant->setPlayers([$player, $otherPlayer]);
-            $newParticipant->setIdent(
-                sprintf('%s - %s', $player->getIdent(), $otherPlayer->getIdent())
-            );
+            $newParticipant->setIdent(sprintf('%s - %s', $player->getIdent(), $otherPlayer->getIdent()));
 
             $participantsForRound[] = $newParticipant;
         }
@@ -97,9 +95,7 @@ class ParticipantService
 
         $newParticipant = new Participant();
         $newParticipant->setPlayers($players);
-        $newParticipant->setIdent(
-            sprintf('%s', explode(' - ', $players[0]->getIdent())[0])
-        );
+        $newParticipant->setIdent(sprintf('%s', explode(' - ', $players[0]->getIdent())[0]));
 
         $this->entityManager->persist($newParticipant);
         $this->entityManager->flush();

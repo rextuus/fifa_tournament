@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Content\File;
 
-use App\Entity\File;
 use App\Content\File\Form\Data\FileData;
+use App\Entity\File;
 
 class FileFactory
 {

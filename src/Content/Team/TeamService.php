@@ -20,8 +20,7 @@ class TeamService
         private FileService $fileService,
         private EntityManagerInterface $entityManager,
         private ImageStorageService $imageStorageService,
-    ) {
-    }
+    ) {}
 
     public function processImagesForTeams(): void
     {

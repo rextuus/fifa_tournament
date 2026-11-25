@@ -15,23 +15,20 @@ class ParticipantType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('forceGoalHymn', CheckboxType::class, ['required' => false])
-            ->add('ident', TextType::class, [
-                'label' => 'Participant Identifier',
-                'required' => true,
-                'attr' => [
-                    'class' => 'form-control',
-                ],
-            ])
-            ->add('players', EntityType::class, [
-                'class' => Player::class, // The Player entity
-                'choice_label' => 'ident', // Display the Player's "ident" property in the dropdown
-                'multiple' => true, // Allow multiple players to be selected
-                'expanded' => false, // Use a dropdown UI, not checkboxes
-                'label' => 'Associated Players',
-                'required' => false, // Players are optional
-            ]);
+        $builder->add('forceGoalHymn', CheckboxType::class, ['required' => false])->add('ident', TextType::class, [
+            'label' => 'Participant Identifier',
+            'required' => true,
+            'attr' => [
+                'class' => 'form-control',
+            ],
+        ])->add('players', EntityType::class, [
+            'class' => Player::class, // The Player entity
+            'choice_label' => 'ident', // Display the Player's "ident" property in the dropdown
+            'multiple' => true, // Allow multiple players to be selected
+            'expanded' => false, // Use a dropdown UI, not checkboxes
+            'label' => 'Associated Players',
+            'required' => false, // Players are optional
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

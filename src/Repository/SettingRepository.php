@@ -30,7 +30,6 @@ class SettingRepository extends ServiceEntityRepository
     //            ->getResult()
     //        ;
     //    }
-
     //    public function findOneBySomeField($value): ?Setting
     //    {
     //        return $this->createQueryBuilder('s')

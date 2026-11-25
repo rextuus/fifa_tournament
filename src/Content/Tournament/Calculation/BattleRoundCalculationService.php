@@ -20,9 +20,8 @@ class BattleRoundCalculationService
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TeamService $teamService
-    ) {
-    }
+        private readonly TeamService $teamService,
+    ) {}
 
     public function calculateGroupRound(Tournament $tournament): void
     {
@@ -41,10 +40,7 @@ class BattleRoundCalculationService
         $fixtures = $tournament->getRoundByNumber(1)->getFixtures()->toArray();
         shuffle($fixtures);
 
-        $shuffledIds = array_map(
-            fn(Fixture $fixture) => $fixture->getId(),
-            $fixtures
-        );
+        $shuffledIds = array_map(fn(Fixture $fixture) => $fixture->getId(), $fixtures);
 
         $battleRound->setFixtureOrder($shuffledIds);
         $this->entityManager->persist($battleRound);
@@ -72,9 +68,8 @@ class BattleRoundCalculationService
         array $participants,
         Tournament $tournament,
         Round $round,
-        bool $fixtureShouldBeHaveTwoLegs = false
+        bool $fixtureShouldBeHaveTwoLegs = false,
     ): void {
-
         $fixtures = [];
         $counter = 1;
         foreach ($participants as $index => $participant) {
@@ -90,7 +85,7 @@ class BattleRoundCalculationService
 
                 $sharedPlayers = array_intersect(
                     array_map($mapFunction, $participant->getPlayers()->toArray()),
-                    array_map($mapFunction, $participant2->getPlayers()->toArray())
+                    array_map($mapFunction, $participant2->getPlayers()->toArray()),
                 );
 
                 if (!empty($sharedPlayers)) {
@@ -103,39 +98,39 @@ class BattleRoundCalculationService
                 $fixture->setHomeParticipant($participant);
                 $fixture->setAwayParticipant($participant2);
                 $roundName = 'Gruppenphase';
-                if ($fixtureShouldBeHaveTwoLegs){
+                if ($fixtureShouldBeHaveTwoLegs) {
                     $roundName = 'Finalrunde';
                 }
-                $fixture->setIdent(
-                    sprintf('%s - %s', $roundName, $counter)
-                );
+                $fixture->setIdent(sprintf('%s - %s', $roundName, $counter));
 
-                $teamListForTournament = $participant->getTeamLists()->filter(
-                    fn(TeamList $teamList) => $teamList->getTournament() === $tournament
-                )->first();
+                $teamListForTournament = $participant
+                    ->getTeamLists()
+                    ->filter(fn(TeamList $teamList) => $teamList->getTournament() === $tournament)
+                    ->first();
 
-                if ($teamListForTournament === false){
+                if ($teamListForTournament === false) {
                     $teamList = new TeamList();
                     $teamList->setTournament($tournament);
                     $teamList->setParticipant($participant);
                     $teamList->addTeam($this->teamService->getFallbackTeam());
 
-                    $teamListForTournament  = $teamList;
+                    $teamListForTournament = $teamList;
                 }
 
                 $fixture->setHomeTeam($teamListForTournament->getTeams()->first());
 
-                $teamListForTournament = $participant2->getTeamLists()->filter(
-                    fn(TeamList $teamList) => $teamList->getTournament() === $tournament
-                )->first();
+                $teamListForTournament = $participant2
+                    ->getTeamLists()
+                    ->filter(fn(TeamList $teamList) => $teamList->getTournament() === $tournament)
+                    ->first();
 
-                if ($teamListForTournament === false){
+                if ($teamListForTournament === false) {
                     $teamList = new TeamList();
                     $teamList->setTournament($tournament);
                     $teamList->setParticipant($participant);
                     $teamList->addTeam($this->teamService->getFallbackTeam());
 
-                    $teamListForTournament  = $teamList;
+                    $teamListForTournament = $teamList;
                 }
 
                 $fixture->setAwayTeam($teamListForTournament->getTeams()->first());
@@ -161,7 +156,7 @@ class BattleRoundCalculationService
             $round = null;
         }
 
-        if ($round !== null){
+        if ($round !== null) {
             return $round;
         }
 

@@ -9,9 +9,9 @@ class FixtureMap
     /**
      * @param PotentialFixture[] $map
      */
-    public function __construct(private array $map)
-    {
-    }
+    public function __construct(
+        private array $map,
+    ) {}
 
     public function getFixtureOccurrenceStatistic(): array
     {
@@ -21,7 +21,7 @@ class FixtureMap
             rsort($values);
 
             $key = sprintf('%s-%s', $values[0], $values[1]);
-            if ((!array_key_exists($key, $statistic))) {
+            if (!array_key_exists($key, $statistic)) {
                 $statistic[$key] = 0;
             }
             $statistic[$key]++;
@@ -46,8 +46,8 @@ class FixtureMap
     public function checkDoubleOccurrenceIsHigherThan(int $maxAllowed): bool
     {
         foreach ($this->getFixtureOccurrenceStatistic() as $key => $statistic) {
-            if ($statistic - 1 > $maxAllowed && $key !== '-') {
-                return true ;
+            if (($statistic - 1) > $maxAllowed && $key !== '-') {
+                return true;
             }
         }
 

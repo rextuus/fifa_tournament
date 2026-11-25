@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
+use \App\Content\Tournament\TournamentState;
+use \App\Content\Tournament\TournamentType;
 use App\Content\Tournament\TournamentLevel;
 use App\Repository\TournamentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use \App\Content\Tournament\TournamentState;
 use Exception;
-use \App\Content\Tournament\TournamentType;
 
 #[ORM\Entity(repositoryClass: TournamentRepository::class)]
 class Tournament
@@ -178,7 +178,6 @@ class Tournament
         return $this;
     }
 
-
     public function getNumberOfChoices(): ?int
     {
         return $this->numberOfChoices;
@@ -208,7 +207,10 @@ class Tournament
      */
     public function getRoundByNumber(int $roundNumber): Round
     {
-        $round = $this->getRounds()->filter(fn(Round $round) => $round->getNr() === $roundNumber)->first();
+        $round = $this
+            ->getRounds()
+            ->filter(fn(Round $round) => $round->getNr() === $roundNumber)
+            ->first();
         if (!$round) {
             throw new Exception('Round not found: ' . $roundNumber);
         }
@@ -242,8 +244,8 @@ class Tournament
     public function getEditRoute(): string
     {
         match ($this->getType()) {
-            TournamentType::CLASSIC => $editRoute =  'tournament_manage',
-            TournamentType::GROUP_BATTLE => $editRoute =  'tournament_manage_group_battle'
+            TournamentType::CLASSIC => $editRoute = 'tournament_manage',
+            TournamentType::GROUP_BATTLE => $editRoute = 'tournament_manage_group_battle',
         };
 
         return $editRoute;

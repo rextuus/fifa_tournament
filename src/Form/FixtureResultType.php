@@ -5,8 +5,8 @@ namespace App\Form;
 use App\Content\Fixture\ScoringMap;
 use App\Form\Data\FixtureResultData;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,15 +16,13 @@ class FixtureResultType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         // Add static fields for home and away goals
-        $builder
-            ->add('homeGoals', IntegerType::class, [
-                'label' => 'Home Goals',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter home goals'],
-            ])
-            ->add('awayGoals', IntegerType::class, [
-                'label' => 'Away Goals',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter away goals'],
-            ]);
+        $builder->add('homeGoals', IntegerType::class, [
+            'label' => 'Home Goals',
+            'attr' => ['class' => 'form-control', 'placeholder' => 'Enter home goals'],
+        ])->add('awayGoals', IntegerType::class, [
+            'label' => 'Away Goals',
+            'attr' => ['class' => 'form-control', 'placeholder' => 'Enter away goals'],
+        ]);
 
         // Add dynamic player fields
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($options) {
@@ -59,7 +57,7 @@ class FixtureResultType extends AbstractType
 
                 foreach ($form->all() as $fieldName => $field) {
                     if (str_starts_with($fieldName, 'player_')) {
-                        $playerId = (int)str_replace('player_', '', $fieldName);
+                        $playerId = (int) str_replace('player_', '', $fieldName);
                         $goals = $field->getData(); // Get the submitted value
                         $playerGoals[$playerId] = $goals;
                     }

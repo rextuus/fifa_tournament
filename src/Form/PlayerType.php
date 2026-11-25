@@ -12,12 +12,11 @@ class PlayerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('ident', TextType::class, [
-                'label' => 'Player Identifier',
-                'required' => true,
-                'attr' => ['class' => 'form-control'],
-            ]);
+        $builder->add('ident', TextType::class, [
+            'label' => 'Player Identifier',
+            'required' => true,
+            'attr' => ['class' => 'form-control'],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

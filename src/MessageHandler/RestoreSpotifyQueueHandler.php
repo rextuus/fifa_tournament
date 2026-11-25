@@ -16,9 +16,8 @@ final class RestoreSpotifyQueueHandler
         private readonly SpotifyService $spotifyService,
         private readonly FixtureRepository $fixtureRepository,
         private readonly UserRepository $userRepository,
-        private readonly EntityManagerInterface $entityManager
-    ) {
-    }
+        private readonly EntityManagerInterface $entityManager,
+    ) {}
 
     public function __invoke(RestoreSpotifyQueue $message): void
     {
@@ -27,10 +26,10 @@ final class RestoreSpotifyQueueHandler
         $this->spotifyService->restoreSpotifyQueueAsBeforeGoalHymnBreak(
             $message->getProgressTime(),
             $user,
-            $message->isPlaylistWasInterrupted()
+            $message->isPlaylistWasInterrupted(),
         );
 
-        if ($message->getFixtureId() !== -1){
+        if ($message->getFixtureId() !== -1) {
             $fixture = $this->fixtureRepository->find($message->getFixtureId());
             $fixture->setIsGoalMusicRunning(false);
             $this->entityManager->flush();

@@ -14,18 +14,14 @@ use Symfony\Component\Validator\Constraints\File;
  */
 class EditProfileImageData
 {
-    #[File(
-        maxSize: '1600Ki',
-        filenameMaxLength: 50,
-        extensions: ['jpg', 'jpeg', 'png']
-    )]
+    #[File(maxSize: '1600Ki', filenameMaxLength: 50, extensions: ['jpg', 'jpeg', 'png'])]
     private ?UploadedFile $profileImage = null;
 
     private bool $deleteProfileImage = false;
 
-    public function __construct(private ImageType $imageType)
-    {
-    }
+    public function __construct(
+        private ImageType $imageType,
+    ) {}
 
     public function getProfileImage(): ?UploadedFile
     {

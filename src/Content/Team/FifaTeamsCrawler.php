@@ -38,29 +38,31 @@ class FifaTeamsCrawler
         $crawler = new Crawler($htmlContent);
 
         // Find all team rows in the table
-        $teams = $crawler->filter('tbody > tr')->each(function (Crawler $node) {
-            // Extract team name
-            $teamNameNode = $node->filter('td .entries .entry-font a');
-            $teamName = $teamNameNode->count() > 0 ? $teamNameNode->text() : 'Unknown';
+        $teams = $crawler
+            ->filter('tbody > tr')
+            ->each(function (Crawler $node) {
+                // Extract team name
+                $teamNameNode = $node->filter('td .entries .entry-font a');
+                $teamName = $teamNameNode->count() > 0 ? $teamNameNode->text() : 'Unknown';
 
-            // Extract team URL
-            $teamUrl = $teamNameNode->count() > 0 ? $teamNameNode->attr('href') : null;
+                // Extract team URL
+                $teamUrl = $teamNameNode->count() > 0 ? $teamNameNode->attr('href') : null;
 
-            // Extract league
-            $leagueNode = $node->filter('td .entries .entry-subtext-font a');
-            $league = $leagueNode->count() > 0 ? $leagueNode->text() : 'Unknown';
+                // Extract league
+                $leagueNode = $node->filter('td .entries .entry-subtext-font a');
+                $league = $leagueNode->count() > 0 ? $leagueNode->text() : 'Unknown';
 
-            // Extract lazy-loaded image URL
-            $imageNode = $node->filter('td .entries a .entry-bg-team img');
-            $imageUrl = $imageNode->count() > 0 ? $imageNode->attr('data-src') : null;
+                // Extract lazy-loaded image URL
+                $imageNode = $node->filter('td .entries a .entry-bg-team img');
+                $imageUrl = $imageNode->count() > 0 ? $imageNode->attr('data-src') : null;
 
-            return [
-                'name' => $teamName,
-                'url' => $teamUrl,
-                'league' => $league,
-                'image' => $imageUrl,
-            ];
-        });
+                return [
+                    'name' => $teamName,
+                    'url' => $teamUrl,
+                    'league' => $league,
+                    'image' => $imageUrl,
+                ];
+            });
 
         $teams = array_filter($teams, function (array $team) {
             return 'Unknown' !== $team['name'];

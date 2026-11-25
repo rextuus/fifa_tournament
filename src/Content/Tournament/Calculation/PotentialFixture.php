@@ -6,9 +6,10 @@ namespace App\Content\Tournament\Calculation;
 
 class PotentialFixture
 {
-    public function __construct(private ?int $home = null, private ?int $away = null)
-    {
-    }
+    public function __construct(
+        private ?int $home = null,
+        private ?int $away = null,
+    ) {}
 
     public function isFree(): bool
     {

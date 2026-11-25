@@ -26,15 +26,16 @@ final class TeamListing
      */
     private array $teams;
 
-    public function __construct(private TeamListRepository $teamListRepository)
-    {
-    }
+    public function __construct(
+        private TeamListRepository $teamListRepository,
+    ) {}
 
     public function getTeams(): array
     {
-        $teamList = $this->teamListRepository->findOneBy(
-            ['participant' => $this->participant, 'tournament' => $this->tournament],
-        );
+        $teamList = $this->teamListRepository->findOneBy([
+            'participant' => $this->participant,
+            'tournament' => $this->tournament,
+        ]);
 
         if (!$teamList) {
             return [];
@@ -45,9 +46,10 @@ final class TeamListing
 
     public function getTeamListId(): int
     {
-        $teamList = $this->teamListRepository->findOneBy(
-            ['participant' => $this->participant, 'tournament' => $this->tournament],
-        );
+        $teamList = $this->teamListRepository->findOneBy([
+            'participant' => $this->participant,
+            'tournament' => $this->tournament,
+        ]);
 
         if (!$teamList) {
             return 0;

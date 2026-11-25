@@ -16,8 +16,7 @@ final class CheckQueueHandler
         private readonly UserRepository $userRepository,
         private readonly SettingService $settingService,
         private readonly EntityManagerInterface $entityManager,
-    ) {
-    }
+    ) {}
 
     public function __invoke(CheckQueue $message): void
     {

@@ -11,8 +11,7 @@ class FileGenerationResult
         private readonly string $directoryPath,
         private readonly string $fileName,
         private readonly string $filesystemIdent,
-    ) {
-    }
+    ) {}
 
     public static function create(
         string $fullFilePath,

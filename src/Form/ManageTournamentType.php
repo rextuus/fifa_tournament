@@ -22,7 +22,7 @@ class ManageTournamentType extends AbstractType
                 'required' => true,
                 'choices' => array_combine(
                     array_map(fn($level) => $level->name, TournamentLevel::cases()),
-                    TournamentLevel::cases()
+                    TournamentLevel::cases(),
                 ),
                 'choice_label' => fn($choice) => $choice->name . ' (' . $choice->value . ')',
                 'choice_value' => fn(?TournamentLevel $choice) => $choice?->value,

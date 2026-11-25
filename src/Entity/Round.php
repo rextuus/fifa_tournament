@@ -147,11 +147,9 @@ class Round
     {
         $fixtures = [];
         foreach ($order as $fixtureNr) {
-            $fixtures[] = $this->fixtures->filter(
-                function (Fixture $fixture) use ($fixtureNr) {
-                    return $fixtureNr === $fixture->getId();
-                }
-            )->first();
+            $fixtures[] = $this->fixtures->filter(function (Fixture $fixture) use ($fixtureNr) {
+                return $fixtureNr === $fixture->getId();
+            })->first();
         }
 
         return $fixtures;

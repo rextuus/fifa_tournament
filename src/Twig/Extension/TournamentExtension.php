@@ -16,9 +16,9 @@ use Twig\TwigFunction;
 #[AutoconfigureTag('twig.extension')]
 class TournamentExtension extends AbstractExtension
 {
-    public function __construct(private readonly TournamentService $tournamentService)
-    {
-    }
+    public function __construct(
+        private readonly TournamentService $tournamentService,
+    ) {}
 
     /**
      * @return array<TwigFunction>
@@ -27,7 +27,11 @@ class TournamentExtension extends AbstractExtension
     {
         return [
             new TwigFunction('tournament_is_valid', [$this, 'tournamentIsValid'], ['is_safe' => ['html']]),
-            new TwigFunction('tournament_participant_is_valid', [$this, 'tournamentParticipantIsValid'], ['is_safe' => ['html']]),
+            new TwigFunction(
+                'tournament_participant_is_valid',
+                [$this, 'tournamentParticipantIsValid'],
+                ['is_safe' => ['html']],
+            ),
         ];
     }
 

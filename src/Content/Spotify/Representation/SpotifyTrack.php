@@ -10,9 +10,8 @@ class SpotifyTrack
         private string $albumName,
         private string $coverUrl,
         private string $spotifyId,
-        private int $duration
-    ) {
-    }
+        private int $duration,
+    ) {}
 
     public function getTrackName(): string
     {

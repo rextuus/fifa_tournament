@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BaseController extends AbstractController
 {
-    public function __construct(private readonly ImageService $imageService)
-    {
-    }
+    public function __construct(
+        private readonly ImageService $imageService,
+    ) {}
 
     protected function updateProfileImage(ImageAwareInterface $entity, EditProfileImageData $data): void
     {

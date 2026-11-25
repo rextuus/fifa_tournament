@@ -34,13 +34,11 @@ final class ParticipantComponent
     #[LiveProp(writable: true)]
     public bool $showQrCode = false; // Add this Live Prop for QR Code visibility
 
-
     public function __construct(
         private readonly QrCodeGenerator $qrCodeGenerator,
         private readonly SpotifyService $spotifyService,
         private readonly UrlGeneratorInterface $urlGenerator,
-    ) {
-    }
+    ) {}
 
     #[LiveAction]
     public function createQrCode(): void
@@ -48,7 +46,7 @@ final class ParticipantComponent
         $this->qrCode = $this->qrCodeGenerator->generateQrCode(
             'spotify_search',
             $this->getEntity()->getId(),
-            $this->getTypeForEntity()
+            $this->getTypeForEntity(),
         );
     }
 
@@ -86,25 +84,18 @@ final class ParticipantComponent
 
     public function getTestRoute(): string
     {
-
         if ($this->participant !== null) {
-            return $this->urlGenerator->generate(
-                'spotify_test_participant',
-                ['id' => $this->participant->getId()]
-            );
+            return $this->urlGenerator->generate('spotify_test_participant', ['id' => $this->participant->getId()]);
         }
 
-        return $this->urlGenerator->generate(
-            'spotify_test_player',
-            ['id' => $this->player->getId()]
-        );
+        return $this->urlGenerator->generate('spotify_test_player', ['id' => $this->player->getId()]);
     }
 
     public function getSpotifyName(): string
     {
         try {
             $displayName = $this->spotifyService->getLoginInformation();
-        } catch (NoAccessTokenFoundException  $e) {
+        } catch (NoAccessTokenFoundException $e) {
             $displayName = 'not_logged_in';
         }
 

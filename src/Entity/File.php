@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping\Cache;
  * @license 2024 DocCheck Community GmbH
  */
 #[ORM\Entity(repositoryClass: FileRepository::class)]
-#[ORM\HasLifecycleCallbacks()]
+#[ORM\HasLifecycleCallbacks]
 #[Cache(usage: 'NONSTRICT_READ_WRITE', region: 'cream_orm_cache')]
 class File extends BaseEntity
 {

@@ -13,9 +13,9 @@ use Twig\TwigFunction;
 #[AutoconfigureTag('twig.extension')]
 class ImageExtension extends AbstractExtension
 {
-    public function __construct(private readonly ImageService $imageService)
-    {
-    }
+    public function __construct(
+        private readonly ImageService $imageService,
+    ) {}
 
     /**
      * @return array<TwigFunction>
