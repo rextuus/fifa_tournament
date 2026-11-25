@@ -425,22 +425,23 @@ Ohne `VOLUME_PREFIX` verweigert `pre-deploy.sh` den Lauf unter einem anderen Pro
 
 ## Entwicklung
 
-Lokal mit SQLite (`.env`, eigene Werte in `.env.local`), `symfony serve` und `php bin/console sass:build --watch`
-(SCSS). JavaScript braucht keinen Build (AssetMapper, `importmap.php`; neue Pakete mit `importmap:require`).
-Kein Node/Webpack mehr. Ohne `IMGPROXY_KEY` werden Bilder im Original ausgeliefert.
-
-Achtung: Symfony 8.1 braucht **PHP ≥ 8.4** – mit dem lokalen PHP 8.2 geht es nicht mehr; Composer, Tests und mago
-z. B. im Container:
+Lokal läuft alles in Docker (`compose.yaml`, Projekt `eat-dev`, Docker-Stufe `dev`) und wird über das `Makefile`
+bedient – lokal installiertes PHP ist nicht nötig (Symfony 8.1 braucht PHP ≥ 8.4). Dienste: `app` (PHP-FPM),
+`web` (Caddy, http://localhost:8000), `worker` (Messenger) und `sass` (baut `assets/styles/app.scss` bei Änderungen).
+Datenbank ist SQLite (`var/data.db`), Bilder kommen im Original aus `data/images` (ohne `IMGPROXY_KEY` kein imgproxy).
+JavaScript braucht keinen Build (AssetMapper, `importmap.php`; neue Pakete mit `importmap:require`).
 
 ```bash
-docker build -f docker/php/Dockerfile --target base -t eat-dev .
-D='docker run --rm -it -u '"$(id -u):$(id -g)"' -e HOME=/tmp -v '"$PWD"':/srv/app eat-dev'
-$D composer install
-$D php vendor/bin/phpunit            # baut beim ersten Mal das SCSS (sass:build)
-$D vendor/bin/mago lint
-$D vendor/bin/mago analyze
-$D vendor/bin/mago format --check    # anwenden: vendor/bin/mago format
+make setup        # erstes Mal: starten, composer/importmap install, Schema anlegen, Login admin@eat.local / admin123
+make up           # danach: starten → http://localhost:8000
+make up-lan       # zusätzlich im WLAN erreichbar, zum Testen am Handy (http://<LAN-IP>:8001)
+make qa           # mago lint/analyze/format, Twig-Lint, PHPUnit
+make help         # alle Befehle
 ```
+
+Die Migrationen sind MySQL-spezifisch (Produktion); lokal legt `make db` das SQLite-Schema per
+`doctrine:schema:update` aus dem Mapping an. Der Worker hält Code im Speicher – nach PHP-Änderungen
+`make worker-restart`. Eigene Ports (`WEB_PORT`, `WEB_LAN_PORT`, `WEB_LAN_IP`) optional in `.env.docker.local`.
 
 Tests: Unit-Tests der Turnierberechnung plus Smoke-Tests (`tests/Smoke`: `/healthz`, Login, Registrierung aus,
 Dashboard, Turnier anlegen/verwalten/ansehen, Teilnehmer) gegen eine SQLite-Testdatenbank.

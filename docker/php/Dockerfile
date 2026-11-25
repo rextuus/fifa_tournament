@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 # eat – Produktions-Images (compose.prod.yaml). Stufen:
 #   base    PHP-FPM mit allen Erweiterungen
+#   dev     lokale Entwicklung (compose.yaml, Makefile): php.ini-development, Code per Bind-Mount
 #   vendor  Composer-Abhängigkeiten ohne dev
 #   prod    App-Image für app, worker, migrate; baut die Assets (AssetMapper + sass-bundle, kein Node)
 #   web     Caddy mit public/ aus prod (index.php, kompilierte Assets unter /assets)
@@ -23,6 +24,12 @@ COPY docker/php/php-fpm.d/zz-app.conf /usr/local/etc/php-fpm.d/zz-app.conf
 RUN mkdir -p /srv/eat/images && chown www-data:www-data /srv/eat/images
 
 WORKDIR /srv/app
+
+# Lokale Entwicklung: Code kommt per Bind-Mount, läuft als Host-Benutzer (compose.yaml: user UID:GID).
+FROM base AS dev
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+COPY docker/php/conf.d/dev.ini $PHP_INI_DIR/conf.d/zzz-dev.ini
+ENV HOME=/tmp COMPOSER_HOME=/tmp/composer
 
 FROM base AS vendor
 COPY composer.json composer.lock symfony.lock ./

@@ -1,20 +1,66 @@
+# eat – lokale Entwicklungsumgebung (Bedienung über das Makefile: `make help`).
+# SQLite (var/data.db) statt MySQL, Bilder im Original aus data/images (kein imgproxy).
+# Produktion ist davon unabhängig: compose.prod.yaml (docs/deployment.md).
+name: eat-dev
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: docker/php/Dockerfile
+    target: dev
+  image: eat-app:dev
+  # Als Host-Benutzer laufen, damit var/, vendor/ und data/ dir gehören (UID/GID setzt das Makefile).
+  user: "${UID:-1000}:${GID:-1000}"
+  volumes:
+    - ./:/srv/app:rw
+  environment:
+    # Caddy im Stack reicht Host/Schema weiter.
+    TRUSTED_PROXIES: private_ranges
+
+# Wartet, bis `make install` vendor/ angelegt hat (frischer Checkout), statt in einer Neustart-Schleife zu hängen.
+x-wait-for-vendor: &wait-for-vendor 'until [ -f vendor/autoload.php ]; do echo "warte auf vendor/ (make install) …"; sleep 3; done; exec "$$@"'
 
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
+  app:
+    <<: *app
+    healthcheck:
+      test: ["CMD-SHELL", "SCRIPT_NAME=/fpm-ping SCRIPT_FILENAME=/fpm-ping REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Messenger-Worker (Spotify-Warteschlange wiederherstellen, CheckQueue).
+  # Hält alten Code im Speicher: nach PHP-Änderungen `make worker-restart`.
+  worker:
+    <<: *app
+    restart: unless-stopped
+    entrypoint: ["sh", "-c", *wait-for-vendor, "--"]
+    command: ["php", "bin/console", "messenger:consume", "async", "--time-limit=3600", "--memory-limit=128M", "-vv"]
+
+  # Baut assets/styles/app.scss bei jeder Änderung neu (var/sass/).
+  sass:
+    <<: *app
+    restart: unless-stopped
+    entrypoint: ["sh", "-c", *wait-for-vendor, "--"]
+    command: ["php", "bin/console", "sass:build", "--watch"]
+
+  web:
+    image: caddy:2.11.9-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
+      SERVER_NAME: ":80"
     volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+      - ./public:/srv/app/public:ro
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    ports:
+      # http://localhost:8000 – passt zu DEFAULT_URI und SPOTIFY_REDIRECT_URI aus .env.
+      - "127.0.0.1:${WEB_PORT:-8000}:80"
+      # Fürs Handy im Heimnetz: `make up-lan` (oder WEB_LAN_IP in .env.docker.local).
+      # Ohne Angabe nur ein zweiter Port auf diesem Rechner – nichts wird nach außen geöffnet.
+      - "${WEB_LAN_IP:-127.0.0.1}:${WEB_LAN_PORT:-8001}:80"
+    depends_on:
+      app:
+        condition: service_healthy
 
 volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
+  caddy_data:
