@@ -31,9 +31,8 @@ class SpotifyService
         #[Autowire('%env(SPOTIFY_CLIENT_SECRET)%')]
         private readonly string $clientSecret,
         #[Autowire('%env(SPOTIFY_REDIRECT_URI)%')]
-        private readonly string $redirectUri
-    ) {
-    }
+        private readonly string $redirectUri,
+    ) {}
 
     private function getApi(?User $user = null): SpotifyWebAPI
     {
@@ -49,11 +48,7 @@ class SpotifyService
 
     public function createAccessToken(string $authorizationCode, User $user): void
     {
-        $session = new Session(
-            $this->clientId,
-            $this->clientSecret,
-            $this->redirectUri
-        );
+        $session = new Session($this->clientId, $this->clientSecret, $this->redirectUri);
 
         $session->requestAccessToken($authorizationCode);
 
@@ -63,14 +58,9 @@ class SpotifyService
         $this->storeTokensToDb($accessToken, $refreshToken, $session->getTokenExpiration(), $user);
     }
 
-
     public function getOauthToken(): string
     {
-        $session = new Session(
-            $this->clientId,
-            $this->clientSecret,
-            $this->redirectUri
-        );
+        $session = new Session($this->clientId, $this->clientSecret, $this->redirectUri);
 
         $state = $session->generateState();
         $options = [
@@ -94,7 +84,7 @@ class SpotifyService
         string $accessToken,
         string $refreshToken,
         int $expiration,
-        User $user
+        User $user,
     ): SpotifyAccessToken {
         $spotifyAccessToken = new SpotifyAccessToken();
         $spotifyAccessToken->setAccessToken($accessToken);
@@ -110,9 +100,7 @@ class SpotifyService
     public function checkSpotifyIsLoggedIn(): bool
     {
         try {
-            $spotifyAccessToken = $this->spotifyAccessTokenRepository->getNewestToken(
-                $this->security->getUser()
-            );
+            $spotifyAccessToken = $this->spotifyAccessTokenRepository->getNewestToken($this->security->getUser());
         } catch (NoAccessTokenFoundException $e) {
             return false;
         }
@@ -130,22 +118,16 @@ class SpotifyService
             $user = $this->security->getUser();
         }
 
-        $spotifyAccessToken = $this->spotifyAccessTokenRepository->getNewestToken(
-            $user
-        );
+        $spotifyAccessToken = $this->spotifyAccessTokenRepository->getNewestToken($user);
 
         // check if current token is valid
-        $currentTime = (new DateTime())->getTimestamp();
+        $currentTime = new DateTime()->getTimestamp();
         $expirationDate = $spotifyAccessToken->getExpirationDate();
         if ($currentTime < $expirationDate) {
             return $spotifyAccessToken;
         }
 
-        $session = new Session(
-            $this->clientId,
-            $this->clientSecret,
-            $this->redirectUri
-        );
+        $session = new Session($this->clientId, $this->clientSecret, $this->redirectUri);
 
         $session->setAccessToken($spotifyAccessToken->getAccessToken());
         $session->setRefreshToken($spotifyAccessToken->getRefreshToken());
@@ -158,14 +140,14 @@ class SpotifyService
             $session->getAccessToken(),
             $session->getRefreshToken(),
             $session->getTokenExpiration(),
-            $spotifyAccessToken->getUser()
+            $spotifyAccessToken->getUser(),
         );
     }
 
     public function getImageUrlOfCurrentlyPlayingSong(): array
     {
         $api = new SpotifyWebAPI();
-        $api->setAccessToken($this->getValidAccessToken());
+        $api->setAccessToken($this->getValidAccessToken()->getAccessToken());
         $currentTrack = json_decode(json_encode($api->getMyCurrentTrack()), true);
         if (!array_key_exists('item', $currentTrack)) {
             return [];
@@ -196,7 +178,7 @@ class SpotifyService
         int $fixtureId,
         string $trackId,
         int $startTime,
-        int $playTimeInSeconds = 10
+        int $playTimeInSeconds = 10,
     ): bool {
         $api = $this->getApi();
 
@@ -209,13 +191,12 @@ class SpotifyService
             $playlistWasInterrupted = true;
             $currentSongId = $currentSongInfo->item->id;
             $currentSongProgress = $currentSongInfo->progress_ms;
-
         }
 
         try {
             $api->queue($trackId);
         } catch (SpotifyWebAPIException $e) {
-            if ($e->getMessage() === 'Player command failed: No active device found'){
+            if ($e->getMessage() === 'Player command failed: No active device found') {
                 $devices = $api->getMyDevices()->devices;
                 $id = $devices[0]->id;
 
@@ -236,7 +217,7 @@ class SpotifyService
             $user->getId(),
             $currentSongId,
             $currentSongProgress,
-            $playlistWasInterrupted
+            $playlistWasInterrupted,
         );
 
         $this->messageBus->dispatch($message, [new DelayStamp($playTimeInSeconds * 1000)]);
@@ -247,16 +228,16 @@ class SpotifyService
     public function restoreSpotifyQueueAsBeforeGoalHymnBreak(
         int $progress,
         User $user,
-        bool $playlistWasInterrupted
+        bool $playlistWasInterrupted,
     ): void {
         $this->api = null;
         $api = $this->getApi($user);
 
         // Move to the requeued current song and set playback position
-        if ($playlistWasInterrupted){
+        if ($playlistWasInterrupted) {
             $api->next();
             $api->seek(['position_ms' => $progress]);
-        }else{
+        } else {
             $api->pause();
         }
     }
@@ -329,7 +310,7 @@ class SpotifyService
     public function logOut(): string
     {
         $api = $this->getApi();
-
+        $me = $api->me();
 
         return $me->display_name;
     }

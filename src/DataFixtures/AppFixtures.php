@@ -29,8 +29,7 @@ class AppFixtures extends Fixture
         private readonly TournamentService $tournamentService,
         private UserPasswordHasherInterface $passwordHasher,
         private FixtureService $fixtureService,
-    ) {
-    }
+    ) {}
 
     public function load(ObjectManager $manager): void
     {
@@ -39,7 +38,6 @@ class AppFixtures extends Fixture
         $hashedPassword = $this->passwordHasher->hashPassword($user, 'a');
         $user->setPassword($hashedPassword);
         $manager->persist($user);
-
 
         // Step 1: Import Teams
         $this->teamImportService->importTeams(StarRating::FIVE_STAR); // Adjust to the desired star rating for teams
@@ -53,7 +51,7 @@ class AppFixtures extends Fixture
             'Erling Haaland',
             'Robert Lewandowski',
             'Kevin De Bruyne',
-            'Mohamed Salah'
+            'Mohamed Salah',
         ];
         $players = [];
         foreach ($playerNames as $playerName) {
@@ -64,9 +62,8 @@ class AppFixtures extends Fixture
         }
         $this->createBattleTournament($manager, $players);
 
-
         // Step 5: Calculate rounds for the tournament
-//        $this->tournamentService->calculateRoundsForTournament($tournament);
+        //        $this->tournamentService->calculateRoundsForTournament($tournament);
     }
 
     private function createBattleTournament(ObjectManager $manager, array $players): void
@@ -77,7 +74,8 @@ class AppFixtures extends Fixture
         $numberOfChoices = 1;
 
         $tournament = new Tournament();
-        $tournament->setIdent('Sample Tournament')
+        $tournament
+            ->setIdent('Sample Tournament')
             ->setLevel($level) // Adjust to match your enum
             ->setState(TournamentState::OPEN)
             ->setType(TournamentType::GROUP_BATTLE)
@@ -126,7 +124,6 @@ class AppFixtures extends Fixture
         // start tournament
         $this->tournamentService->calculateRoundsForTournament($tournament);
 
-
         // set results
         $fixturesToFill = 15;
         $order = $tournament->getBattleRound()->getFixtureOrder();
@@ -134,7 +131,7 @@ class AppFixtures extends Fixture
 
         $fixturesToFill = count($fixtures) - 1;
         $counter = 0;
-        foreach ($fixtures as $fixture){
+        foreach ($fixtures as $fixture) {
             $result = new Result();
             $result->setHomeGoals(0);
             $result->setAwayGoals(0);
@@ -166,9 +163,9 @@ class AppFixtures extends Fixture
             $fixture->setFirstLeg($result);
 
             // set a random generated date to fixture.played
-            $yesterday = new \DateTime('yesterday');
+            $yesterday = new \DateTimeImmutable('yesterday');
             $randomSeconds = random_int(0, 86399);
-            $randomDateTime = (clone $yesterday)->add(new \DateInterval("PT{$randomSeconds}S"));
+            $randomDateTime = $yesterday->add(new \DateInterval("PT{$randomSeconds}S"));
 
             $data = new FixtureResultData();
             $scoringMap = $this->fixtureService->getScoringMap($fixture);
@@ -176,7 +173,7 @@ class AppFixtures extends Fixture
                 $data->setPlayerGoal($player, $scoreValue);
             }
 
-            if ($counter < $fixturesToFill){
+            if ($counter < $fixturesToFill) {
                 $fixture->setPlayed($randomDateTime);
                 $result->setPlayed($randomDateTime);
             }
@@ -197,13 +194,14 @@ class AppFixtures extends Fixture
      */
     private function createClassicTournament(ObjectManager $manager, array $players): array
     {
-// Step 3: Create a Tournament
+        // Step 3: Create a Tournament
         $participantsToCreate = 3;
         $level = TournamentLevel::QUARTER_FINAL;
-        $numberOfChoices = (int)floor($level->getNumberOfParticipantPlaces() / $participantsToCreate);
+        $numberOfChoices = (int) floor($level->getNumberOfParticipantPlaces() / $participantsToCreate);
 
         $tournament = new Tournament();
-        $tournament->setIdent('Sample Tournament')
+        $tournament
+            ->setIdent('Sample Tournament')
             ->setLevel($level) // Adjust to match your enum
             ->setState(TournamentState::OPEN)
             ->setNumberOfChoices($numberOfChoices)
@@ -218,7 +216,7 @@ class AppFixtures extends Fixture
                 'Pimmelbande',
                 'Whiskey Walters',
                 'Vollzeitwichser',
-                'Anal-Anarchisten'
+                'Anal-Anarchisten',
             ];
 
             shuffle($participantNames); // Shuffle for randomness

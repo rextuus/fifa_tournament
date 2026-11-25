@@ -14,12 +14,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/team')]
 final class TeamController extends BaseController
 {
-    public function __construct(protected ImageService $imageService)
-    {
+    public function __construct(
+        protected ImageService $imageService,
+    ) {
         parent::__construct($imageService);
     }
 
-    #[Route('/edit/{id}', name: 'team_edit')]
+    #[Route('/edit/{id:team}', name: 'team_edit')]
     public function edit(Team $team, Request $request): Response
     {
         $form = $this->createForm(
@@ -28,8 +29,8 @@ final class TeamController extends BaseController
             [
                 'show_delete_button' => (bool) $team->getImageFile(),
                 'current_image_url' => $team->getImageFile(),
-                'default_image_path' => 'build/images/thumbnails/client_default.png',
-            ]
+                'default_image_path' => 'images/thumbnails/client_default.png',
+            ],
         );
 
         //        dd($form);
@@ -42,7 +43,7 @@ final class TeamController extends BaseController
         ]);
     }
 
-    #[Route('/edit/profile-image/{id}', name: 'team_edit_profile_image')]
+    #[Route('/edit/profile-image/{id:team}', name: 'team_edit_profile_image')]
     public function editProfileImageAjax(Team $team, Request $request): Response
     {
         $form = $this->createAjaxForm(
@@ -52,7 +53,7 @@ final class TeamController extends BaseController
             [
                 'show_delete_button' => false,
                 'current_image_url' => $team->getImageFile(),
-                'default_image_path' => 'build/images/thumbnails/client_default.png',
+                'default_image_path' => 'images/thumbnails/client_default.png',
             ],
         );
 
@@ -73,19 +74,15 @@ final class TeamController extends BaseController
         return $this->renderAjaxForm($form);
     }
 
-    #[Route('/edit/profile-image-full/{id}', name: 'team_edit_profile_image2')]
+    #[Route('/edit/profile-image-full/{id:team}', name: 'team_edit_profile_image2')]
     public function editProfileImage2(Team $team, Request $request): Response
     {
-        $form = $this->createForm(
-            EditProfileImageType::class,
-            new EditProfileImageData(ImageType::TEAM_IMAGE),
-            [
-                'show_delete_button' => false,
-                'show_save_button' => true,
-                'current_image_url' => $team->getImageFile(),
-                'default_image_path' => 'build/images/thumbnails/client_default.png',
-            ],
-        );
+        $form = $this->createForm(EditProfileImageType::class, new EditProfileImageData(ImageType::TEAM_IMAGE), [
+            'show_delete_button' => false,
+            'show_save_button' => true,
+            'current_image_url' => $team->getImageFile(),
+            'default_image_path' => 'images/thumbnails/client_default.png',
+        ]);
 
         //        dd($form);
 

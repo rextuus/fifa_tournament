@@ -16,7 +16,7 @@
                 <!-- Team Image -->
                 <img src="{{ fixture.homeTeam is not null and fixture.homeTeam.imageFile
                 ? image_url(fixture.homeTeam.imageFile, 'x-large')
-                : asset('build/images/thumbnails/team_default.png') }}"
+                : asset('images/thumbnails/team_default.png') }}"
                      alt="Home Team Logo"
                      class="img-fluid team-image"
                      style="width: 80px; height: 80px; object-fit: cover;" />
@@ -24,7 +24,7 @@
                 <!-- Participant Image -->
                 <img src="{{ fixture.homeParticipant is not null and fixture.homeParticipant.imageFile
                 ? image_url(fixture.homeParticipant.imageFile, 'x-large')
-                : asset('build/images/thumbnails/client_default.png') }}"
+                : asset('images/thumbnails/client_default.png') }}"
                      alt="Home Participant Image"
                      class="img-fluid participant-image rounded-circle border"
                      style="width: 80px; height: 80px; object-fit: cover;" />
@@ -44,7 +44,7 @@
                 <!-- Team Image -->
                 <img src="{{ fixture.awayTeam is not null and fixture.awayTeam.imageFile
                 ? image_url(fixture.awayTeam.imageFile, 'x-large')
-                : asset('build/images/thumbnails/team_default.png') }}"
+                : asset('images/thumbnails/team_default.png') }}"
                      alt="Away Team Logo"
                      class="img-fluid team-image"
                      style="width: 80px; height: 80px; object-fit: cover;" />
@@ -52,7 +52,7 @@
                 <!-- Participant Image -->
                 <img src="{{ fixture.awayParticipant is not null and fixture.awayParticipant.imageFile
                 ? image_url(fixture.awayParticipant.imageFile, 'x-large')
-                : asset('build/images/thumbnails/client_default.png') }}"
+                : asset('images/thumbnails/client_default.png') }}"
                      alt="Away Participant Image"
                      class="img-fluid participant-image rounded-circle border"
                      style="width: 80px; height: 80px; object-fit: cover;" />

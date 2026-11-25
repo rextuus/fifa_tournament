@@ -1,0 +1,231 @@
+# eat (FIFA-Turniere) – Produktion auf einem einzelnen Server (abyss, Komodo-Stack „eat“).
+# Aufruf (Komodo macht genau das):
+#   docker compose -p eat -f compose.prod.yaml --env-file .env.prod.local up -d --build --wait
+# Reihenfolge beim Start: database (gesund) → migrate (Migrationen, einmalig) → app/worker → web.
+# Werte und Secrets kommen ausschließlich aus .env.prod.local (Vorlage: .env.prod.dist; Komodo schreibt die Datei
+# bei jedem Deploy aus dem Environment des Stacks). Ablauf, Umzug, Backup: docs/deployment.md.
+# Die Entwicklungsumgebung (compose.yaml, SQLite) ist davon unabhängig.
+name: eat
+
+# Docker-Logs begrenzen (sonst wachsen sie unbegrenzt): je Dienst höchstens 5 × 10 MB.
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: docker/php/Dockerfile
+    target: prod
+  image: eat-app:prod
+  # Selbst gebaut, nie aus einer Registry: `docker compose pull` (Komodo „Pull Images“) überspringt den Dienst.
+  pull_policy: build
+  restart: unless-stopped
+  logging: *logging
+  volumes:
+    # Originalbilder (Uploads, Team-Wappen) – Host-Ordner, nicht im DB-Dump, Offsite über backup.offsite_paths.
+    # Muss existieren und www-data (UID/GID 82) gehören, siehe docs/deployment.md. Kein stilles Anlegen.
+    # Verkleinerte Fassungen berechnet imgproxy bei Bedarf; gespeichert wird davon nichts.
+    - type: bind
+      source: ${IMAGE_HOST_DIR:-/srv/eat/images}
+      target: /srv/eat/images
+      bind:
+        create_host_path: false
+  environment:
+    # Fest, nicht aus der Env-Datei: Ein Tippfehler dort (securitas: APP_ENV=env) kann so keinen Debug-Modus
+    # mehr einschalten. docker/php/entrypoint.sh bricht zusätzlich bei allem außer prod/0 ab.
+    APP_ENV: prod
+    APP_DEBUG: "0"
+    APP_SECRET: ${APP_SECRET:?APP_SECRET fehlt in .env.prod.local}
+    DEFAULT_URI: ${DEFAULT_URI:?DEFAULT_URI fehlt in .env.prod.local}
+    DATABASE_URL: mysql://${MYSQL_USER:-eat}:${MYSQL_PASSWORD:?MYSQL_PASSWORD fehlt}@database:3306/${MYSQL_DATABASE:-eat}?serverVersion=8.4.13&charset=utf8mb4
+    MESSENGER_TRANSPORT_DSN: doctrine://default?auto_setup=0
+    # PHP sieht als Absender nur den Caddy im Stack (Docker-Netz); der reicht X-Forwarded-* vom VPS weiter.
+    TRUSTED_PROXIES: private_ranges
+    IMAGE_DIR: /srv/eat/images
+    # Signatur der Bild-URLs (/img/… → imgproxy). Hex, je 64 Zeichen.
+    IMGPROXY_KEY: ${IMGPROXY_KEY:?IMGPROXY_KEY fehlt}
+    IMGPROXY_SALT: ${IMGPROXY_SALT:?IMGPROXY_SALT fehlt}
+    # Offene Registrierung bleibt in Produktion aus; Benutzer per app:create-default-user (docs/deployment.md).
+    REGISTRATION_ENABLED: ${REGISTRATION_ENABLED:-0}
+    SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID:?SPOTIFY_CLIENT_ID fehlt}
+    SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET:?SPOTIFY_CLIENT_SECRET fehlt}
+    SPOTIFY_REDIRECT_URI: ${SPOTIFY_REDIRECT_URI:?SPOTIFY_REDIRECT_URI fehlt}
+    FORCED_RUNNING_TIME: ${FORCED_RUNNING_TIME:-30}
+    # Leer = Sentry aus.
+    SENTRY_DSN: ${SENTRY_DSN:-}
+    # eat verschickt keine Mails (Registrierung aus). null://null = keine Mails.
+    MAILER_DSN: ${MAILER_DSN:-null://null}
+
+# app und worker starten erst, wenn die Migrationen durch sind. Schlägt migrate fehl, starten sie nicht und
+# Komodo meldet den Deploy als fehlgeschlagen (docs/deployment.md, „Rollback“).
+x-after-migrate: &after-migrate
+  database:
+    condition: service_healthy
+  migrate:
+    condition: service_completed_successfully
+
+services:
+  # Einmalig bei jedem Deploy: Datenbank migrieren. Beendet sich mit 0; in Komodo unter ignore_services.
+  migrate:
+    <<: *app
+    restart: "no"
+    command: ["php", "bin/console", "doctrine:migrations:migrate", "--no-interaction", "--allow-no-migration"]
+    depends_on:
+      database:
+        condition: service_healthy
+
+  app:
+    <<: *app
+    depends_on: *after-migrate
+    healthcheck:
+      test: ["CMD-SHELL", "SCRIPT_NAME=/fpm-ping SCRIPT_FILENAME=/fpm-ping REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 20s
+
+  # Messenger-Worker: Spotify-Warteschlange wiederherstellen (RestoreSpotifyQueue, verzögert) und CheckQueue.
+  # Startet sich nach einer Stunde bzw. 128 MB selbst neu (restart: unless-stopped holt ihn zurück).
+  worker:
+    <<: *app
+    command: ["php", "bin/console", "messenger:consume", "async", "--time-limit=3600", "--memory-limit=128M", "--no-interaction"]
+    depends_on: *after-migrate
+    # Gesund, solange der Worker die Datenbank erreicht (dort liegen die Aufträge).
+    healthcheck:
+      test: ["CMD", "php", "bin/console", "dbal:run-sql", "--no-interaction", "SELECT 1"]
+      interval: 60s
+      timeout: 15s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512m
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: web
+    image: eat-web:prod
+    pull_policy: build
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      # Nur HTTP: HTTPS und Zertifikat macht der Caddy auf dem VPS, der über WireGuard hierher weiterleitet.
+      SERVER_NAME: ":80"
+      # Nur von diesen Adressen gelten X-Forwarded-* (Gast-IP, https): die WireGuard-IP des VPS.
+      REVERSE_PROXY_IPS: ${REVERSE_PROXY_IPS:-private_ranges}
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      # Der einzige Host-Port des Stacks; auf abyss nur auf der WireGuard-Adresse (HTTP_BIND=10.0.0.2).
+      - "${HTTP_BIND:-127.0.0.1}:${HTTP_PORT:-8199}:80"
+    # Prüft den ganzen Weg, den auch der VPS nimmt: Caddy → PHP → Datenbank.
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      app:
+        condition: service_healthy
+      imgproxy:
+        condition: service_healthy
+
+  # Bildvarianten (Profilbilder, Team-Wappen in 60/126/250/500 px) auf Abruf, nur über web (/img/…) erreichbar.
+  # Liest die Originale nur lesend; Benutzer nobody in der Gruppe www-data (GID 82), dem die Bilder gehören.
+  imgproxy:
+    image: ghcr.io/imgproxy/imgproxy:v4.0.25
+    restart: unless-stopped
+    logging: *logging
+    user: "65534:82"
+    environment:
+      IMGPROXY_KEY: ${IMGPROXY_KEY:?IMGPROXY_KEY fehlt}
+      IMGPROXY_SALT: ${IMGPROXY_SALT:?IMGPROXY_SALT fehlt}
+      IMGPROXY_LOCAL_FILESYSTEM_ROOT: /images
+      IMGPROXY_ALLOWED_SOURCES: local:///
+      IMGPROXY_MAX_SRC_RESOLUTION: "40"
+      IMGPROXY_MAX_SRC_FILE_SIZE: "17825792"
+      IMGPROXY_WORKERS: "2"
+      IMGPROXY_STRIP_METADATA: "true"
+      IMGPROXY_AUTO_ROTATE: "true"
+    volumes:
+      - type: bind
+        source: ${IMAGE_HOST_DIR:-/srv/eat/images}
+        target: /images
+        read_only: true
+        bind:
+          create_host_path: false
+    healthcheck:
+      test: ["CMD", "imgproxy", "health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512m
+
+  database:
+    image: mysql:8.4.13
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-eat}
+      MYSQL_USER: ${MYSQL_USER:-eat}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD fehlt}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD fehlt}
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    volumes:
+      - database_data:/var/lib/mysql:rw
+
+  # Datenbank-Dump nach BACKUP_DIR (Standard /srv/eat/backups auf dem Host), mit Rotation (deploy/komodo/db-backup.sh).
+  # Startet nie von selbst (Profil), nur per `docker compose run --rm backup <anlass>`: vor jedem Deploy
+  # (pre-deploy.sh, Anlass pre-deploy), täglich über die Komodo-Procedure eat-backup (Anlass daily) oder von Hand.
+  backup:
+    image: mysql:8.4.13
+    profiles: ["backup"]
+    restart: "no"
+    logging: *logging
+    entrypoint: ["sh", "/usr/local/bin/eat-db-backup"]
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-eat}
+      MYSQL_PWD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD fehlt}
+      BACKUP_KEEP: ${BACKUP_KEEP:-14}
+    volumes:
+      - ./deploy/komodo/db-backup.sh:/usr/local/bin/eat-db-backup:ro
+      # Der Ordner muss auf dem Host schon existieren (einmalig anlegen, docs/deployment.md). Docker legt ihn
+      # so nicht still neu an – ein Tippfehler in BACKUP_DIR lässt die Sicherung scheitern statt ins Leere zu gehen.
+      - type: bind
+        source: ${BACKUP_DIR:-/srv/eat/backups}
+        target: /backups
+        bind:
+          create_host_path: false
+    depends_on:
+      database:
+        condition: service_healthy
+
+# Feste Namen, damit die Daten nicht am Projektnamen hängen. Niemals umbenennen.
+# VOLUME_PREFIX nur für Probeläufe setzen (z. B. eatprobe) – dann landet ein Test nie in den echten eat_*-Volumes.
+volumes:
+  database_data:
+    name: ${VOLUME_PREFIX:-eat}_database_data
+  caddy_data:
+    name: ${VOLUME_PREFIX:-eat}_caddy_data
+  caddy_config:
+    name: ${VOLUME_PREFIX:-eat}_caddy_config

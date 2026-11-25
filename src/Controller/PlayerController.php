@@ -55,7 +55,7 @@ final class PlayerController extends BaseController
         ]);
     }
 
-    #[Route('/edit/{id}', name: 'player_edit')]
+    #[Route('/edit/{id:player}', name: 'player_edit')]
     public function edit(Request $request, Player $player, EntityManagerInterface $entityManager): Response
     {
         // Create a form for editing the player
@@ -70,10 +70,7 @@ final class PlayerController extends BaseController
             return $this->redirectToRoute('player_create');
         }
 
-        $qrCodeDataUri = $this->qrCodeGenerator->generateQrCode(
-            'player_edit_profile_image_full',
-            $player->getId()
-        );
+        $qrCodeDataUri = $this->qrCodeGenerator->generateQrCode('player_edit_profile_image_full', $player->getId());
 
         // Render the player edit template
         return $this->render('player/edit.html.twig', [
@@ -83,7 +80,7 @@ final class PlayerController extends BaseController
         ]);
     }
 
-    #[Route('/edit/profile-image/{id}', name: 'player_edit_profile_image')]
+    #[Route('/edit/profile-image/{id:player}', name: 'player_edit_profile_image')]
     public function editProfileImageAjax(Player $player, Request $request): Response
     {
         $form = $this->createAjaxForm(
@@ -93,7 +90,7 @@ final class PlayerController extends BaseController
             [
                 'show_delete_button' => false,
                 'current_image_url' => $player->getImageFile(),
-                'default_image_path' => 'build/images/thumbnails/client_default.png',
+                'default_image_path' => 'images/thumbnails/client_default.png',
             ],
         );
 
@@ -106,7 +103,7 @@ final class PlayerController extends BaseController
         return $this->renderAjaxForm($form);
     }
 
-    #[Route('/edit/profile-image-full/{id}', name: 'player_edit_profile_image_full')]
+    #[Route('/edit/profile-image-full/{id:player}', name: 'player_edit_profile_image_full')]
     public function editProfileImage2(Player $player, Request $request): Response
     {
         $form = $this->createForm(
@@ -116,7 +113,7 @@ final class PlayerController extends BaseController
                 'show_delete_button' => false,
                 'show_save_button' => true,
                 'current_image_url' => $player->getImageFile(),
-                'default_image_path' => 'build/images/thumbnails/client_default.png',
+                'default_image_path' => 'images/thumbnails/client_default.png',
             ],
         );
 

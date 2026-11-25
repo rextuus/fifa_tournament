@@ -6,31 +6,26 @@ use App\Content\SettingService;
 use App\Entity\User;
 use App\Form\SettingType;
 use App\Message\CheckQueue;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/setting')]
 final class SettingController extends AbstractController
 {
-
-
     public function __construct(
         private readonly SettingService $settingService,
         private readonly EntityManagerInterface $entityManager,
-    )
-    {
-    }
+    ) {}
 
     #[Route('/edit', name: 'setting_edit')]
-    public function edit(
-        Request $request,
-    ): RedirectResponse|Response {
+    public function edit(Request $request): RedirectResponse|Response
+    {
         /** @var User $currentUser */
         $currentUser = $this->getUser();
 
@@ -38,7 +33,7 @@ final class SettingController extends AbstractController
         $setting = $this->settingService->getSettingForUser($currentUser);
 
         $queueIsRunning = true;
-        if ($setting->getQueueCheck() !== null){
+        if ($setting->getQueueCheck() !== null) {
             $queueIsRunning = false;
         }
 
@@ -71,7 +66,7 @@ final class SettingController extends AbstractController
         $messageBus->dispatch(new CheckQueue($currentUser->getId()));
 
         $setting = $this->settingService->getSettingForUser($currentUser);
-        $setting->setQueueCheck(new DateTime());
+        $setting->setQueueCheck(new DateTimeImmutable());
 
         $this->entityManager->persist($setting);
         $this->entityManager->flush();

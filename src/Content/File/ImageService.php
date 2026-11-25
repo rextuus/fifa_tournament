@@ -6,12 +6,11 @@ namespace App\Content\File;
 
 use App\Content\File\Flysystem\FilesystemProvider;
 use App\Content\File\Form\Data\EditProfileImageData;
+use App\Content\File\Imgproxy\ImgproxyUrlSigner;
 use App\Entity\File;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Liip\ImagineBundle\Message\WarmupCache;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @author  Sven Bröker <sven.broeker@doccheck.com>
@@ -30,42 +29,27 @@ class ImageService
     public const PLAYER_PROFILE_IMAGE = 'player_profile_image';
 
     /**
-     * @var array<string, array<string, string>>
+     * Kantenlänge in Pixeln je Größe (quadratisch, mittig zugeschnitten – wie früher die Liip-Filter „fixed“).
+     * Gilt für alle Bildarten (Team, Benutzer, Teilnehmer, Spieler).
+     *
+     * @var array<string, int>
      */
-    private static array $filterConfig = [
-        self::TEAM_IMAGE => [
-            self::SIZE_SMALL => LiipImagineFilterIdents::IMAGE_SQUARE_SMALL,
-            self::SIZE_MEDIUM => LiipImagineFilterIdents::IMAGE_SQUARE_MEDIUM,
-            self::SIZE_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_LARGE,
-            self::SIZE_X_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_X_LARGE,
-        ],
-        self::USER_PROFILE_IMAGE => [
-            self::SIZE_SMALL => LiipImagineFilterIdents::IMAGE_SQUARE_SMALL,
-            self::SIZE_MEDIUM => LiipImagineFilterIdents::IMAGE_SQUARE_MEDIUM,
-            self::SIZE_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_LARGE,
-            self::SIZE_X_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_X_LARGE,
-        ],
-        self::PARTICIPANT_PROFILE_IMAGE => [
-            self::SIZE_SMALL => LiipImagineFilterIdents::IMAGE_SQUARE_SMALL,
-            self::SIZE_MEDIUM => LiipImagineFilterIdents::IMAGE_SQUARE_MEDIUM,
-            self::SIZE_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_LARGE,
-            self::SIZE_X_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_X_LARGE,
-        ],
-        self::PLAYER_PROFILE_IMAGE => [
-            self::SIZE_SMALL => LiipImagineFilterIdents::IMAGE_SQUARE_SMALL,
-            self::SIZE_MEDIUM => LiipImagineFilterIdents::IMAGE_SQUARE_MEDIUM,
-            self::SIZE_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_LARGE,
-            self::SIZE_X_LARGE => LiipImagineFilterIdents::IMAGE_SQUARE_X_LARGE,
-        ],
+    private const array SIZES = [
+        self::SIZE_SMALL => 60,
+        self::SIZE_MEDIUM => 126,
+        self::SIZE_LARGE => 250,
+        self::SIZE_X_LARGE => 500,
     ];
 
+    /** Präfix, unter dem Caddy (docker/caddy/Caddyfile) an imgproxy weiterreicht. */
+    private const string IMGPROXY_PREFIX = '/img';
+
     public function __construct(
-        private readonly CacheManager $cacheManager,
         private readonly FileService $fileService,
-        private readonly MessageBusInterface $messageBus,
         private readonly EntityManagerInterface $entityManager,
-    ) {
-    }
+        private readonly ImgproxyUrlSigner $imgproxy,
+        private readonly UrlGeneratorInterface $urlGenerator,
+    ) {}
 
     public function resolveUrl(File $file, string $size): string
     {
@@ -73,26 +57,31 @@ class ImageService
             throw new \InvalidArgumentException('File is not an image.');
         }
 
-        $imageType = $file->getImageType()->value;
-
-        if (!isset(self::$filterConfig[$imageType])) {
-            throw new \InvalidArgumentException('Image type "'.$imageType.'" is not configured.');
+        if (!isset(self::SIZES[$size])) {
+            throw new \InvalidArgumentException('Size "' . $size . '" is not configured.');
         }
 
-        if (!isset(self::$filterConfig[$imageType][$size])) {
-            throw new \InvalidArgumentException('Size "'.$size.'" is not configured for image type ".');
+        // Lokal ohne imgproxy: Original (der Browser skaliert).
+        if (!$this->imgproxy->isEnabled()) {
+            return $this->urlGenerator->generate('app_image_original', ['id' => $file->getId()]);
         }
 
-        $filterIdent = self::$filterConfig[$file->getImageType()->value][$size];
+        $edge = self::SIZES[$size];
+        // Neuer Wert, sobald die Datei ersetzt wird (z. B. Team-Wappen neu geladen): andere URL, kein alter Cache.
+        $changed = $file->getEdited() ?? $file->getCreated();
+        $cacheBuster = $file->getId() . '-' . ($changed?->getTimestamp() ?? 0);
 
-        return $this->cacheManager->getBrowserPath($file->getRelativePath(), $filterIdent);
+        return self::IMGPROXY_PREFIX
+        . $this->imgproxy->sign('local:///' . $file->getRelativePath(), [
+            'rs:fill:' . $edge . ':' . $edge,
+            'g:ce',
+            'q:85',
+            'cb:' . $cacheBuster,
+        ]);
     }
 
-    public function updateProfileImage(
-        ImageAwareInterface $entity,
-        EditProfileImageData $data,
-        ?User $actor,
-    ): void {
+    public function updateProfileImage(ImageAwareInterface $entity, EditProfileImageData $data, ?User $actor): void
+    {
         if ($entity->getImageFile() && $data->deleteProfileImage()) {
             $profileImage = $entity->getImageFile();
             $this->fileService->delete($profileImage);
@@ -106,19 +95,17 @@ class ImageService
                     $uploadedImagePath,
                     FilesystemProvider::IDENT_IMAGE,
                     $actor,
-                    $data->getImageType()
+                    $data->getImageType(),
                 );
             } else {
                 $file = $this->fileService->importFile(
                     $uploadedImagePath,
                     FilesystemProvider::IDENT_IMAGE,
                     $actor,
-                    $data->getImageType()
+                    $data->getImageType(),
                 );
                 $entity->setImageFile($file);
             }
-
-            $this->messageBus->dispatch(new WarmupCache($file->getRelativePath(), null, true));
         }
 
         $this->entityManager->flush();

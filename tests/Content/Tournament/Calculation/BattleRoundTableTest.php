@@ -14,13 +14,13 @@ class BattleRoundTableTest extends TestCase
     public function testGetOrderedPlayersBy(): void
     {
         // Create mock Player objects
-        $player1 = $this->createMock(Player::class);
+        $player1 = $this->createStub(Player::class);
         $player1->method('getId')->willReturn(1);
 
-        $player2 = $this->createMock(Player::class);
+        $player2 = $this->createStub(Player::class);
         $player2->method('getId')->willReturn(2);
 
-        $player3 = $this->createMock(Player::class);
+        $player3 = $this->createStub(Player::class);
         $player3->method('getId')->willReturn(3);
 
         // Create the BattleRoundTable instance
@@ -46,7 +46,7 @@ class BattleRoundTableTest extends TestCase
         $this->assertSame(
             [$player1, $player2, $player3], // Expected order
             $orderedPlayers,
-            'Players should be ordered by points descending, with ties resolved by secondary key.'
+            'Players should be ordered by points descending, with ties resolved by secondary key.',
         );
 
         // Test sorting on a different filter
@@ -56,7 +56,7 @@ class BattleRoundTableTest extends TestCase
         $this->assertSame(
             [$player1, $player2, $player3], // Expected order by goals
             $orderedPlayersByGoals,
-            'Players should be ordered by personal goals descending.'
+            'Players should be ordered by personal goals descending.',
         );
     }
 }

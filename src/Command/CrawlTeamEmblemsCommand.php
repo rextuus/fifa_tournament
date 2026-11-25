@@ -4,26 +4,25 @@ namespace App\Command;
 
 use App\Content\Team\StarRating;
 use App\Content\Team\TeamImportService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'app:crawl-team-emblems')]
 class CrawlTeamEmblemsCommand extends Command
 {
-    protected static $defaultName = 'app:crawl-team-emblems';
-
     public function __construct(
-        private readonly TeamImportService $teamImporterService
+        private readonly TeamImportService $teamImporterService,
     ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this
-            ->setDescription('Crawl team emblems');
+        $this->setDescription('Crawl team emblems');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

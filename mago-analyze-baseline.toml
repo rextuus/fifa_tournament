@@ -1,0 +1,1789 @@
+variant = "loose"
+
+[[issues]]
+file = "src/Command/CrawlTeamsCommand.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Content\Team\StarRating::tryFrom`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Command/CreateDefaultUserCommand.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\User::setEmail`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Command/CreateDefaultUserCommand.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strlen`: expected `string`, but found `truthy-mixed`."
+count = 1
+
+[[issues]]
+file = "src/Command/CreateDefaultUserCommand.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface::hashPassword`: expected `string`, but found `truthy-mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Command/CreateDefaultUserCommand.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "src/Command/CreateDefaultUserCommand.php"
+code = "mixed-operand"
+message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
+count = 2
+
+[[issues]]
+file = "src/Content/File/FileService.php"
+code = "implicit-to-string-cast"
+message = 'Implicit conversion to `string` for left operand via `Symfony\Component\String\AbstractUnicodeString::__toString()`.'
+count = 1
+
+[[issues]]
+file = "src/Content/File/FileService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\File\Form\Data\FileData::setType` is possibly `null`, but parameter type `enum(App\Content\File\Enum\FileType)` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/File/FileService.php"
+code = "possibly-null-operand"
+message = "Possibly null right operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "src/Content/File/Flysystem/FilesystemProvider.php"
+code = "match-expression-only-default-arm"
+message = "This match expression is redundant as it only contains a default arm."
+count = 1
+
+[[issues]]
+file = "src/Content/File/Flysystem/FilesystemProvider.php"
+code = "never-return"
+message = "Cannot return value with type 'never' from this function."
+count = 1
+
+[[issues]]
+file = "src/Content/File/ImageService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\File\FileService::delete` is possibly `null`, but parameter type `App\Entity\File` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/File/ImageService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\File\FileService::moveUploadedFile` is possibly `null`, but parameter type `Symfony\Component\HttpFoundation\File\UploadedFile` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/File/ImageService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\File\FileService::updateFile` is possibly `null`, but parameter type `App\Entity\File` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/File/ImageService.php"
+code = "possibly-null-operand"
+message = "Possibly null left operand used in string concatenation (type `int|null`)."
+count = 1
+
+[[issues]]
+file = "src/Content/Fixture/FixtureService.php"
+code = "less-specific-nested-argument-type"
+message = 'Argument type mismatch for argument #2 of `App\Content\Fixture\ScoringMap::__construct`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/Content/Fixture/FixtureService.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 5
+
+[[issues]]
+file = "src/Content/Fixture/FixtureService.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `App\Content\Participant\ParticipantService::findOrCreateParticipant`: expected `array<array-key, App\Entity\Player>`, but possibly received `list{App\Entity\Participant|App\Entity\Player, App\Entity\Participant|App\Entity\Player|null}`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Fixture/FixtureService.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `App\Content\Participant\ParticipantService::findOrCreateParticipant`: expected `array<array-key, App\Entity\Player>`, but possibly received `list{App\Entity\Participant|App\Entity\Player|null}`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Fixture/ScoringMap.php"
+code = "invalid-property-assignment-value"
+message = "Invalid type for property `$map`: expected `array<int, int>`, but got `non-empty-array<int|string(''), int>`."
+count = 1
+
+[[issues]]
+file = "src/Content/Fixture/ScoringMap.php"
+code = "possibly-null-array-index"
+message = "Possibly using `null` as an array index to access element."
+count = 1
+
+[[issues]]
+file = "src/Content/Participant/ParticipantService.php"
+code = "less-specific-nested-argument-type"
+message = 'Argument type mismatch for argument #1 of `App\Repository\ParticipantRepository::findParticipantsByPlayerCombination`: expected `array<array-key, App\Entity\Player>`, but provided type `list{App\Entity\Player, mixed}` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/Content/Participant/ParticipantService.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "src/Content/Participant/ParticipantService.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "src/Content/Participant/ParticipantService.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getIdent()` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Content/Participant/ParticipantService.php"
+code = "possibly-null-argument"
+message = "Argument #2 of function `explode` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "src/Content/Participant/ParticipantService.php"
+code = "unused-property"
+message = "Property `$playerRepository` is never used."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "ambiguous-object-property-access"
+message = "Cannot statically verify property access on a generic `object` type."
+count = 16
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-property-access"
+message = "Attempting to access property `$album` on type `array<array-key, mixed>|object`, which can be `array<array-key, mixed>`."
+count = 2
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-property-access"
+message = "Attempting to access property `$artists` on type `array<array-key, mixed>|object`, which can be `array<array-key, mixed>`."
+count = 2
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-property-access"
+message = "Attempting to access property `$devices` on type `array<array-key, mixed>|object`, which can be `array<array-key, mixed>`."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-property-access"
+message = "Attempting to access property `$display_name` on type `array<array-key, mixed>|object`, which can be `array<array-key, mixed>`."
+count = 2
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-property-access"
+message = "Attempting to access property `$duration_ms` on type `array<array-key, mixed>|object`, which can be `array<array-key, mixed>`."
+count = 2
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-property-access"
+message = "Attempting to access property `$id` on type `array<array-key, mixed>|object`, which can be `array<array-key, mixed>`."
+count = 2
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-property-access"
+message = "Attempting to access property `$item` on type `array<array-key, mixed>|object`, which can be `array<array-key, mixed>`."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-property-access"
+message = "Attempting to access property `$name` on type `array<array-key, mixed>|object`, which can be `array<array-key, mixed>`."
+count = 2
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-property-access"
+message = "Attempting to access property `$progress_ms` on type `array<array-key, mixed>|object`, which can be `array<array-key, mixed>`."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "invalid-property-access"
+message = "Attempting to access property `$tracks` on type `array<array-key, mixed>|object`, which can be `array<array-key, mixed>`."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `App\Repository\SpotifyAccessTokenRepository::getNewestToken`: expected `App\Entity\User`, but provided type `App\Entity\User|Symfony\Component\Security\Core\User\UserInterface|null` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `App\Repository\SpotifyAccessTokenRepository::getNewestToken`: expected `App\Entity\User`, but provided type `Symfony\Component\Security\Core\User\UserInterface|null` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Content\Spotify\Representation\SpotifyTrack::__construct`: expected `string`, but found `mixed`.'
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `SpotifyWebAPI\SpotifyWebAPI::play`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `SpotifyWebAPI\SpotifyWebAPI::queue`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `SpotifyWebAPI\SpotifyWebAPI::search`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Content\Spotify\Representation\SpotifyTrack::__construct`: expected `string`, but found `mixed`.'
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Message\RestoreSpotifyQueue::__construct`: expected `int`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #3 of `App\Content\Spotify\Representation\SpotifyTrack::__construct`: expected `string`, but found `mixed`.'
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #3 of `App\Message\RestoreSpotifyQueue::__construct`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #4 of `App\Content\Spotify\Representation\SpotifyTrack::__construct`: expected `string`, but found `mixed`.'
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #4 of `App\Message\RestoreSpotifyQueue::__construct`: expected `int|null`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #5 of `App\Content\Spotify\Representation\SpotifyTrack::__construct`: expected `string`, but found `mixed`.'
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #6 of `App\Content\Spotify\Representation\SpotifyTrack::__construct`: expected `int`, but found `mixed`.'
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 17
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 7
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$album` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$artists` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$duration_ms` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$id` on a non-object type (`mixed`)."
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$images` on a non-object type (`mixed`)."
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$items` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$name` on a non-object type (`mixed`)."
+count = 7
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$url` on a non-object type (`mixed`)."
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `App\Content\Spotify\SpotifyService::getLoginInformation`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `App\Content\Spotify\SpotifyService::logOut`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "non-existent-method"
+message = 'Method `getId` does not exist on type `Symfony\Component\Security\Core\User\UserInterface`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "possibly-false-argument"
+message = "Argument #1 of function `json_decode` is possibly `false`, but parameter type `string` does not accept it."
+count = 2
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Repository\SpotifyAccessTokenRepository::getNewestToken` is possibly `null`, but parameter type `App\Entity\User` does not accept it.'
+count = 2
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `SpotifyWebAPI\Session::setAccessToken` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `SpotifyWebAPI\Session::setRefreshToken` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `SpotifyWebAPI\SpotifyWebAPI::getTrack` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `SpotifyWebAPI\SpotifyWebAPI::setAccessToken` is possibly `null`, but parameter type `string` does not accept it.'
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "possibly-null-argument"
+message = 'Argument #4 of method `App\Content\Spotify\SpotifyService::storeTokensToDb` is possibly `null`, but parameter type `App\Entity\User` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/Team/TeamImportService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\Team::setImageLink`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Team/TeamImportService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\Team::setLeague`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Team/TeamImportService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\Team::setName`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Team/TeamImportService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\Team::setTeamLink`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Team/TeamImportService.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 6
+
+[[issues]]
+file = "src/Content/Team/TeamImportService.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "src/Content/Team/TeamImportService.php"
+code = "unused-property"
+message = "Property `$messageBus` is never used."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundCalculationService.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundCalculationService.php"
+code = "possibly-false-argument"
+message = 'Argument #1 of method `App\Entity\Fixture::setAwayTeam` is possibly `false`, but parameter type `App\Entity\Team|null` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundCalculationService.php"
+code = "possibly-false-argument"
+message = 'Argument #1 of method `App\Entity\Fixture::setHomeTeam` is possibly `false`, but parameter type `App\Entity\Team|null` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundCalculationService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Doctrine\Persistence\ObjectManager::persist` is possibly `null`, but parameter type `object` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "invalid-array-access"
+message = 'Cannot access array index on object `App\Entity\Participant` that does not implement `ArrayAccess`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "invalid-array-access"
+message = 'Cannot access array index on object `App\Entity\Player` that does not implement `ArrayAccess`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "less-specific-nested-return-statement"
+message = '''Returned type `list<mixed>` is less specific than the declared return type `array<int, App\Entity\Participant|App\Entity\Player|int>` for function `App\Content\Tournament\Calculation\BattleRoundTable::getOrderedBy` due to nested 'mixed'.'''
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "match-arm-always-true"
+message = "This match arm is always true, making subsequent arms unreachable."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 23
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `nonnull`."
+count = 8
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "mixed-array-assignment"
+message = "Unsafe array assignment on type `mixed`."
+count = 11
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "mixed-array-assignment"
+message = "Unsafe array assignment on type `nonnull`."
+count = 8
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "mixed-operand"
+message = "Cannot reliably increment a `mixed` operand."
+count = 6
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "mixed-operand"
+message = "Left operand in binary operation has type `mixed`."
+count = 13
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "mixed-operand"
+message = "Left operand in spaceship comparison (`<=>`) has `mixed` type."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "mixed-operand"
+message = "Right operand in binary operation has type `mixed`."
+count = 8
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "mixed-operand"
+message = "Right operand in spaceship comparison (`<=>`) has `mixed` type."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "never-return"
+message = "Cannot return value with type 'never' from this function."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "possibly-invalid-array-access"
+message = "Cannot perform array access on value of type `int`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `array_key_exists` is possibly `null`, but parameter type `bool|float|int|string` does not accept it."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "possibly-null-array-index"
+message = "Possibly using `null` as an array index to access element of variable $this->map."
+count = 11
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "possibly-null-array-index"
+message = "Possibly using `null` as an array index to access element."
+count = 12
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "unreachable-match-default-arm"
+message = "This default arm is unreachable."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/FixtureMap.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/FixtureMap.php"
+code = "mixed-operand"
+message = "Left operand in `>` comparison has `mixed` type."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/FixtureMap.php"
+code = "mixed-operand"
+message = "Left operand in binary operation has type `mixed`."
+count = 3
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/FixtureMap.php"
+code = "mixed-operand"
+message = "Right operand in binary operation has type `mixed`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/FixtureMap.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `App\Content\Tournament\Calculation\FixtureMap::countDoubles`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/FixtureMap.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `array_key_exists` is possibly `null`, but parameter type `bool|float|int|string` does not accept it."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/FixtureMap.php"
+code = "possibly-null-array-index"
+message = "Possibly using `null` as an array index to access element."
+count = 4
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `App\Content\Tournament\Calculation\TournamentCalculationService::getFixtureAmountForRound`: expected `int|null`, but found `float|int`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `App\Content\Tournament\Calculation\PotentialFixture::setHome`: expected `int|null`, but provided type `array-key` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "less-specific-nested-argument-type"
+message = 'Argument type mismatch for argument #1 of `App\Content\Tournament\Calculation\FixtureMap::__construct`: expected `array<array-key, App\Content\Tournament\Calculation\PotentialFixture>`, but provided type `array<array-key, mixed>|list<App\Content\Tournament\Calculation\PotentialFixture>` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Content\Tournament\Calculation\PotentialFixture::setAway`: expected `int|null`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Content\Tournament\Calculation\TournamentCalculationService::checkFixtureAlreadyExists`: expected `int`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Content\Tournament\Calculation\TournamentCalculationService::checkFixtureAlreadyExists`: expected `int`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-array-index"
+message = "Invalid index type `mixed` used in array assignment on `array{}`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-array-index"
+message = "Invalid index type `mixed` used in array assignment on `non-empty-array<array-key, non-empty-list<nonnull>>`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-array-index"
+message = "Invalid index type `nonnull` used in array assignment on `non-empty-array<array-key, int>`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 5
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getAway()` on a non-object type (`nonnull`)."
+count = 4
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getAway()` on a non-object type (`truthy-mixed`)."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getHome()` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getHome()` on a non-object type (`nonnull`)."
+count = 3
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getHome()` on a non-object type (`truthy-mixed`)."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "mixed-operand"
+message = "Left operand in `&&` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "possibly-false-array-index"
+message = "Possibly using `false` as an array index to access element of variable $this->fixturesMap."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "possibly-null-argument"
+message = 'Argument #3 of method `App\Content\Tournament\Calculation\TournamentCalculationService::checkFixtureDistribution` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "possibly-null-operand"
+message = "Left operand in arithmetic operation might be `null` (type `int|null`)."
+count = 3
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "possibly-null-operand"
+message = "Right operand in `<` comparison might be `null` (type `int|null`)."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "unused-method"
+message = "Method `countParticipantWithFullFixtureCount()` is never used."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/ParticipantTeamMap.php"
+code = "invalid-method-access"
+message = 'Attempting to call method `getTeams()` on type `App\Entity\TeamList|false`, which can be `false`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/ParticipantTeamMap.php"
+code = "invalid-property-assignment-value"
+message = "Invalid type for property `$map`: expected `array<int, array<int, array<string, bool|int>>>`, but got `non-empty-array<int|string(''), array<int, array<string, bool|int>>>`."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/ParticipantTeamMap.php"
+code = "invalid-property-assignment-value"
+message = "Invalid type for property `$map`: expected `array<int, array<int, array<string, bool|int>>>`, but got `non-empty-array<int|string(''), array<int, array<string, bool|int>|array{'placed': bool|int, 'team': bool|int|null}>>`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/ParticipantTeamMap.php"
+code = "invalid-property-assignment-value"
+message = '''Invalid type for property `$teamsLists`: expected `array<int, App\Entity\TeamList>`, but got `non-empty-array<int|string(''), App\Entity\TeamList|false>`.'''
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/ParticipantTeamMap.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `array_key_exists` is possibly `null`, but parameter type `bool|float|int|string` does not accept it."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/ParticipantTeamMap.php"
+code = "possibly-null-array-index"
+message = "Possibly using `null` as an array index to access element of variable $teams."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/ParticipantTeamMap.php"
+code = "possibly-null-array-index"
+message = "Possibly using `null` as an array index to access element of variable $this->map."
+count = 4
+
+[[issues]]
+file = "src/Content/Tournament/ParticipantTeamMap.php"
+code = "possibly-null-array-index"
+message = "Possibly using `null` as an array index to access element of variable $this->teamsLists."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/ParticipantTeamMap.php"
+code = "possibly-null-array-index"
+message = "Possibly using `null` as an array index to access element."
+count = 4
+
+[[issues]]
+file = "src/Content/Tournament/RoundType.php"
+code = "match-not-exhaustive"
+message = 'Non-exhaustive `match` expression: subject of type `enum(App\Content\Tournament\RoundType)` is not fully handled.'
+count = 3
+
+[[issues]]
+file = "src/Content/Tournament/RoundType.php"
+code = "possibly-undefined-variable"
+message = "Variable `$type` might not have been defined on all execution paths leading to this point."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "invalid-array-index"
+message = '''Invalid index type `float` used for array access on `array{0?: list<App\Entity\Fixture|string('X')>, ...<int, list<App\Entity\Fixture|string('X')>>}|array{0?: list<string('X')>}`.'''
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "invalid-operand"
+message = "Invalid type for left operand."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\BattleRound::addParticipant`: expected `App\Entity\Participant`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\Fixture::setAwayParticipant`: expected `App\Entity\Participant|null`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\Tournament::addParticipant`: expected `App\Entity\Participant`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Doctrine\Persistence\ObjectManager::persist`: expected `object`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Content\Tournament\Calculation\BattleRoundTable::addPersonalGoals`: expected `int`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 4
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getId()` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getPlayers()` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 23
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #2 of `array_fill`: expected `non-negative-int`, but possibly received `int`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-invalid-operand"
+message = "Possibly invalid type for left operand."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-invalid-operand"
+message = "Possibly invalid type for right operand."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\Tournament\Calculation\BattleRoundTable::addAgainstGoal` is possibly `null`, but parameter type `App\Entity\Participant|App\Entity\Player` does not accept it.'
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\Tournament\Calculation\BattleRoundTable::addDraw` is possibly `null`, but parameter type `App\Entity\Participant|App\Entity\Player` does not accept it.'
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\Tournament\Calculation\BattleRoundTable::addLoose` is possibly `null`, but parameter type `App\Entity\Participant|App\Entity\Player` does not accept it.'
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\Tournament\Calculation\BattleRoundTable::addPlayer` is possibly `null`, but parameter type `App\Entity\Participant|App\Entity\Player` does not accept it.'
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\Tournament\Calculation\BattleRoundTable::addTeamGoals` is possibly `null`, but parameter type `App\Entity\Participant|App\Entity\Player` does not accept it.'
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\Tournament\Calculation\BattleRoundTable::addWin` is possibly `null`, but parameter type `App\Entity\Participant|App\Entity\Player` does not accept it.'
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Entity\Round::setRoundType` is possibly `null`, but parameter type `enum(App\Content\Tournament\RoundType)` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Doctrine\Persistence\ObjectManager::persist` is possibly `null`, but parameter type `object` does not accept it.'
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-argument"
+message = 'Argument #2 of method `App\Content\Tournament\Calculation\BattleRoundTable::addAgainstGoal` is possibly `null`, but parameter type `int` does not accept it.'
+count = 4
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-argument"
+message = 'Argument #2 of method `App\Content\Tournament\Calculation\BattleRoundTable::addTeamGoals` is possibly `null`, but parameter type `int` does not accept it.'
+count = 4
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "possibly-null-array-index"
+message = "Possibly using `null` as an array index to access element of variable $foundPlayers."
+count = 1
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `App\Content\SettingService::getSettingForUser`: expected `App\Entity\User`, but provided type `Symfony\Component\Security\Core\User\UserInterface|null` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `App\Form\Data\FixtureResultData::setPlayerGoal`: expected `int`, but provided type `array-key` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Form\Data\FixtureResultData::setPlayerGoal`: expected `int`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 3
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\SettingService::getSettingForUser` is possibly `null`, but parameter type `App\Entity\User` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/ParticipantController.php"
+code = "incompatible-readonly-modifier"
+message = 'Cannot redeclare readonly property `App\Controller\BaseController::$imageService` as non-readonly `App\Controller\ParticipantController::$imageService`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/ParticipantController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Controller\BaseController::updateProfileImage`: expected `App\Content\File\Form\Data\EditProfileImageData`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "src/Controller/ParticipantController.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #2 of `Symfony\Bundle\FrameworkBundle\Controller\AbstractController::isCsrfTokenValid`: expected `null|string`, but possibly received `null|scalar`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/ParticipantController.php"
+code = "possibly-null-argument"
+message = 'Argument #2 of method `App\Content\QrCodeGenerator::generateQrCode` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/ParticipantController.php"
+code = "unused-property"
+message = "Property `$imageService` is never used."
+count = 1
+
+[[issues]]
+file = "src/Controller/PlayerController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Controller\BaseController::updateProfileImage`: expected `App\Content\File\Form\Data\EditProfileImageData`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "src/Controller/PlayerController.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `App\Entity\Player::setIdent`: expected `string`, but possibly received `null|scalar`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/PlayerController.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Entity\Player::setIdent` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/PlayerController.php"
+code = "possibly-null-argument"
+message = 'Argument #2 of method `App\Content\QrCodeGenerator::generateQrCode` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/PlayerController.php"
+code = "unused-property"
+message = "Property `$imageService` is never used."
+count = 1
+
+[[issues]]
+file = "src/Controller/RegistrationController.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `App\Controller\RegistrationController::register`: expected `Symfony\Component\HttpFoundation\Response`, but found `Symfony\Component\HttpFoundation\Response|null`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/RegistrationController.php"
+code = "nullable-return-statement"
+message = 'Function `App\Controller\RegistrationController::register` is declared to return `Symfony\Component\HttpFoundation\Response` but possibly returns a nullable value (inferred as `Symfony\Component\HttpFoundation\Response|null`).'
+count = 1
+
+[[issues]]
+file = "src/Controller/SettingController.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Message\CheckQueue::__construct` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `App\Content\SettingService::getSettingForUser`: expected `App\Entity\User`, but provided type `Symfony\Component\Security\Core\User\UserInterface|null` is less specific.'
+count = 3
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\Base\GoalHymnAwareTrait::setGoalHymnEndTime`: expected `int`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\Base\GoalHymnAwareTrait::setGoalHymnStartTime`: expected `int`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #3 of `App\Content\Spotify\SpotifyService::breakQueueWithGoalHymn`: expected `int`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #4 of `App\Content\Spotify\SpotifyService::breakQueueWithGoalHymn`: expected `int`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 4
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "mixed-operand"
+message = "Left operand in `>` comparison has `mixed` type."
+count = 2
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "mixed-operand"
+message = "Left operand in binary operation has type `mixed`."
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "mixed-operand"
+message = "Right operand in binary operation has type `mixed`."
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `App\Controller\SpotifyController::startTestRun`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "non-existent-method"
+message = 'Method `getGoalHymnEndTime` does not exist on type `App\Entity\Base\GoalHymnAwareInterface`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "non-existent-method"
+message = 'Method `getGoalHymnStartTime` does not exist on type `App\Entity\Base\GoalHymnAwareInterface`.'
+count = 2
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 7
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\SettingService::getSettingForUser` is possibly `null`, but parameter type `App\Entity\User` does not accept it.'
+count = 3
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\Spotify\SpotifyService::breakQueueWithGoalHymn` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Entity\Fixture::addScorer` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Doctrine\Persistence\ObjectManager::persist` is possibly `null`, but parameter type `object` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-argument"
+message = 'Argument #2 of method `App\Content\Spotify\SpotifyService::breakQueueWithGoalHymn` is possibly `null`, but parameter type `string` does not accept it.'
+count = 2
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-argument"
+message = 'Argument #3 of method `App\Content\Spotify\SpotifyService::breakQueueWithGoalHymn` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-argument"
+message = 'Argument #4 of method `App\Content\Spotify\SpotifyService::breakQueueWithGoalHymn` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-operand"
+message = "Left operand in `>` comparison might be `null` (type `int|null`)."
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-operand"
+message = "Left operand in arithmetic operation might be `null` (type `int|null`)."
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-operand"
+message = "Right operand in `>` comparison might be `null` (type `int|null`)."
+count = 2
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "possibly-null-operand"
+message = "Right operand in arithmetic operation might be `null` (type `int|null`)."
+count = 1
+
+[[issues]]
+file = "src/Controller/TeamController.php"
+code = "incompatible-readonly-modifier"
+message = 'Cannot redeclare readonly property `App\Controller\BaseController::$imageService` as non-readonly `App\Controller\TeamController::$imageService`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/TeamController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Content\File\ImageService::updateProfileImage`: expected `App\Content\File\Form\Data\EditProfileImageData`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "less-specific-nested-argument-type"
+message = 'Argument type mismatch for argument #1 of `App\Entity\Round::getFixturesByOrder`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Content\Tournament\TournamentService::addPlayerToBattleRound`: expected `App\Entity\Player`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getPlayer()` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 4
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Entity\TeamList::addTeam` is possibly `null`, but parameter type `App\Entity\Team` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "possibly-null-argument"
+message = 'Argument #2 of method `App\Content\Tournament\TournamentService::addPlayerToBattleRound` is possibly `null`, but parameter type `App\Entity\BattleRound` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `App\Form\Data\FixtureResultData::setPlayerGoal`: expected `int`, but provided type `array-key` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "less-specific-nested-argument-type"
+message = 'Argument type mismatch for argument #1 of `App\Entity\Round::getFixturesByOrder`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\BattleRound::addPlayer`: expected `App\Entity\Player`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Form\Data\FixtureResultData::setPlayerGoal`: expected `int`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 4
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\Tournament\TournamentService::addAndRemovePlayersToBattleRound` is possibly `null`, but parameter type `App\Entity\BattleRound` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Entity\Fixture::addScorer` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "possibly-null-operand"
+message = "Left operand in arithmetic operation might be `null` (type `int|null`)."
+count = 2
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "unused-method"
+message = "Method `createClassicTournament()` is never used."
+count = 1
+
+[[issues]]
+file = "src/Entity/Base/BaseEntity.php"
+code = "non-existent-method"
+message = 'Method `getEntityTypeIdent` does not exist on type `App\Entity\Base\BaseEntity`.'
+count = 1
+
+[[issues]]
+file = "src/Entity/Base/BaseEntity.php"
+code = "possibly-null-operand"
+message = "Possibly null left operand used in string concatenation (type `int|null`)."
+count = 1
+
+[[issues]]
+file = "src/Entity/Base/ImageFileAwareTrait.php"
+code = "incompatible-parameter-name"
+message = 'Parameter #1 of `App\Entity\Participant::setimagefile()` is named `$imageFile` but parent `App\Content\File\ImageAwareInterface::setimagefile()` names it `$profileImage`'
+count = 1
+
+[[issues]]
+file = "src/Entity/Base/ImageFileAwareTrait.php"
+code = "incompatible-parameter-name"
+message = 'Parameter #1 of `App\Entity\Player::setimagefile()` is named `$imageFile` but parent `App\Content\File\ImageAwareInterface::setimagefile()` names it `$profileImage`'
+count = 1
+
+[[issues]]
+file = "src/Entity/Base/ImageFileAwareTrait.php"
+code = "incompatible-parameter-name"
+message = 'Parameter #1 of `App\Entity\Team::setimagefile()` is named `$imageFile` but parent `App\Content\File\ImageAwareInterface::setimagefile()` names it `$profileImage`'
+count = 1
+
+[[issues]]
+file = "src/Entity/BattleRound.php"
+code = "mixed-property-type-coercion"
+message = "A value with a less specific type `array<array-key, mixed>` is being assigned to property `$fixtureOrder` (array<array-key, int>)."
+count = 1
+
+[[issues]]
+file = "src/Entity/Fixture.php"
+code = "mixed-property-type-coercion"
+message = "A value with a less specific type `array<array-key, mixed>` is being assigned to property `$scorers` (array<array-key, int>)."
+count = 1
+
+[[issues]]
+file = "src/Entity/Participant.php"
+code = "property-type-coercion"
+message = 'A value of a less specific type `Doctrine\Common\Collections\ArrayCollection<array-key, mixed>` is being assigned to property `$players` (Doctrine\Common\Collections\Collection<int, App\Entity\Player>).'
+count = 1
+
+[[issues]]
+file = "src/Entity/Result.php"
+code = "mixed-property-type-coercion"
+message = "A value with a less specific type `array<array-key, mixed>` is being assigned to property `$playerGoals` (array<array-key, int>)."
+count = 1
+
+[[issues]]
+file = "src/Entity/Round.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `App\Entity\Round::getFixturesByOrder`: expected `array<array-key, App\Entity\Fixture>`, but found `list<App\Entity\Fixture|false>`.'
+count = 1
+
+[[issues]]
+file = "src/Entity/Tournament.php"
+code = "possibly-undefined-variable"
+message = "Variable `$editRoute` might not have been defined on all execution paths leading to this point."
+count = 1
+
+[[issues]]
+file = "src/Entity/User.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `App\Entity\User::getRoles`: expected `list<string>`, but found `non-empty-array<non-negative-int, string>`.'
+count = 1
+
+[[issues]]
+file = "src/Entity/User.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `App\Entity\User::getUserIdentifier`: expected `non-empty-string`, but found `string`.'
+count = 1
+
+[[issues]]
+file = "src/Form/Data/FixtureResultData.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `App\Form\Data\FixtureResultData::getPlayerGoal`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "array-to-int-cast"
+message = "Casting an array to int instead of counting its elements."
+count = 1
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "less-specific-argument"
+message = "Argument type mismatch for argument #1 of `str_starts_with`: expected `string`, but provided type `array-key` is less specific."
+count = 1
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "less-specific-argument"
+message = "Argument type mismatch for argument #3 of `str_replace`: expected `array<array-key, string>|string`, but provided type `array-key` is less specific."
+count = 1
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 6
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getId()` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "mixed-method-access"
+message = "Attempting to call method `getIdent()` on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 2
+
+[[issues]]
+file = "src/Form/ManageTournamentType.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "src/Form/ManageTournamentType.php"
+code = "mixed-operand"
+message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "src/Form/ManageTournamentType.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$name` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Form/ManageTournamentType.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$value` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "src/Form/TeamAutoCompleteField.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "src/Form/TournamentCreateType.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+count = 2
+
+[[issues]]
+file = "src/Form/TournamentCreateType.php"
+code = "mixed-operand"
+message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
+count = 2
+
+[[issues]]
+file = "src/Form/TournamentCreateType.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$name` on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "src/Form/TournamentCreateType.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$value` on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "src/MessageHandler/CheckQueueHandler.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\SettingService::getSettingForUser` is possibly `null`, but parameter type `App\Entity\User` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/MessageHandler/RestoreSpotifyQueueHandler.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "src/MessageHandler/RestoreSpotifyQueueHandler.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `App\Content\Spotify\SpotifyService::restoreSpotifyQueueAsBeforeGoalHymnBreak` is possibly `null`, but parameter type `int` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/MessageHandler/RestoreSpotifyQueueHandler.php"
+code = "possibly-null-argument"
+message = 'Argument #2 of method `App\Content\Spotify\SpotifyService::restoreSpotifyQueueAsBeforeGoalHymnBreak` is possibly `null`, but parameter type `App\Entity\User` does not accept it.'
+count = 1
+
+[[issues]]
+file = "src/Repository/AbstractBaseRepository.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Doctrine\ORM\EntityManager::persist`: expected `object`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Repository/AbstractBaseRepository.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Doctrine\ORM\EntityManager::refresh`: expected `object`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Repository/AbstractBaseRepository.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Doctrine\ORM\EntityManager::remove`: expected `object`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Repository/ParticipantRepository.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `App\Repository\ParticipantRepository::findParticipantsByPlayerCombination`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/GoalComponent.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `str_pad` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/GoalComponent.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `strlen` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/GoalComponent.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `substr` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/ParticipantComponent.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `App\Twig\Components\ParticipantComponent::getEntity`: expected `App\Entity\Base\GoalHymnAwareInterface`, but found `App\Entity\Player|null`.'
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/ParticipantComponent.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `App\Content\QrCodeGenerator::generateQrCode`: expected `int`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/ParticipantComponent.php"
+code = "non-existent-method"
+message = 'Method `getId` does not exist on type `App\Entity\Base\GoalHymnAwareInterface`.'
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/ParticipantComponent.php"
+code = "nullable-return-statement"
+message = 'Function `App\Twig\Components\ParticipantComponent::getEntity` is declared to return `App\Entity\Base\GoalHymnAwareInterface` but possibly returns a nullable value (inferred as `App\Entity\Player|null`).'
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/ParticipantComponent.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/TeamListing.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `App\Twig\Components\TeamListing::getTeamListId`: expected `int`, but found `int|null`.'
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/TeamListing.php"
+code = "nullable-return-statement"
+message = 'Function `App\Twig\Components\TeamListing::getTeamListId` is declared to return `int` but possibly returns a nullable value (inferred as `int|null`).'
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/TeamListing.php"
+code = "unused-property"
+message = "Property `$teams` is never used."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/TrackComponent.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `App\Twig\Components\TrackComponent::getEntity`: expected `App\Entity\Base\GoalHymnAwareInterface`, but found `App\Entity\Player|null`.'
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/TrackComponent.php"
+code = "nullable-return-statement"
+message = 'Function `App\Twig\Components\TrackComponent::getEntity` is declared to return `App\Entity\Base\GoalHymnAwareInterface` but possibly returns a nullable value (inferred as `App\Entity\Player|null`).'
+count = 1
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/TournamentCalculationServiceTest.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `App\Entity\Tournament::setLevel`: expected `enum(App\Content\Tournament\TournamentLevel)`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/TournamentCalculationServiceTest.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/TournamentCalculationServiceTest.php"
+code = "mixed-operand"
+message = "Right operand in `>` comparison has `mixed` type."
+count = 1
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/TournamentCalculationServiceTest.php"
+code = "mixed-property-access"
+message = "Attempting to access property `$value` on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/TournamentCalculationServiceTest.php"
+code = "possibly-undefined-int-array-index"
+message = 'Possibly undefined array index accessed on `array{0: App\Entity\Player, ...<int<0, 9>, App\Entity\Player>}|array{0: App\Entity\Player}`.'
+count = 33
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/TournamentCalculationServiceTest.php"
+code = "possibly-undefined-int-array-index"
+message = 'Possibly undefined array index accessed on `array{1: App\Entity\Player, ...<int<1, 10>, App\Entity\Player>}|array{1: App\Entity\Player}`.'
+count = 13
+
+[[issues]]
+file = "tests/Smoke/LoggedInPagesTest.php"
+code = "possibly-null-operand"
+message = "Possibly null right operand used in string concatenation (type `int|null`)."
+count = 2
+
+[[issues]]
+file = "tests/Smoke/WebSmokeTestCase.php"
+code = "property-type-coercion"
+message = 'A value of a less specific type `object` is being assigned to property `$em` (Doctrine\ORM\EntityManagerInterface).'
+count = 1
+
+[[issues]]
+file = "tests/bootstrap.php"
+code = "reference-to-undefined-variable"
+message = "Reference created from a previously undefined variable `$exitCode`."
+count = 1

@@ -4,27 +4,29 @@ namespace App\Command;
 
 use App\Content\Team\StarRating;
 use App\Content\Team\TeamImportService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'app:crawl-teams')]
 class CrawlTeamsCommand extends Command
 {
-    protected static $defaultName = 'app:crawl-teams';
-
     public function __construct(
-        private TeamImportService $teamImporterService
+        private TeamImportService $teamImporterService,
     ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this
-            ->setDescription('Crawl teams from FIFA Index')
-            ->addArgument('stars', InputArgument::REQUIRED, 'Number of stars to filter (e.g., 3)');
+        $this->setDescription('Crawl teams from FIFA Index')->addArgument(
+            'stars',
+            InputArgument::REQUIRED,
+            'Number of stars to filter (e.g., 3)',
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

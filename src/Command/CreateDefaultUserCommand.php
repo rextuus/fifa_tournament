@@ -4,19 +4,19 @@ namespace App\Command;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+#[AsCommand(name: 'app:create-default-user')]
 class CreateDefaultUserCommand extends Command
 {
-    protected static $defaultName = 'app:create-default-user';
-
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private UserPasswordHasherInterface $passwordHasher
+        private UserPasswordHasherInterface $passwordHasher,
     ) {
         parent::__construct();
     }
@@ -41,8 +41,7 @@ class CreateDefaultUserCommand extends Command
         }
 
         // Check if a user with the email already exists
-        $existingUser = $this->entityManager->getRepository(User::class)
-            ->findOneBy(['email' => $email]);
+        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
         if ($existingUser) {
             $output->writeln('<error>A user with the email "' . $email . '" already exists.</error>');
             return Command::FAILURE;
@@ -68,7 +67,9 @@ class CreateDefaultUserCommand extends Command
             $output->writeln('<info>Default user with email "' . $email . '" created successfully!</info>');
             return Command::SUCCESS;
         } catch (\Exception $e) {
-            $output->writeln('<error>An error occurred while creating the default user: ' . $e->getMessage() . '</error>');
+            $output->writeln(
+                '<error>An error occurred while creating the default user: ' . $e->getMessage() . '</error>',
+            );
             return Command::FAILURE;
         }
     }

@@ -19,8 +19,8 @@ final class ProfileImageComponent
     {
         $defaultImage = '';
         match ($this->profile->getDefaultImageType()) {
-            DefaultImageType::TEAM_PROFILE => $defaultImage = 'build/images/thumbnails/team_default.png',
-            DefaultImageType::USER_PROFILE => $defaultImage = 'build/images/thumbnails/client_default.png'
+            DefaultImageType::TEAM_PROFILE => $defaultImage = 'images/thumbnails/team_default.png',
+            DefaultImageType::USER_PROFILE => $defaultImage = 'images/thumbnails/client_default.png',
         };
 
         return $defaultImage;
@@ -39,7 +39,6 @@ final class ProfileImageComponent
         if ($this->rounded) {
             $classes[] = 'rounded-circle';
             $classes[] = 'border';
-
         }
 
         return implode(' ', $classes);

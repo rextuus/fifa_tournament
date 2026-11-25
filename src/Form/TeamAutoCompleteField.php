@@ -15,7 +15,7 @@ use Symfony\UX\Autocomplete\Form\BaseEntityAutocompleteType;
 #[AsEntityAutocompleteField]
 class TeamAutoCompleteField extends AbstractType
 {
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'class' => Team::class,
@@ -32,14 +32,14 @@ class TeamAutoCompleteField extends AbstractType
                     $qb = $er->createQueryBuilder('o');
 
                     $excludedFoods = $options['extra_options']['excluded_teams'] ?? [];
-//                    $excludedFoods = array_map(fn($team) => $team->getId(), $excludedFoods);
+                    //                    $excludedFoods = array_map(fn($team) => $team->getId(), $excludedFoods);
                     if ([] !== $excludedFoods) {
                         $qb->andWhere($qb->expr()->notIn('o.id', $excludedFoods));
                     }
 
                     return $qb;
                 };
-            }
+            },
             // ... any other normal EntityType options
             // e.g. query_builder, choice_label
         ]);

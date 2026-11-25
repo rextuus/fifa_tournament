@@ -10,6 +10,7 @@ use App\Content\Tournament\TournamentLevel;
 use App\Entity\Participant;
 use App\Entity\Player;
 use App\Entity\Tournament;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TournamentCalculationServiceTest extends TestCase
@@ -58,7 +59,6 @@ class TournamentCalculationServiceTest extends TestCase
 
         $participantsToTest = [];
 
-
         for ($numberOfPlayers = 2; $numberOfPlayers < 17; $numberOfPlayers++) {
             for ($j = 0; $j < $numberOfPlayers; $j++) {
                 $participantsToTest[] = $participants[$j];
@@ -75,9 +75,7 @@ class TournamentCalculationServiceTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider getTournamentLevel
-     */
+    #[DataProvider('getTournamentLevel')]
     public function testCalculate($tournamentLevel): void
     {
         // Number of participants and players
@@ -109,10 +107,10 @@ class TournamentCalculationServiceTest extends TestCase
         }
 
         // Print participants for verification
-//        foreach ($participants as $index => $participant) {
-//            $playerIds = array_map(fn($player) => $player->getId(), $participant->getPlayers()->toArray());
-//            echo "Participant {$index} has players: " . implode(', ', $playerIds) . PHP_EOL;
-//        }
+        //        foreach ($participants as $index => $participant) {
+        //            $playerIds = array_map(fn($player) => $player->getId(), $participant->getPlayers()->toArray());
+        //            echo "Participant {$index} has players: " . implode(', ', $playerIds) . PHP_EOL;
+        //        }
 
         $participantsToTest = [];
 
@@ -129,7 +127,7 @@ class TournamentCalculationServiceTest extends TestCase
 
             if ($numParticipants > $tournamentLevel->value) {
                 $this->expectExceptionMessage(
-                    'To much participants (' . $numberOfPlayers . ') for tournament level: ' . $tournamentLevel->value
+                    'To much participants (' . $numberOfPlayers . ') for tournament level: ' . $tournamentLevel->value,
                 );
             }
 
@@ -138,7 +136,7 @@ class TournamentCalculationServiceTest extends TestCase
         }
     }
 
-    public function getTournamentLevel(): array
+    public static function getTournamentLevel(): array
     {
         return [
             TournamentLevel::ROUND_OF_128->name => [TournamentLevel::ROUND_OF_128],
@@ -192,7 +190,7 @@ class TournamentCalculationServiceTest extends TestCase
 
         $result = $this->tournamentCalculationService->calculateParticipantPlayerSimilarityMap(
             $participants,
-            $participants[1]
+            $participants[1],
         );
         $this->assertEquals([2, 7, 3, 4, 5, 6], $result);
     }

@@ -55,3 +55,28 @@
 /data
 /public/build
 /public/media
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+# Gebaute Assets gehören ins Image, nicht ins Repo
+/public/bundles/
+/public/assets/
+
+# Produktion (Komodo schreibt die Datei bei jedem Deploy)
+/.env.prod.local
+
+/.phpunit.cache/
+/.phpunit.result.cache
+/.env.dev
+
+###> symfony/asset-mapper ###
+/assets/vendor/
+###< symfony/asset-mapper ###
+
+###> symfonycasts/sass-bundle ###
+###< symfonycasts/sass-bundle ###

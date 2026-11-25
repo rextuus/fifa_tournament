@@ -1,0 +1,35 @@
+# Mago (Linter, Analyzer, Formatter) – Einstellungen wie in optatio/wedora.
+#   vendor/bin/mago lint       vendor/bin/mago analyze       vendor/bin/mago format --check
+php-version = "8.5.0"
+
+[source]
+paths = ["src", "tests", "migrations"]
+includes = ["vendor"]
+excludes = ["var", "config/reference.php"]
+
+[formatter]
+print-width = 120
+
+[linter]
+# Altlasten vor Einführung von Mago; neue Befunde schlagen fehl. Abbau: Befund beheben, dann
+#   vendor/bin/mago lint --remove-outdated-baseline-entries --baseline mago-lint-baseline.toml
+baseline = "mago-lint-baseline.toml"
+integrations = ["symfony", "phpunit", "doctrine"]
+
+[linter.rules]
+# Symfony-Konvention: self::assert*().
+assertion-style = { style = "self" }
+# Rein stilistisch; bei Funktionen wie strtr()/hash_hmac() kontraproduktiv.
+literal-named-argument = { enabled = false }
+# Konstruktor-Injektion von Diensten ist kein „langer Parameterlisten“-Smell.
+excessive-parameter-list = { constructor-threshold = 8 }
+# Integrationstests bündeln bewusst mehrere Prüfschritte eines Szenarios.
+too-many-methods = { threshold = 20 }
+# Doctrine-Entities bündeln naturgemäß viele Felder.
+too-many-properties = { threshold = 20 }
+# Komplexität pro Methode bewerten; zentrale Regelklassen dürfen in Summe komplexer sein.
+cyclomatic-complexity = { threshold = 30, method-threshold = 10 }
+
+[analyzer]
+# Altlasten wie beim Linter.
+baseline = "mago-analyze-baseline.toml"

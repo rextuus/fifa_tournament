@@ -2,10 +2,22 @@
 
 use Symfony\Component\Dotenv\Dotenv;
 
-require dirname(__DIR__).'/vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
-if (file_exists(dirname(__DIR__).'/config/bootstrap.php')) {
-    require dirname(__DIR__).'/config/bootstrap.php';
-} elseif (method_exists(Dotenv::class, 'bootEnv')) {
-    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+if (method_exists(Dotenv::class, 'bootEnv')) {
+    new Dotenv()->bootEnv(dirname(__DIR__) . '/.env');
+}
+
+// Das Layout bindet das gebaute SCSS ein (asset('styles/app.scss')). Fehlt es (frischer Checkout), einmal bauen.
+if ([] === glob(dirname(__DIR__) . '/var/sass/*.output.css')) {
+    passthru(
+        escapeshellarg(PHP_BINARY)
+        . ' '
+        . escapeshellarg(dirname(__DIR__) . '/bin/console')
+        . ' sass:build --env=test --quiet',
+        $exitCode,
+    );
+    if (0 !== $exitCode) {
+        throw new RuntimeException('sass:build ist fehlgeschlagen.');
+    }
 }

@@ -12,38 +12,35 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SelectSongPeriodType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('start', RangeType::class, [
-                'required' => true,
-                'attr' => [
-                    'type' => 'range',
-                    'class' => 'form-range',
-                    'min' => 0,
-                    'max' => $options['trackDuration'], // Dynamically set the track duration
-                    'value' => $options['start'], // Default initial value
-                    'step' => 1,
-                    'id' => 'startSlider', // Ensure this matches your JS selector
-                ],
-                'label' => null,
-            ])
-            ->add('end', RangeType::class, [
-                'required' => true,
-                'attr' => [
-                    'type' => 'range',
-                    'class' => 'form-range',
-                    'min' => 1,
-                    'max' => $options['trackDuration'],
-                    'value' => $options['end'],
-                    'step' => 1,
-                    'id' => 'endSlider',
-                ],
-                'label' => null,
-            ])
-            ->add('save', SubmitType::class, [
-                'attr' => ['class' => 'btn btn-primary'],
-            ]);
+        $builder->add('start', RangeType::class, [
+            'required' => true,
+            'attr' => [
+                'type' => 'range',
+                'class' => 'form-range',
+                'min' => 0,
+                'max' => $options['trackDuration'], // Dynamically set the track duration
+                'value' => $options['start'], // Default initial value
+                'step' => 1,
+                'id' => 'startSlider', // Ensure this matches your JS selector
+            ],
+            'label' => null,
+        ])->add('end', RangeType::class, [
+            'required' => true,
+            'attr' => [
+                'type' => 'range',
+                'class' => 'form-range',
+                'min' => 1,
+                'max' => $options['trackDuration'],
+                'value' => $options['end'],
+                'step' => 1,
+                'id' => 'endSlider',
+            ],
+            'label' => null,
+        ])->add('save', SubmitType::class, [
+            'attr' => ['class' => 'btn btn-primary'],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

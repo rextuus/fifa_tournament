@@ -30,8 +30,8 @@ class Setting
     #[ORM\Column]
     private ?bool $goalGifEnabled = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $queueCheck = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $queueCheck = null;
 
     public function getId(): ?int
     {
@@ -98,12 +98,12 @@ class Setting
         return $this;
     }
 
-    public function getQueueCheck(): ?\DateTimeInterface
+    public function getQueueCheck(): ?\DateTimeImmutable
     {
         return $this->queueCheck;
     }
 
-    public function setQueueCheck(?\DateTimeInterface $queueCheck): static
+    public function setQueueCheck(?\DateTimeImmutable $queueCheck): static
     {
         $this->queueCheck = $queueCheck;
 

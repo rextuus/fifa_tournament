@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Content\Tournament\ResultType;
 use App\Repository\ResultRepository;
-use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,8 +30,8 @@ class Result
     #[ORM\Column(type: Types::JSON)]
     private array $playerGoals = [];
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?DateTimeInterface $played = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $played = null;
 
     public function getId(): ?int
     {
@@ -114,12 +113,12 @@ class Result
         return ResultType::DRAW;
     }
 
-    public function getPlayed(): ?DateTimeInterface
+    public function getPlayed(): ?\DateTimeImmutable
     {
         return $this->played;
     }
 
-    public function setPlayed(?DateTimeInterface $played): static
+    public function setPlayed(?\DateTimeImmutable $played): static
     {
         $this->played = $played;
 

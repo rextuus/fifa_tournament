@@ -27,7 +27,7 @@ class CroppedImageUploadType extends AbstractType
 
         $resolver->setDefaults([
             'current_image_url' => null,
-            'default_image_path' => 'build/images/thumbnail/company_default.png',
+            'default_image_path' => 'images/thumbnails/client_default.png',
         ]);
 
         $resolver->setAllowedTypes('width', ['int']);

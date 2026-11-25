@@ -46,11 +46,13 @@
                     Sign in
                 </button>
             </form>
+            {% if registration_enabled %}
             <div class="text-center mt-3">
                 {{ component('ButtonComponent', {
                     text: 'Registrieren', classes: 'btn btn-primary', route: path('app_register')
                 }) }}
             </div>
+            {% endif %}
 
         </div>
     </div>

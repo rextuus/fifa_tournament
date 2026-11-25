@@ -1,0 +1,22 @@
+# Nichts davon gehört ins Produktions-Image – vor allem keine Secrets und keine Daten.
+.git
+.github
+.idea
+.env.local
+.env.local.php
+.env.*.local
+.env.dev
+.env.prod.local
+var/
+vendor/
+node_modules/
+data/
+public/bundles/
+public/media/
+assets/vendor/
+tests/
+docs/
+deploy/
+.phpunit.cache
+.phpunit.result.cache
+compose*.yaml

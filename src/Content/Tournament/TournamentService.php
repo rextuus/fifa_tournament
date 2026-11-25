@@ -28,8 +28,7 @@ class TournamentService
         private readonly ParticipantService $participantService,
         private readonly BattleRoundCalculationService $battleRoundCalculationService,
         private readonly TeamService $teamService,
-    ) {
-    }
+    ) {}
 
     public function calculateTeamAmountPerParticipant(Tournament $tournament): int
     {
@@ -46,7 +45,7 @@ class TournamentService
 
     public function calculateRoundsForTournament(Tournament $tournament): void
     {
-        if ($tournament->getType() === TournamentType::GROUP_BATTLE){
+        if ($tournament->getType() === TournamentType::GROUP_BATTLE) {
             $this->battleRoundCalculationService->calculateGroupRound($tournament);
 
             return;
@@ -75,13 +74,7 @@ class TournamentService
 
                 $fixture->setHomeParticipant(null);
                 $fixture->setAwayParticipant(null);
-                $fixture->setIdent(
-                    sprintf(
-                        '%s - Spiel %s',
-                        $currentRoundType->getRoundDescription(),
-                        $fixtureNr + 1
-                    )
-                );
+                $fixture->setIdent(sprintf('%s - Spiel %s', $currentRoundType->getRoundDescription(), $fixtureNr + 1));
 
                 $round->addFixture($fixture);
 
@@ -96,16 +89,12 @@ class TournamentService
         $this->entityManager->flush();
     }
 
-
     /**
      * @param array<Participant> $participants
      */
-    private function calculateFirstRound(
-        Tournament $tournament,
-        FixtureMap $fixtureMap,
-        array $participants
-    ): void {
-        $map = (new ParticipantTeamMap())->initFromTeamlist($tournament);
+    private function calculateFirstRound(Tournament $tournament, FixtureMap $fixtureMap, array $participants): void
+    {
+        $map = new ParticipantTeamMap()->initFromTeamlist($tournament);
 
         $firstRound = new Round();
         $firstRoundType = RoundType::getFirstRoundTypeByTournamentLevel($tournament->getLevel());
@@ -127,13 +116,7 @@ class TournamentService
             $fixture->setHomeTeam($map->getRandomTeamForParticipant($homeParticipant));
             $fixture->setAwayTeam($map->getRandomTeamForParticipant($awayParticipant));
 
-            $fixture->setIdent(
-                sprintf(
-                    '%s - Spiel %s',
-                    $firstRoundType->getRoundDescription(),
-                    $index + 1
-                )
-            );
+            $fixture->setIdent(sprintf('%s - Spiel %s', $firstRoundType->getRoundDescription(), $index + 1));
             $this->entityManager->persist($fixture);
 
             $firstRound->addFixture($fixture);
@@ -159,8 +142,8 @@ class TournamentService
 
     public function isValid(Tournament $tournament): bool
     {
-        if ($tournament->getType() === TournamentType::GROUP_BATTLE){
-            if ($tournament->getBattleRound()->getParticipants()->count() < 2){
+        if ($tournament->getType() === TournamentType::GROUP_BATTLE) {
+            if ($tournament->getBattleRound()->getParticipants()->count() < 2) {
                 return false;
             }
 
@@ -190,10 +173,11 @@ class TournamentService
 
     public function participantIsValid(Tournament $tournament, Participant $participant): bool
     {
-        if ($tournament->getType() === TournamentType::GROUP_BATTLE){
-            $teamListForTournament = $participant->getTeamLists()->filter(
-                fn(TeamList $teamList) => $teamList->getTournament() === $tournament
-            )->first();
+        if ($tournament->getType() === TournamentType::GROUP_BATTLE) {
+            $teamListForTournament = $participant
+                ->getTeamLists()
+                ->filter(fn(TeamList $teamList) => $teamList->getTournament() === $tournament)
+                ->first();
 
             if ($teamListForTournament === false) {
                 return false;
@@ -202,19 +186,18 @@ class TournamentService
             return $teamListForTournament->getTeams()->count() === 1;
         }
 
-
         $maximumAmount = $this->calculateTeamAmountPerParticipant($tournament);
-        $teamListForTournament = $participant->getTeamLists()->filter(
-            fn(TeamList $teamList) => $teamList->getTournament() === $tournament
-        )->first();
+        $teamListForTournament = $participant
+            ->getTeamLists()
+            ->filter(fn(TeamList $teamList) => $teamList->getTournament() === $tournament)
+            ->first();
 
         if ($teamListForTournament === false) {
             return false;
         }
-//        dd($teamListForTournament->getTeams()->count() === $maximumAmount);
+        //        dd($teamListForTournament->getTeams()->count() === $maximumAmount);
         return $teamListForTournament->getTeams()->count() === $maximumAmount;
     }
-
 
     /**
      * @param array<Fixture> $fixtures
@@ -224,12 +207,12 @@ class TournamentService
     {
         // Total rows and columns in the matrix
         $totalRows = pow(2, $rounds) - 1; // Total number of rows in the binary tree
-        $totalColumns = $rounds;          // Number of rounds/columns
+        $totalColumns = $rounds; // Number of rounds/columns
 
         // Initialize matrix with "X"
         $matrix = [];
         for ($i = 0; $i < $totalRows; $i++) {
-            $matrix[$i] = array_fill(0, $totalColumns, "X");
+            $matrix[$i] = array_fill(0, $totalColumns, 'X');
         }
 
         // Counter for game IDs
@@ -247,9 +230,9 @@ class TournamentService
             // Place games in the matrix
             for ($game = 0; $game < $gamesInRound; $game++) {
                 // Calculate row for the current game's placement
-                $row = $startRow + $game * $rowDistance;
+                $row = $startRow + ($game * $rowDistance);
                 // Place the game ID
-                $matrix[$row][$round] = $fixtures[$gameCounter-1];
+                $matrix[$row][$round] = $fixtures[$gameCounter - 1];
 
                 // Increment game counter
                 $gameCounter++;
@@ -292,8 +275,6 @@ class TournamentService
             $battleRound->addParticipant($participant);
             $tournament->addParticipant($participant);
         }
-dump($existingParticipants);
-dump($newParticipants);
         // create new fixture between existing participants and the new ones
         $round = $tournament->getRoundByNumber(1);
         $fixtureNr = $round->getFixtures()->count() + 1;
@@ -315,7 +296,7 @@ dump($newParticipants);
                 $fixture = new Fixture();
                 $fixture->setHomeParticipant($existingParticipant);
                 $fixture->setAwayParticipant($newParticipant);
-                $fixture->setIdent('Gruppenphase - '.$fixtureNr);
+                $fixture->setIdent('Gruppenphase - ' . $fixtureNr);
                 $fixture->setPlayed(null);
                 $fixture->setRound($round);
 
@@ -335,10 +316,7 @@ dump($newParticipants);
         $fixtures = $tournament->getRoundByNumber(1)->getFixtures()->toArray();
         shuffle($fixtures);
 
-        $shuffledIds = array_map(
-            fn(Fixture $fixture) => $fixture->getId(),
-            $fixtures
-        );
+        $shuffledIds = array_map(fn(Fixture $fixture) => $fixture->getId(), $fixtures);
 
         $battleRound->setFixtureOrder($shuffledIds);
         $this->entityManager->persist($battleRound);
@@ -357,7 +335,7 @@ dump($newParticipants);
         }
 
         foreach ($fixtures as $fixture) {
-            if ($fixture->getPlayed() === null){
+            if ($fixture->getPlayed() === null) {
                 continue;
             }
 
@@ -431,7 +409,7 @@ dump($newParticipants);
         }
 
         foreach ($fixtures as $fixture) {
-            if ($fixture->getPlayed() === null){
+            if ($fixture->getPlayed() === null) {
                 continue;
             }
 
@@ -470,7 +448,7 @@ dump($newParticipants);
 
     private function calculateFinalResultForFixture(Fixture $fixture): ResultType
     {
-        if ($fixture->getPlayed() === null){
+        if ($fixture->getPlayed() === null) {
             throw new \Exception('Fixture has not been played yet');
         }
 

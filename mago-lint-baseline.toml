@@ -1,0 +1,1261 @@
+variant = "loose"
+
+[[issues]]
+file = "src/Command/CrawlTeamEmblemsCommand.php"
+code = "no-redundant-use"
+message = "Unused import: `InputArgument`."
+count = 1
+
+[[issues]]
+file = "src/Command/CrawlTeamEmblemsCommand.php"
+code = "no-redundant-use"
+message = "Unused import: `StarRating`."
+count = 1
+
+[[issues]]
+file = "src/Command/CrawlTeamEmblemsCommand.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Command/CrawlTeamsCommand.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Command/CreateDefaultUserCommand.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Command/GenerateTournamentFixturesCommand.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/File/DefaultImageType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/File/FileService.php"
+code = "no-boolean-flag-parameter"
+message = "Avoid boolean flag parameters."
+count = 3
+
+[[issues]]
+file = "src/Content/File/ImageService.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 1
+
+[[issues]]
+file = "src/Content/File/ImageService.php"
+code = "no-else-clause"
+message = "Avoid `elseif` clauses."
+count = 1
+
+[[issues]]
+file = "src/Content/File/ImageService.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "src/Content/Fixture/FixtureService.php"
+code = "no-empty"
+message = "Use of the `empty` construct."
+count = 1
+
+[[issues]]
+file = "src/Content/Fixture/ScoringMap.php"
+code = "no-redundant-use"
+message = "Unused import: `Participant`."
+count = 1
+
+[[issues]]
+file = "src/Content/Fixture/ScoringMap.php"
+code = "use-compound-assignment"
+message = "Use a compound assignment for clarity and performance."
+count = 1
+
+[[issues]]
+file = "src/Content/Participant/ParticipantService.php"
+code = "no-noop"
+message = "Redundant noop statement."
+count = 2
+
+[[issues]]
+file = "src/Content/Participant/ParticipantService.php"
+code = "no-redundant-use"
+message = "Unused import: `EntityManager`."
+count = 1
+
+[[issues]]
+file = "src/Content/QrCodeGenerator.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/Representation/SpotifyTrack.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "no-boolean-flag-parameter"
+message = "Avoid boolean flag parameters."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "no-redundant-use"
+message = "Unused import: `Participant`."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "readable-literal"
+message = "Numeric literal could use underscore separators for readability."
+count = 1
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "sensitive-parameter"
+message = "Parameters that may contain sensitive information should be marked with the `#[SensitiveParameter]` attribute."
+count = 3
+
+[[issues]]
+file = "src/Content/Spotify/SpotifyService.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/Team/FifaTeamsCrawler.php"
+code = "no-empty"
+message = "Use of the `empty` construct."
+count = 1
+
+[[issues]]
+file = "src/Content/Team/FifaTeamsCrawler.php"
+code = "prefer-arrow-function"
+message = "This closure can be simplified to a more concise arrow function."
+count = 1
+
+[[issues]]
+file = "src/Content/Team/FifaTeamsCrawler.php"
+code = "prefer-static-closure"
+message = "This closure does not use `$this` and should be declared static."
+count = 2
+
+[[issues]]
+file = "src/Content/Team/FifaTeamsCrawler.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/Team/StarRating.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/Team/TeamImportService.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundCalculationService.php"
+code = "no-boolean-flag-parameter"
+message = "Avoid boolean flag parameters."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundCalculationService.php"
+code = "no-empty"
+message = "Use of the `empty` construct."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundCalculationService.php"
+code = "prefer-arrow-function"
+message = "This closure can be simplified to a more concise arrow function."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundCalculationService.php"
+code = "prefer-static-closure"
+message = "This arrow function does not use `$this` and should be declared static."
+count = 3
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundCalculationService.php"
+code = "prefer-static-closure"
+message = "This closure does not use `$this` and should be declared static."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "halstead"
+message = "Method has a high halstead difficulty"
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "prefer-arrow-function"
+message = "This closure can be simplified to a more concise arrow function."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "prefer-static-closure"
+message = "This closure does not use `$this` and should be declared static."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/BattleRoundTable.php"
+code = "use-compound-assignment"
+message = "Use a compound assignment for clarity and performance."
+count = 5
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/FixtureMap.php"
+code = "prefer-early-continue"
+message = "Consider using early continue pattern to reduce nesting."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/FixtureMap.php"
+code = "use-compound-assignment"
+message = "Use a compound assignment for clarity and performance."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "cyclomatic-complexity"
+message = "Method `calculate` has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "cyclomatic-complexity"
+message = "Method `randomizeFixtures` has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "halstead"
+message = "Method has a high halstead difficulty and effort"
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "halstead"
+message = "Method has a high halstead effort"
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "no-debug-symbols"
+message = "Do not commit debug functions."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "no-empty-catch-clause"
+message = "Do not use empty `catch` blocks."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "no-isset"
+message = "Use of the `isset` construct."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "no-shorthand-ternary"
+message = "Use of the shorthand ternary operator."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "prefer-arrow-function"
+message = "This closure can be simplified to a more concise arrow function."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "prefer-early-continue"
+message = "Consider using early continue pattern to reduce nesting."
+count = 3
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "prefer-static-closure"
+message = "This arrow function does not use `$this` and should be declared static."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "prefer-static-closure"
+message = "This closure does not use `$this` and should be declared static."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/Calculation/TournamentCalculationService.php"
+code = "strict-behavior"
+message = "Call to `array_search` must enforce strict comparison."
+count = 2
+
+[[issues]]
+file = "src/Content/Tournament/ParticipantTeamMap.php"
+code = "prefer-static-closure"
+message = "This arrow function does not use `$this` and should be declared static."
+count = 3
+
+[[issues]]
+file = "src/Content/Tournament/ResultType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/RoundType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentFactory.php"
+code = "no-redundant-use"
+message = "Unused import: `Tournament`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "cyclomatic-complexity"
+message = "Method `calculateBattleRoundTable` has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "cyclomatic-complexity"
+message = "Method `calculateFinalResultForFixture` has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "no-redundant-use"
+message = "Unused import: `Result`."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "prefer-arrow-function"
+message = "This closure can be simplified to a more concise arrow function."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "prefer-early-continue"
+message = "Consider using early continue pattern to reduce nesting."
+count = 3
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "prefer-static-closure"
+message = "This arrow function does not use `$this` and should be declared static."
+count = 3
+
+[[issues]]
+file = "src/Content/Tournament/TournamentService.php"
+code = "prefer-static-closure"
+message = "This closure does not use `$this` and should be declared static."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentState.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Content/Tournament/TournamentType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Controller/BaseController.php"
+code = "final-controller"
+message = "Controller classes should be declared as `final`."
+count = 1
+
+[[issues]]
+file = "src/Controller/BaseController.php"
+code = "no-boolean-flag-parameter"
+message = "Avoid boolean flag parameters."
+count = 2
+
+[[issues]]
+file = "src/Controller/DashboardController.php"
+code = "no-redundant-use"
+message = "Unused import: `SettingService`."
+count = 1
+
+[[issues]]
+file = "src/Controller/DashboardController.php"
+code = "no-redundant-use"
+message = "Unused import: `User`."
+count = 1
+
+[[issues]]
+file = "src/Controller/DashboardController.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "cyclomatic-complexity"
+message = "Method `saveResult` has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "halstead"
+message = "Method has a high halstead effort"
+count = 1
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 3
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "no-redundant-use"
+message = "Unused import: `ScoringMap`."
+count = 1
+
+[[issues]]
+file = "src/Controller/FixtureController.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Controller/ParticipantController.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 1
+
+[[issues]]
+file = "src/Controller/ParticipantController.php"
+code = "no-redundant-use"
+message = "Unused import: `UrlGeneratorInterface`."
+count = 1
+
+[[issues]]
+file = "src/Controller/ParticipantController.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Controller/ParticipantController.php"
+code = "tagged-todo"
+message = "TODO should be tagged with (@username) or (#issue)."
+count = 1
+
+[[issues]]
+file = "src/Controller/PlayerController.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Controller/RegistrationController.php"
+code = "final-controller"
+message = "Controller classes should be declared as `final`."
+count = 1
+
+[[issues]]
+file = "src/Controller/RegistrationController.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Controller/SecurityController.php"
+code = "final-controller"
+message = "Controller classes should be declared as `final`."
+count = 1
+
+[[issues]]
+file = "src/Controller/SecurityController.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Controller/SettingController.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "cyclomatic-complexity"
+message = "Method `run` has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 1
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "no-else-clause"
+message = "Avoid `elseif` clauses."
+count = 2
+
+[[issues]]
+file = "src/Controller/SpotifyController.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Controller/TeamController.php"
+code = "no-debug-symbols"
+message = "Do not commit debug functions."
+count = 1
+
+[[issues]]
+file = "src/Controller/TeamController.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "cyclomatic-complexity"
+message = "Class has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "cyclomatic-complexity"
+message = "Method `selectTeams` has high complexity."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "no-redundant-use"
+message = "Unused import: `ParticipantService`."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "prefer-arrow-function"
+message = "This closure can be simplified to a more concise arrow function."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "prefer-early-continue"
+message = "Consider using early continue pattern to reduce nesting."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "prefer-static-closure"
+message = "This arrow function does not use `$this` and should be declared static."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "prefer-static-closure"
+message = "This closure does not use `$this` and should be declared static."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "strict-behavior"
+message = "Call to `array_search` must enforce strict comparison."
+count = 1
+
+[[issues]]
+file = "src/Controller/TournamentController.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "array-style"
+message = "Short array style `[..]` is preferred over `array(..)`."
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "halstead"
+message = "Method has a high halstead volume and effort"
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "kan-defect"
+message = "Class has a high kan defect score."
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "readable-literal"
+message = "Numeric literal could use underscore separators for readability."
+count = 1
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "strict-behavior"
+message = "Call to `in_array` must enforce strict comparison."
+count = 2
+
+[[issues]]
+file = "src/DataFixtures/AppFixtures.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/Base/GoalHymnAwareInterface.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/Base/GoalHymnAwareTrait.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/BattleRound.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/Fixture.php"
+code = "no-redundant-use"
+message = "Unused import: `PotentialFixture`."
+count = 1
+
+[[issues]]
+file = "src/Entity/Fixture.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/Participant.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/Player.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/Result.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/Round.php"
+code = "no-redundant-use"
+message = "Unused import: `FileType`."
+count = 1
+
+[[issues]]
+file = "src/Entity/Round.php"
+code = "prefer-arrow-function"
+message = "This closure can be simplified to a more concise arrow function."
+count = 1
+
+[[issues]]
+file = "src/Entity/Round.php"
+code = "prefer-static-closure"
+message = "This closure does not use `$this` and should be declared static."
+count = 1
+
+[[issues]]
+file = "src/Entity/Round.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/Setting.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/SpotifyAccessToken.php"
+code = "no-redundant-use"
+message = "Unused import: `Types`."
+count = 1
+
+[[issues]]
+file = "src/Entity/SpotifyAccessToken.php"
+code = "sensitive-parameter"
+message = "Parameters that may contain sensitive information should be marked with the `#[SensitiveParameter]` attribute."
+count = 2
+
+[[issues]]
+file = "src/Entity/SpotifyAccessToken.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/Team.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/TeamList.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/Tournament.php"
+code = "prefer-static-closure"
+message = "This arrow function does not use `$this` and should be declared static."
+count = 1
+
+[[issues]]
+file = "src/Entity/Tournament.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Entity/User.php"
+code = "sensitive-parameter"
+message = "Parameters that may contain sensitive information should be marked with the `#[SensitiveParameter]` attribute."
+count = 3
+
+[[issues]]
+file = "src/Entity/User.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/AddSinglePlayerBattleTournamentType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "no-redundant-use"
+message = "Unused import: `ScoringMap`."
+count = 1
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "prefer-early-continue"
+message = "Consider using early continue pattern to reduce nesting."
+count = 1
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "prefer-static-closure"
+message = "This closure does not use `$this` and should be declared static."
+count = 2
+
+[[issues]]
+file = "src/Form/FixtureResultType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/ManageBattleTournamentType.php"
+code = "no-redundant-use"
+message = "Unused import: `ChoiceType`."
+count = 1
+
+[[issues]]
+file = "src/Form/ManageBattleTournamentType.php"
+code = "no-redundant-use"
+message = "Unused import: `Participant`."
+count = 1
+
+[[issues]]
+file = "src/Form/ManageBattleTournamentType.php"
+code = "no-redundant-use"
+message = "Unused import: `TournamentLevel`."
+count = 1
+
+[[issues]]
+file = "src/Form/ManageBattleTournamentType.php"
+code = "no-redundant-use"
+message = "Unused import: `Tournament`."
+count = 1
+
+[[issues]]
+file = "src/Form/ManageBattleTournamentType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/ManageTournamentType.php"
+code = "prefer-static-closure"
+message = "This arrow function does not use `$this` and should be declared static."
+count = 3
+
+[[issues]]
+file = "src/Form/ManageTournamentType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/ParticipantType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/PlayerType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/RegistrationFormType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/SelectSongPeriodType.php"
+code = "no-redundant-use"
+message = "Unused import: `IntegerType`."
+count = 1
+
+[[issues]]
+file = "src/Form/SelectSongPeriodType.php"
+code = "no-redundant-use"
+message = "Unused import: `SettingService`."
+count = 1
+
+[[issues]]
+file = "src/Form/SelectSongPeriodType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/SettingType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/TeamAutoCompleteField.php"
+code = "prefer-arrow-function"
+message = "This closure can be simplified to a more concise arrow function."
+count = 1
+
+[[issues]]
+file = "src/Form/TeamAutoCompleteField.php"
+code = "prefer-static-closure"
+message = "This closure does not use `$this` and should be declared static."
+count = 2
+
+[[issues]]
+file = "src/Form/TeamSelectionData.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/TeamSelectionType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Form/TournamentCreateType.php"
+code = "prefer-static-closure"
+message = "This arrow function does not use `$this` and should be declared static."
+count = 6
+
+[[issues]]
+file = "src/Form/TournamentCreateType.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Kernel.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Message/CheckQueue.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Message/RestoreSpotifyQueue.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/MessageHandler/CheckQueueHandler.php"
+code = "no-redundant-use"
+message = "Unused import: `DateTime`."
+count = 1
+
+[[issues]]
+file = "src/MessageHandler/CheckQueueHandler.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/MessageHandler/RestoreSpotifyQueueHandler.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/BattleRoundRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/FixtureRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/ParticipantRepository.php"
+code = "prefer-static-closure"
+message = "This arrow function does not use `$this` and should be declared static."
+count = 1
+
+[[issues]]
+file = "src/Repository/ParticipantRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/PlayerRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/ResultRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/RoundRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/SettingRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/SpotifyAccessTokenRepository.php"
+code = "sensitive-parameter"
+message = "Parameters that may contain sensitive information should be marked with the `#[SensitiveParameter]` attribute."
+count = 1
+
+[[issues]]
+file = "src/Repository/SpotifyAccessTokenRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/TeamListRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/TeamRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/TournamentRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Repository/UserRepository.php"
+code = "sensitive-parameter"
+message = "Parameters that may contain sensitive information should be marked with the `#[SensitiveParameter]` attribute."
+count = 1
+
+[[issues]]
+file = "src/Repository/UserRepository.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Security/EmailVerifier.php"
+code = "no-redundant-use"
+message = "Unused import: `UserInterface`."
+count = 1
+
+[[issues]]
+file = "src/Security/EmailVerifier.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/ButtonComponent.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/FixtureComponent.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/GoalComponent.php"
+code = "no-else-clause"
+message = "Avoid `else` clauses."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/GoalComponent.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/ParticipantComponent.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/ProfileImageComponent.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/TeamListing.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/TrackComponent.php"
+code = "no-redundant-use"
+message = "Unused import: `LiveAction`."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/TrackComponent.php"
+code = "no-redundant-use"
+message = "Unused import: `QrCodeGenerator`."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/TrackComponent.php"
+code = "no-redundant-use"
+message = "Unused import: `SpotifyService`."
+count = 1
+
+[[issues]]
+file = "src/Twig/Components/TrackComponent.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1
+
+[[issues]]
+file = "src/Twig/Extension/GoalHymnExtension.php"
+code = "no-redundant-use"
+message = "Unused import: `File`."
+count = 1
+
+[[issues]]
+file = "src/Twig/Extension/GoalHymnExtension.php"
+code = "no-redundant-use"
+message = "Unused import: `ImageService`."
+count = 1
+
+[[issues]]
+file = "src/Twig/Extension/GoalHymnExtension.php"
+code = "no-redundant-use"
+message = "Unused import: `TournamentService`."
+count = 1
+
+[[issues]]
+file = "src/Twig/Extension/GoalHymnExtension.php"
+code = "no-redundant-use"
+message = "Unused import: `Tournament`."
+count = 1
+
+[[issues]]
+file = "src/Twig/Extension/TournamentExtension.php"
+code = "no-redundant-use"
+message = "Unused import: `File`."
+count = 1
+
+[[issues]]
+file = "src/Twig/Extension/TournamentExtension.php"
+code = "no-redundant-use"
+message = "Unused import: `ImageService`."
+count = 1
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/BattleRoundTableTest.php"
+code = "assertion-style"
+message = "Inconsistent assertions style."
+count = 2
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/TournamentCalculationServiceTest.php"
+code = "assertion-style"
+message = "Inconsistent assertions style."
+count = 10
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/TournamentCalculationServiceTest.php"
+code = "halstead"
+message = "Method has a high halstead effort"
+count = 1
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/TournamentCalculationServiceTest.php"
+code = "prefer-static-closure"
+message = "This arrow function does not use `$this` and should be declared static."
+count = 1
+
+[[issues]]
+file = "tests/Content/Tournament/Calculation/TournamentCalculationServiceTest.php"
+code = "strict-assertions"
+message = "Use strict assertions in PHPUnit tests."
+count = 6
+
+[[issues]]
+file = "tests/bootstrap.php"
+code = "strict-types"
+message = "Missing `declare(strict_types=1);` statement at the beginning of the file."
+count = 1

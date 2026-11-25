@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Entity\Base;
 
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 trait CreateDateTrait
 {
     #[ORM\Column(nullable: false)]
-    protected ?DateTime $created = null;
+    protected ?DateTimeImmutable $created = null;
 
-    public function getCreated(): ?DateTime
+    public function getCreated(): ?DateTimeImmutable
     {
         return $this->created;
     }
 
-    public function setCreated(DateTime $created): static
+    public function setCreated(DateTimeImmutable $created): static
     {
         $this->created = $created;
 
@@ -27,8 +27,8 @@ trait CreateDateTrait
     #[ORM\PrePersist]
     public function onPrePersistSetCreated(): void
     {
-        if (!$this->getCreated() instanceof DateTime) {
-            $this->setCreated(new DateTime('now'));
+        if (!$this->getCreated() instanceof DateTimeImmutable) {
+            $this->setCreated(new DateTimeImmutable('now'));
         }
     }
 }

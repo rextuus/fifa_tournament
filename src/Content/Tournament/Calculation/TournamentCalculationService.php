@@ -34,7 +34,7 @@ class TournamentCalculationService
         $participants = $tournament->getParticipants()->toArray();
         $totalParticipants = $tournament->getLevel()->value;
 
-            return (int)floor($totalParticipants / count($participants));
+        return (int) floor($totalParticipants / count($participants));
     }
 
     public function calculate(Tournament $tournament): FixtureMap
@@ -44,7 +44,7 @@ class TournamentCalculationService
             throw new \InvalidArgumentException('Not enough participants to create fixtures.');
         }
 
-        if (count($participants) > $tournament->getLevel()->value * 2) {
+        if (count($participants) > ($tournament->getLevel()->value * 2)) {
             throw new \InvalidArgumentException('Not enough participants to create fixtures.');
         }
 
@@ -52,10 +52,10 @@ class TournamentCalculationService
 
         $numberOfFixturesToCreate = $this->getFixtureAmountForRound($totalParticipants, 1);
 
-        $numberOfFixturesPerParticipant = (int)floor($totalParticipants / count($participants));
+        $numberOfFixturesPerParticipant = (int) floor($totalParticipants / count($participants));
         $rest = $totalParticipants - (count($participants) * $numberOfFixturesPerParticipant);
         $uniqueCombinations = $this->calculateMatchCombinations($participants);
-        $maxAllowedDoubleNumberForASingleFixture = (int)($numberOfFixturesToCreate / $uniqueCombinations);
+        $maxAllowedDoubleNumberForASingleFixture = (int) ($numberOfFixturesToCreate / $uniqueCombinations);
         $totalMaxDuplicates = $numberOfFixturesToCreate - $maxAllowedDoubleNumberForASingleFixture;
 
         // Special cases
@@ -70,13 +70,11 @@ class TournamentCalculationService
         }
 
         if ($numberOfFixturesPerParticipant < 1 || $rest < 0) {
-            throw new ToMuchParticipantsForLevelException(
-                sprintf(
-                    'To much participants (%d) for tournament level: %d',
-                    count($participants),
-                    $tournament->getLevel()->value
-                )
-            );
+            throw new ToMuchParticipantsForLevelException(sprintf(
+                'To much participants (%d) for tournament level: %d',
+                count($participants),
+                $tournament->getLevel()->value,
+            ));
         }
 
         $infinityCounter = 0;
@@ -96,7 +94,7 @@ class TournamentCalculationService
                     $rest,
                     $numberOfFixturesPerParticipant,
                     $participants,
-                    $maxAllowedDoubleNumberForASingleFixture
+                    $maxAllowedDoubleNumberForASingleFixture,
                 );
             } catch (NoSolutionException $e) {
             }
@@ -104,12 +102,12 @@ class TournamentCalculationService
             $checkIsGood = $this->checkFixtureDistribution(
                 $numberOfFixturesPerParticipant,
                 $maxAllowedDoubleNumberForASingleFixture,
-                $totalMaxDuplicates
+                $totalMaxDuplicates,
             );
 
             $allowMoreDuplicatesCounter++;
 
-            if ($allowMoreDuplicatesCounter > 10){
+            if ($allowMoreDuplicatesCounter > 10) {
                 // if we cant find a good solution try to increase the amount of allowed duplicates
                 $totalMaxDuplicates++;
                 $allowMoreDuplicatesCounter = 0;
@@ -117,23 +115,6 @@ class TournamentCalculationService
             }
 
             if ($infinityCounter > 500) {
-                dump('Teilnehmer ' . count($participants));
-                dump('Plätze ' . $totalParticipants);
-                dump('Spiele in dieser Runde ' . $numberOfFixturesToCreate);
-                dump('Spiele pro Teilnehmer ' . $numberOfFixturesPerParticipant);
-                dump('Übrige Plätze ' . $rest);
-                dump('Mögliche Paarungen ' . $this->calculateMatchCombinations($participants));
-                dump('Maximale Anzahl an Dopplungen pro Partie ' . $maxAllowedDoubleNumberForASingleFixture);
-                dump('Maximal Dopplungen insgesamt ' . $totalMaxDuplicates);
-
-
-                dump($this->playerFixtureCounts);
-                dump($this->fixturesMap);
-                $map = (new FixtureMap($this->fixturesMap));
-                dump($map->countDoubles(15));
-                dump($totalMaxDuplicates);
-                dump($map->checkDoubleOccurrenceIsHigherThan(16));
-                dd($map->getFixtureOccurrenceStatistic());
                 throw new \Exception('Cant calculate a good tournament');
             }
         }
@@ -144,12 +125,12 @@ class TournamentCalculationService
             shuffle($this->fixturesMap);
             $potentialRound = $this->fixturesMap;
         }
-        return (new FixtureMap($potentialRound));
+        return new FixtureMap($potentialRound);
     }
 
     private function checkFixtureDistribution(int $maxFixtureCount, int $allowedDoubles, int $maxDoubling): bool
     {
-        $statistics = (new FixtureMap($this->fixturesMap));
+        $statistics = new FixtureMap($this->fixturesMap);
 
         if ($statistics->countDoubles() > $maxDoubling) {
             return false;
@@ -164,7 +145,7 @@ class TournamentCalculationService
         $allUsersHaveMaxFixtures = true;
         foreach ($this->playerFixtureCounts as $player => $fixtureCount) {
             // if user has not at least
-            if ($fixtureCount < $maxFixtureCount - 1) {
+            if ($fixtureCount < ($maxFixtureCount - 1)) {
                 return false;
             }
 
@@ -178,19 +159,13 @@ class TournamentCalculationService
 
         // if rest is odd
         if (!$allUsersHaveMaxFixtures) {
-            if (1 === count($this->playerFixtureCounts) - $participantsWithFullFixtures) {
+            if (1 === (count($this->playerFixtureCounts) - $participantsWithFullFixtures)) {
                 $allUsersHaveMaxFixtures = true;
 
                 // search next free fixture and add user without enemy
-                $index = array_search(
-                    true,
-                    array_map(
-                        function (PotentialFixture $fixture) {
-                            return $fixture->isFree();
-                        },
-                        $this->fixturesMap
-                    )
-                );
+                $index = array_search(true, array_map(function (PotentialFixture $fixture) {
+                    return $fixture->isFree();
+                }, $this->fixturesMap));
                 $this->fixturesMap[$index]->setHome($userWithoutFullFixtures[0]);
             }
         }
@@ -210,15 +185,15 @@ class TournamentCalculationService
     ): void {
         $setFixtures = 0;
         $fixtureAlreadyExistsOccurrenceBefore = 0;
-        while ($setFixtures < $numberOfFixturesToCreate - $rest / 2) {
+        while ($setFixtures < ($numberOfFixturesToCreate - ($rest / 2))) {
             $participantToSearchEnemyFor = $this->getRandomParticipantWhichHasNotReachedTheMaximumNumberOfFixtures(
                 $numberOfFixturesPerParticipant,
-                $setFixtures
+                $setFixtures,
             );
 
             $similarityMap = $this->calculateParticipantPlayerSimilarityMap(
                 $participants,
-                $participants[$participantToSearchEnemyFor]
+                $participants[$participantToSearchEnemyFor],
             );
 
             $bestFittingRemainingEnemy = null;
@@ -230,9 +205,9 @@ class TournamentCalculationService
                 // check if these guys already have a big battle planned then lets try another
                 $fixtureAlreadyExistsOccurrenceBefore = $this->checkFixtureAlreadyExists(
                     $participantToSearchEnemyFor,
-                    $candidate
+                    $candidate,
                 );
-                if ($fixtureAlreadyExistsOccurrenceBefore === $maxAllowedDoubleNumberForASingleFixture + 1) {
+                if ($fixtureAlreadyExistsOccurrenceBefore === ($maxAllowedDoubleNumberForASingleFixture + 1)) {
                     continue;
                 }
 
@@ -245,15 +220,9 @@ class TournamentCalculationService
                 throw new NoSolutionException('Cant find a participant with free fixture places.');
             }
 
-            $index = array_search(
-                true,
-                array_map(
-                    function (PotentialFixture $fixture) {
-                        return $fixture->isFree();
-                    },
-                    $this->fixturesMap
-                )
-            );
+            $index = array_search(true, array_map(function (PotentialFixture $fixture) {
+                return $fixture->isFree();
+            }, $this->fixturesMap));
 
             $potentialFixture = $this->fixturesMap[$index];
             $potentialFixture->setHome($participantToSearchEnemyFor);
@@ -265,9 +234,12 @@ class TournamentCalculationService
 
             $fixtureAlreadyExistsOccurrenceAfter = $this->checkFixtureAlreadyExists(
                 $participantToSearchEnemyFor,
-                $bestFittingRemainingEnemy
+                $bestFittingRemainingEnemy,
             );
-            if ($fixtureAlreadyExistsOccurrenceAfter > $fixtureAlreadyExistsOccurrenceBefore && $fixtureAlreadyExistsOccurrenceBefore > 0) {
+            if (
+                $fixtureAlreadyExistsOccurrenceAfter > $fixtureAlreadyExistsOccurrenceBefore
+                && $fixtureAlreadyExistsOccurrenceBefore > 0
+            ) {
                 ++$this->usedDoubles;
             }
 
@@ -310,7 +282,8 @@ class TournamentCalculationService
                     $lastFixture = end($randomizedFixtures);
 
                     // Check if the last fixture involved the same players
-                    if ($lastFixture
+                    if (
+                        $lastFixture
                         && (
                             $lastFixture->getHome() === $fixture->getHome()
                             || $lastFixture->getHome() === $fixture->getAway()
@@ -342,7 +315,7 @@ class TournamentCalculationService
             $finalFixtures[] = $fixture;
 
             // Insert a null fixture at intervals
-            if ($nullFixturesCount > 0 && ($index + 1) % $interval === 0 && isset($nullFixtures[$nullIndex])) {
+            if ($nullFixturesCount > 0 && (($index + 1) % $interval) === 0 && isset($nullFixtures[$nullIndex])) {
                 $finalFixtures[] = $nullFixtures[$nullIndex++];
             }
         }
@@ -372,8 +345,8 @@ class TournamentCalculationService
         $occurrence = 0;
         foreach ($this->fixturesMap as $potentialFixture) {
             if (
-                ($potentialFixture->getHome() === $home && $potentialFixture->getAway() === $away)
-                || ($potentialFixture->getHome() === $away && $potentialFixture->getAway() === $home)
+                $potentialFixture->getHome() === $home && $potentialFixture->getAway() === $away
+                || $potentialFixture->getHome() === $away && $potentialFixture->getAway() === $home
             ) {
                 ++$occurrence;
             }
@@ -414,9 +387,10 @@ class TournamentCalculationService
     public function calculateParticipantPlayerSimilarityMap(array $participants, Participant $baseParticipant): array
     {
         // Get the list of players for the base participant
-        $basePlayerIds = $baseParticipant->getPlayers()->map(
-            fn($player) => $player->getId()
-        )->toArray();
+        $basePlayerIds = $baseParticipant
+            ->getPlayers()
+            ->map(fn($player) => $player->getId())
+            ->toArray();
 
         // Initialize the similarity map
         $similarityMap = [];
@@ -428,9 +402,10 @@ class TournamentCalculationService
             }
 
             // Get the list of players for the current participant
-            $participantPlayerIds = $participant->getPlayers()->map(
-                fn($player) => $player->getId()
-            )->toArray();
+            $participantPlayerIds = $participant
+                ->getPlayers()
+                ->map(fn($player) => $player->getId())
+                ->toArray();
 
             // Calculate the similarity score (shared players count)
             $intersection = array_intersect($basePlayerIds, $participantPlayerIds);
@@ -447,7 +422,7 @@ class TournamentCalculationService
     public function getFixtureAmountForRound(int $totalParticipants, int $round): ?int
     {
         // Calculate the total number of rounds possible in the tournament
-        $totalRounds = (int)log($totalParticipants, 2);
+        $totalRounds = (int) log($totalParticipants, 2);
 
         // If the round exceeds the total number of rounds, return null
         if ($round > $totalRounds) {

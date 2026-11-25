@@ -20,8 +20,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route('/participant')]
 final class ParticipantController extends BaseController
 {
-    public function __construct(protected ImageService $imageService, protected QrCodeGenerator $qrCodeGenerator)
-    {
+    public function __construct(
+        protected ImageService $imageService,
+        protected QrCodeGenerator $qrCodeGenerator,
+    ) {
         parent::__construct($imageService);
     }
 
@@ -60,7 +62,7 @@ final class ParticipantController extends BaseController
         ]);
     }
 
-    #[Route('/edit/{id}', name: 'participant_edit')]
+    #[Route('/edit/{id:participant}', name: 'participant_edit')]
     public function edit(
         Request $request,
         Participant $participant,
@@ -71,8 +73,7 @@ final class ParticipantController extends BaseController
         $players = $playerRepository->findAll();
 
         // Create the form and pre-fill it with the participant's current data
-        $form = $this->createForm(ParticipantType::class, $participant, [
-        ]);
+        $form = $this->createForm(ParticipantType::class, $participant, []);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -83,18 +84,21 @@ final class ParticipantController extends BaseController
             return $this->redirectToRoute('participant_manage');
         }
 
-        $qrCodeDataUri = $this->qrCodeGenerator->generateQrCode('participant_edit_profile_image_full', $participant->getId());
+        $qrCodeDataUri = $this->qrCodeGenerator->generateQrCode(
+            'participant_edit_profile_image_full',
+            $participant->getId(),
+        );
 
         // Render the edit template
         return $this->render('participant/edit.html.twig', [
             'form' => $form->createView(),
             'participant' => $participant,
             'qrCodeDataUri' => $qrCodeDataUri,
-            'players' => $players,  // Pass the players list to the template
+            'players' => $players, // Pass the players list to the template
         ]);
     }
 
-    #[Route('/edit/profile-image/{id}', name: 'participant_edit_profile_image')]
+    #[Route('/edit/profile-image/{id:participant}', name: 'participant_edit_profile_image')]
     public function editProfileImageAjax(Participant $participant, Request $request): Response
     {
         $form = $this->createAjaxForm(
@@ -104,7 +108,7 @@ final class ParticipantController extends BaseController
             [
                 'show_delete_button' => false,
                 'current_image_url' => $participant->getImageFile(),
-                'default_image_path' => 'build/images/thumbnails/client_default.png',
+                'default_image_path' => 'images/thumbnails/client_default.png',
             ],
         );
 
@@ -117,7 +121,7 @@ final class ParticipantController extends BaseController
         return $this->renderAjaxForm($form);
     }
 
-    #[Route('/edit/profile-image-full/{id}', name: 'participant_edit_profile_image_full')]
+    #[Route('/edit/profile-image-full/{id:participant}', name: 'participant_edit_profile_image_full')]
     public function editProfileImage2(Participant $participant, Request $request): Response
     {
         $form = $this->createForm(
@@ -127,7 +131,7 @@ final class ParticipantController extends BaseController
                 'show_delete_button' => false,
                 'show_save_button' => true,
                 'current_image_url' => $participant->getImageFile(),
-                'default_image_path' => 'build/images/thumbnails/client_default.png',
+                'default_image_path' => 'images/thumbnails/client_default.png',
             ],
         );
 
@@ -144,7 +148,7 @@ final class ParticipantController extends BaseController
     }
 
     // Todo remove or improve
-    #[Route('/participant/delete/{id}', name: 'participant_delete', methods: ['POST'])]
+    #[Route('/participant/delete/{id:participant}', name: 'participant_delete', methods: ['POST'])]
     public function delete(Request $request, Participant $participant, EntityManagerInterface $entityManager): Response
     {
         // Generate a CSRF token for security

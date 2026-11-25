@@ -13,7 +13,6 @@ use App\Entity\User;
 use App\Form\SelectSongPeriodType;
 use App\Repository\ParticipantRepository;
 use App\Repository\PlayerRepository;
-use App\Twig\Helper\GoalHymnEntityWrapper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,8 +37,7 @@ final class SpotifyController extends AbstractController
         private readonly PlayerRepository $playerRepository,
         #[Autowire('%env(FORCED_RUNNING_TIME)%')]
         private readonly int $forcedRuntime,
-    ) {
-    }
+    ) {}
 
     #[Route('/login', name: 'spotify_login')]
     public function login(): RedirectResponse
@@ -56,7 +54,7 @@ final class SpotifyController extends AbstractController
     {
         $error = $request->query->get('error');
         if ($error) {
-            return new Response("Error: " . $error);
+            return new Response('Error: ' . $error);
         }
 
         $authorizationCode = $request->query->get('code');
@@ -70,7 +68,7 @@ final class SpotifyController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        return new Response("Authorization failed.");
+        return new Response('Authorization failed.');
     }
 
     #[Route('/{type}/{id}/search', name: 'spotify_search')]
@@ -92,7 +90,8 @@ final class SpotifyController extends AbstractController
             throw $this->createNotFoundException('Participant not found.');
         }
 
-        $form = $formFactory->createBuilder()
+        $form = $formFactory
+            ->createBuilder()
             ->setMethod('GET') // Use GET to enable query parameter handling
             ->add('q', TextType::class, [
                 'label' => false,
@@ -119,7 +118,6 @@ final class SpotifyController extends AbstractController
                 $tracks = $this->spotifyService->search($searchTerm); // Fetch Spotify tracks
             }
         }
-
 
         return $this->render('spotify/search.html.twig', [
             'form' => $form->createView(),
@@ -165,16 +163,12 @@ final class SpotifyController extends AbstractController
             $end = $targetEntity->getGoalHymnEndTime();
         }
 
-        $form = $this->createForm(
-            SelectSongPeriodType::class,
-            null,
-            [
-                'trackDuration' => $durationInSeconds,
-                'playTimeLimit' => $playTimeLimit,
-                'start' => $start,
-                'end' => $end,
-            ]
-        );
+        $form = $this->createForm(SelectSongPeriodType::class, null, [
+            'trackDuration' => $durationInSeconds,
+            'playTimeLimit' => $playTimeLimit,
+            'start' => $start,
+            'end' => $end,
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -205,7 +199,7 @@ final class SpotifyController extends AbstractController
     {
         try {
             $displayName = $this->spotifyService->getLoginInformation();
-        } catch (NoAccessTokenFoundException  $e) {
+        } catch (NoAccessTokenFoundException $e) {
             $displayName = 'not_logged_in';
         }
 
@@ -218,9 +212,12 @@ final class SpotifyController extends AbstractController
     #[Route('/run/{fixtureId}/{participantId}/{playerId}', name: 'spotify_run', methods: ['GET', 'POST'])]
     public function run(
         Request $request,
-        #[MapEntity(id: 'fixtureId')] Fixture $fixture,
-        #[MapEntity(id: 'participantId')] Participant $participant,
-        #[MapEntity(id: 'playerId')] Player $player,
+        #[MapEntity(id: 'fixtureId')]
+        Fixture $fixture,
+        #[MapEntity(id: 'participantId')]
+        Participant $participant,
+        #[MapEntity(id: 'playerId')]
+        Player $player,
     ): JsonResponse {
         $isHome = $request->query->get('isHome');
 
@@ -284,7 +281,7 @@ final class SpotifyController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route('/test/player/{id}', name: 'spotify_test_player')]
+    #[Route('/test/player/{id:player}', name: 'spotify_test_player')]
     public function testPlayer(Player $player): Response
     {
         // logout
@@ -297,7 +294,7 @@ final class SpotifyController extends AbstractController
         ]);
     }
 
-    #[Route('/test/participant/{id}', name: 'spotify_test_participant')]
+    #[Route('/test/participant/{id:participant}', name: 'spotify_test_participant')]
     public function testParticipant(Participant $participant): Response
     {
         // logout
@@ -306,10 +303,10 @@ final class SpotifyController extends AbstractController
 
         return $this->render('spotify/test.html.twig', [
             'calculatedRuntime' => $calculatedRuntime,
-            'redirectUrl' => $this->generateUrl(
-                'spotify_search',
-                ['type' => 'participant', 'id' => $participant->getId()]
-            ),
+            'redirectUrl' => $this->generateUrl('spotify_search', [
+                'type' => 'participant',
+                'id' => $participant->getId(),
+            ]),
         ]);
     }
 

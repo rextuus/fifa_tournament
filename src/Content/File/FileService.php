@@ -10,7 +10,6 @@ use App\Content\File\Flysystem\FilesystemProvider;
 use App\Content\File\Form\Data\FileData;
 use App\Entity\File;
 use App\Entity\User;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -24,10 +23,8 @@ class FileService
         private readonly SluggerInterface $slugger,
         private readonly string $appUploadDir,
         private readonly FilePathGenerator $filePathGenerator,
-        private readonly CacheManager $cacheManager,
         private readonly bool $virusDetectionEnabled = false,
-    ) {
-    }
+    ) {}
 
     public function createByData(FileData $data, bool $flush = false): File
     {
@@ -72,15 +69,11 @@ class FileService
     {
         $prefix = $this->filesystemProvider->getFilesystemPrefix($file->getFilesystemIdent());
 
-        return $prefix.DIRECTORY_SEPARATOR.$file->getRelativePath();
+        return $prefix . DIRECTORY_SEPARATOR . $file->getRelativePath();
     }
 
     public function delete(File $file, bool $flush = false): void
     {
-        if ($file->isImage()) {
-            $this->cacheManager->remove($file->getRelativePath());
-        }
-
         $fileSystem = $this->filesystemProvider->getFilesystem($file->getFilesystemIdent());
         $fileSystem->delete($file->getRelativePath());
 
@@ -114,15 +107,15 @@ class FileService
 
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
-        $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+        $fileName = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
         try {
             $file->move($this->appUploadDir, $fileName);
         } catch (FileException $e) {
-            throw new \Exception('Upload failed: '.$e->getMessage());
+            throw new \Exception('Upload failed: ' . $e->getMessage());
         }
 
-        return $this->appUploadDir.DIRECTORY_SEPARATOR.$fileName;
+        return $this->appUploadDir . DIRECTORY_SEPARATOR . $fileName;
     }
 
     public function importFile(
@@ -156,10 +149,6 @@ class FileService
 
         $this->deleteFileFromFilesystem($oldFilesystemIdent, $oldRelativePath);
 
-        if ($file->isImage()) {
-            $this->cacheManager->remove($oldRelativePath);
-        }
-
         unlink($localFilePath);
 
         return $file;
@@ -175,25 +164,21 @@ class FileService
         ?ImageType $imageType = null,
     ): FileData {
         if (!is_file($localFilePath)) {
-            throw new \Exception('File to import not found: '.$localFilePath);
+            throw new \Exception('File to import not found: ' . $localFilePath);
         }
 
         if (!is_readable($localFilePath)) {
-            throw new \Exception('File to import is not readable: '.$localFilePath);
+            throw new \Exception('File to import is not readable: ' . $localFilePath);
         }
 
         $hashedFolderName = $this->filePathGenerator->generateRandomFilePath();
 
-        $filePath = sprintf(
-            '%s/%s',
-            $hashedFolderName,
-            pathinfo($localFilePath, PATHINFO_BASENAME)
-        );
+        $filePath = sprintf('%s/%s', $hashedFolderName, pathinfo($localFilePath, PATHINFO_BASENAME));
 
         $filesystem = $this->filesystemProvider->getFilesystem($filesystemIdent);
         $filesystem->writeStream($filePath, fopen($localFilePath, 'r'));
 
-        return (new FileData())
+        return new FileData()
             ->setName(pathinfo($localFilePath, PATHINFO_FILENAME))
             ->setPath($hashedFolderName)
             ->setExtension(pathinfo($localFilePath, PATHINFO_EXTENSION))
@@ -214,7 +199,7 @@ class FileService
         FileType $fileType,
         bool $flush,
     ): File {
-        $fileData = (new FileData())
+        $fileData = new FileData()
             ->setFilesystemIdent($result->getFilesystemIdent())
             ->setPath($result->getDirectoryPath())
             ->setName($result->getFileName())

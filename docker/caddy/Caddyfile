@@ -1,0 +1,47 @@
+# eat – Caddy vor PHP-FPM (Dienst web in compose.prod.yaml).
+# Nur HTTP (SERVER_NAME=":80"): HTTPS und Zertifikat macht der Caddy auf dem VPS, der über WireGuard
+# an 10.0.0.2:8199 weiterleitet (docs/deployment.md).
+{
+	admin off
+	servers {
+		# Nur von diesen Adressen (dem VPS-Caddy) werden X-Forwarded-For/-Proto übernommen: echte Gast-IP und
+		# „kam per HTTPS“. Von allen anderen setzt Caddy die Werte selbst (nicht fälschbar).
+		trusted_proxies static {$REVERSE_PROXY_IPS:private_ranges}
+		client_ip_headers X-Forwarded-For
+	}
+}
+
+{$SERVER_NAME::80} {
+	root * /srv/app/public
+	encode zstd gzip
+
+	# Bild-Uploads (PHP erlaubt 16 MB); größere Anfragen gar nicht erst annehmen.
+	request_body {
+		max_size 18MB
+	}
+
+	header {
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		X-Frame-Options "SAMEORIGIN"
+		-Server
+	}
+
+	# Kompilierte Assets (asset-map:compile nach public/assets): Der Dateiname enthält den Inhalts-Hash.
+	@assets path_regexp assets ^/assets/.+-[A-Za-z0-9_-]{7}\.[a-z0-9]+$
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+
+	# Bilder: signierte URLs (ImageService) → imgproxy, das die Originale aus /srv/eat/images nur lesend kennt.
+	# Ohne gültige Signatur antwortet imgproxy 403. Die URL enthält einen Cachebuster, also lange cachen.
+	handle_path /img/* {
+		reverse_proxy imgproxy:8080 {
+			header_down -Server
+			header_down Cache-Control "public, max-age=31536000, immutable"
+		}
+	}
+
+	handle {
+		php_fastcgi app:9000
+		file_server
+	}
+}

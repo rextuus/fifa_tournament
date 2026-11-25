@@ -21,17 +21,17 @@ class Fixture
     #[ORM\ManyToOne(inversedBy: 'fixtures')]
     private ?Team $homeTeam = null;
 
-    #[ORM\ManyToOne(inversedBy: 'fixtures')]
+    #[ORM\ManyToOne]
     private ?Team $awayTeam = null;
 
     #[ORM\ManyToOne(inversedBy: 'fixtures')]
     private ?Participant $homeParticipant = null;
 
-    #[ORM\ManyToOne(inversedBy: 'fixtures')]
+    #[ORM\ManyToOne]
     private ?Participant $awayParticipant = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $played = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $played = null;
 
     #[ORM\ManyToOne(inversedBy: 'fixtures')]
     #[ORM\JoinColumn(nullable: false)]
@@ -40,10 +40,10 @@ class Fixture
     #[ORM\OneToOne(inversedBy: 'fixture', cascade: ['persist', 'remove'])]
     private ?Result $firstLeg = null;
 
-    #[ORM\OneToOne(inversedBy: 'fixture', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Result $secondLeg = null;
 
-    #[ORM\OneToOne(inversedBy: 'fixture', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Result $thirdLeg = null;
 
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => false])]
@@ -129,12 +129,12 @@ class Fixture
         return $this;
     }
 
-    public function getPlayed(): ?\DateTimeInterface
+    public function getPlayed(): ?\DateTimeImmutable
     {
         return $this->played;
     }
 
-    public function setPlayed(?\DateTimeInterface $played): static
+    public function setPlayed(?\DateTimeImmutable $played): static
     {
         $this->played = $played;
 
@@ -192,7 +192,6 @@ class Fixture
         $this->thirdLeg = $thirdLeg;
         return $this;
     }
-
 
     public function isTwoLeg(): bool
     {

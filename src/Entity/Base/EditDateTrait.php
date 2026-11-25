@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Entity\Base;
 
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 trait EditDateTrait
 {
     #[ORM\Column(nullable: true)]
-    protected ?DateTime $edited = null;
+    protected ?DateTimeImmutable $edited = null;
 
-    public function getEdited(): ?DateTime
+    public function getEdited(): ?DateTimeImmutable
     {
         return $this->edited;
     }
 
-    private function setEdited(DateTime $edited): static
+    private function setEdited(DateTimeImmutable $edited): static
     {
         $this->edited = $edited;
 
@@ -26,7 +26,7 @@ trait EditDateTrait
 
     public function updateEdited(): void
     {
-        $this->setEdited(new DateTime('now'));
+        $this->setEdited(new DateTimeImmutable('now'));
     }
 
     #[ORM\PreUpdate]
